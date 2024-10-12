@@ -23,9 +23,6 @@
 #  define BUFFER_SIZE 4096
 # endif
 
-char	*ft_strdup(char *s);
-char	*ft_strlcpy(char *dst, const char *src, size_t size);
-size_t	ft_strlen(const char *s);
 char	*begins_after_n(char *s);
 int		n_is_nth_char_of(char *str);
 char	*get_next_line(int fd);

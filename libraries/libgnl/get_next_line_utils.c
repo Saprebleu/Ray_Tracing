@@ -12,7 +12,7 @@
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *s)
+size_t	ft_strlen2(const char *s)
 {
 	size_t	length;
 
@@ -27,14 +27,14 @@ size_t	ft_strlen(const char *s)
 	return (length);
 }
 
-char	*ft_strdup(char *s)
+char	*ft_strdup2(char *s)
 {
 	size_t	len;
 	size_t	i;
 	char	*s_cpy;
 
 	i = 0;
-	len = ft_strlen(s) + 1;
+	len = ft_strlen2(s) + 1;
 	if (s == NULL)
 		return (NULL);
 	s_cpy = malloc(len);
@@ -49,7 +49,7 @@ char	*ft_strdup(char *s)
 	return (s_cpy);
 }
 
-char	*ft_strlcpy(char *dst, const char *src, size_t size)
+char	*ft_strlcpy2(char *dst, const char *src, size_t size)
 {
 	size_t	i;
 
@@ -76,7 +76,7 @@ char	*begins_after_n(char *s)
 			break ;
 		i++;
 	}
-	cpy = ft_strdup(s + i + 1);
+	cpy = ft_strdup2(s + i + 1);
 	return (cpy);
 }
 

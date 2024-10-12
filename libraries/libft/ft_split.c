@@ -42,7 +42,7 @@ int	assign_counter(int i, char *trimmed, int c_counter, char c)
 		{
 			i++;
 			if (trimmed[i] != c)
-			c_counter++;
+				c_counter++;
 		}
 		i++;
 	}

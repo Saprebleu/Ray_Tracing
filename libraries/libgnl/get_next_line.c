@@ -12,6 +12,10 @@
 
 #include "get_next_line.h"
 
+char	*ft_strdup2(char *s);
+char	*ft_strlcpy2(char *dst, const char *src, size_t size);
+size_t	ft_strlen2(const char *s);
+
 int	has_n(const char *s)
 {
 	if (s == NULL)
@@ -30,7 +34,7 @@ char	*create_to_print_and_temp2(char **temp, char **temp2, char **buffer)
 	char	*to_print;
 
 	to_print = malloc(sizeof(char) * (n_is_nth_char_of(*temp) + 1));
-	to_print = ft_strlcpy(to_print, *temp, n_is_nth_char_of(*temp));
+	to_print = ft_strlcpy2(to_print, *temp, n_is_nth_char_of(*temp));
 	to_print[n_is_nth_char_of(*temp)] = '\0';
 	*temp2 = begins_after_n(*temp);
 	free(*temp);
@@ -49,7 +53,7 @@ char	*return_the_line_or_null(char **temp, char **to_print, char **buffer,
 {
 	if (*temp != NULL && read_result == 0)
 	{
-		*to_print = ft_strdup(*temp);
+		*to_print = ft_strdup2(*temp);
 		free(*temp);
 		*temp = NULL;
 		free(*buffer);
@@ -103,7 +107,7 @@ char	*get_next_line(int fd)
 	read_result = read(fd, buffer, BUFFER_SIZE);
 	while (read_result >= 0)
 	{
-		realloc_and_concat(&temp, buffer, ft_strlen(temp), read_result);
+		realloc_and_concat(&temp, buffer, ft_strlen2(temp), read_result);
 		if (has_n(temp))
 		{
 			to_print = create_to_print_and_temp2(&temp, &temp2, &buffer);

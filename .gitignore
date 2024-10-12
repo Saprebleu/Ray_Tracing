@@ -1,0 +1,5 @@
+obj/
+miniRT
+*.o
+libraries/libft/libft.a
+libraries/libgnl/libgnl.a
