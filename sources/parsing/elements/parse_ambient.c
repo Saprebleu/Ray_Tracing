@@ -1,3 +1,4 @@
+#include <math.h>
 #include <stddef.h>
 #include <stdio.h>
 
@@ -45,39 +46,83 @@ bool	is_int(const char *s)
 	int	i;
 
 	i = 0;
-	while (ft_isdigit(s[i]))
+	if (s[i] == '-')
+		i++;
+	if (1 != ft_isdigit(s[i]))
+		return (false);
+	while (1 == ft_isdigit(s[i]))
 		i++;
 	return (s[i] == '\0');
 }
 
 bool	is_float_in_range(float n, float lower, float upper)
 {
-	(void)n; (void)lower; (void)upper;
-	return (true);
+	return (n >= lower && n <= upper);
 }
 
 bool	is_int_in_range(int n, int lower, int upper)
 {
-	(void)n; (void)lower; (void)upper;
-	return (true);
+	return (n >= lower && n <= upper);
 }
 
 bool	is_vector_in_range(t_vector v, float lower, float upper)
 {
-	(void)v; (void)lower; (void)upper;
-	return (true);
+	return (is_float_in_range(v.x, lower, upper)
+		&& is_float_in_range(v.y, lower, upper)
+		&& is_float_in_range(v.z, lower, upper));
 }
 
 bool	is_color_in_range(t_color c, int lower, int upper)
 {
-	(void)c; (void)lower; (void)upper;
-	return (true);
+	return (is_int_in_range(c.r, lower, upper)
+		&& is_int_in_range(c.g, lower, upper)
+		&& is_int_in_range(c.b, lower, upper));
 }
 
 bool	is_vector(const char *s)
 {
-	(void)s;
-	return (true);
+	int	i;
+
+	i = 0;
+	if (s[i] == '-')
+		i++;
+	if (1 != ft_isdigit(s[i]))
+		return (false);
+	while (1 == ft_isdigit(s[i]))
+		i++;
+	if (s[i] == '\0')
+		return (true);
+	if (s[i] != '.')
+        return (false);
+    i++;
+	if (1 != ft_isdigit(s[i]))
+		return (false);
+	while (1 == ft_isdigit(s[i]))
+		i++;
+    return (s[i] == '\0');
+}
+
+bool	is_color(const char *s)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (j < 3)
+	{
+		if (s[i] == '-')
+			i++;
+		if (1 != ft_isdigit(s[i]))
+			return (false);
+		while (1 == ft_isdigit(s[i]))
+			i++;
+		if (j != 2 && s[i] != ',')
+			return (false);
+        i++;
+		j++;
+	}
+	return (s[i - 1] == '\0');
 }
 
 t_vector	get_vector(const char *s)
@@ -86,22 +131,28 @@ t_vector	get_vector(const char *s)
 	return ((t_vector){0.0f, 0.0f, 0.0f});
 }
 
-bool	is_color(const char *s)
-{
-	(void)s;
-	return (true);
-}
-
 t_color	get_color(const char *s)
 {
 	(void)s;
 	return ((t_color){0, 0, 0});
 }
 
-float	atof(const char *s)
+float	get_float(const char *s)
 {
-	(void)s;
-	return (0.0f);
+	int		i;
+	float	n;
+	float	decimals;
+	int		decimal_factor;
+	char	*decimal_str;
+
+	n = ft_atoi(s);
+	decimals = 0;
+	decimal_factor = 1;
+	decimal_str = ft_strchr(s, '.');
+	if (decimal_str == NULL)
+		return (n);
+	decimals = ft_atoi(decimal_str + 1);
+	return (n + (decimals / (float)powf(10, ft_strlen(decimal_str + 1))));
 }
 
 int	parse_ambient(char **line_split, t_world *world)
@@ -109,7 +160,7 @@ int	parse_ambient(char **line_split, t_world *world)
 	line_split = goto_next_value(line_split);
 	if (line_split == NULL)
 		return (printf("Error\nNot enough information for Ambient\n"), -1);
-	if (false == is_float(*line_split, ft_strlen(*line_split)))
+	if (false == is_float(*line_split))
 		return (printf("Error\nAmbient Power is not a float\n"), -2);
 	world->ambient_power = atof(*line_split);
 	if (false == is_float_in_range(world->ambient_power, 0.0f, 1.0f))
