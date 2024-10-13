@@ -12,7 +12,7 @@ bool	file_has_extension(const char *pathname, const char *extension)
 	char	*tmp;
 
 	tmp = ft_strrchr(pathname, '.');
-	if (tmp == NULL)
+	if (tmp == NULL || tmp == pathname)
 		return (false);
 	return (0 == ft_strncmp(tmp + 1, extension, ft_strlen(extension)));
 }
