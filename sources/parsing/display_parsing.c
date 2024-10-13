@@ -3,7 +3,7 @@
 
 #include "parsing.h"
 
-char *get_object_type_string(t_object_type object_type)
+static char *get_object_type_string(t_object_type object_type)
 {
 	switch (object_type)
 	{

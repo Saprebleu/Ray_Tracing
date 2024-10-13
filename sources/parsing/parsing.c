@@ -5,7 +5,36 @@
 #include <unistd.h>
 #include "get_next_line.h"
 #include "libft.h"
+#include "world.h"
 #include "parsing.h"
+
+int	parse_line(const char *line, t_world *world)
+{
+	char 	**line_split;
+	int		i;
+
+	line_split = ft_split(line, ' ');
+	if (line_split == NULL)
+		return (printf("Error\nOut of memory\n"), -1);
+	i = 0;
+	while (line_split[i][0] == '\0')
+		i++;
+	if (line_split[i] == NULL)
+		return (0);
+	if (0 == ft_strncmp(line_split[i], "A", 2))
+		return (parse_ambient(line_split + i + 1, world));
+	// if (0 == ft_strncmp(line_split[i], "C", 2))
+	// 	return (parse_camera(line_split + i + 1, world));
+	// if (0 == ft_strncmp(line_split[i], "L", 2))
+	// 	return (parse_light(line_split + i + 1, world));
+	// if (0 == ft_strncmp(line_split[i], "sp", 3))
+	// 	return (parse_sphere(line_split + i + 1, world));
+	// if (0 == ft_strncmp(line_split[i], "pl", 3))
+	// 	return (parse_plane(line_split + i + 1, world));
+	// if (0 == ft_strncmp(line_split[i], "cy", 3))
+	// 	return (parse_cylinder(line_split + i + 1, world));
+	return (printf("Error\nInvalid element type '%s'\n", line_split[i]), -2);
+}
 
 bool	file_has_extension(const char *pathname, const char *extension)
 {
@@ -17,28 +46,28 @@ bool	file_has_extension(const char *pathname, const char *extension)
 	return (0 == ft_strncmp(tmp + 1, extension, ft_strlen(extension)));
 }
 
-int	parse_rt(const char *pathname/*, t_world *world*/)
+int	parse_rt(const char *pathname, t_world *world)
 {
 	int		fd;
 	char	*line;
 
+	ft_memset(world, 0, sizeof(t_world));
 	if (false == file_has_extension(pathname, "rt"))
-		return (-1);
+		return (printf("Error\nBad filename extension\n"), -1);
 	fd = open(pathname, O_RDONLY);
 	if (fd == -1)
-	{
-		printf("Error\n%s\n", strerror(errno));
-		return (-2);
-	}
+		return (printf("Error\nCannot open file: %s\n", strerror(errno)), -2);
 	while (true)
 	{
 		line = get_next_line(fd);
 		if (line == NULL)
 			break ;
-		// if (0 != parse_line(line, world))
-		// 	return (free(world->objects), free(line), -3);
+		if (0 != parse_line(line, world))
+			return (free(world->objects), free(line), -3);
 		free(line);
 	}
 	close(fd);
+	if (world->has_camera == false)
+		return (free(world->objects), printf("Error\nNo camera found\n"), -4);
 	return (0);
 }

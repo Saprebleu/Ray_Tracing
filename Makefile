@@ -17,15 +17,17 @@ INCLUDE_FLAGS =			-I includes \
 						-I libraries/libgnl
 
 # Include files involved in project (needed for Makefile's recompilation check)
-INCLUDE_FILES =			includes/parsing.h
+INCLUDE_FILES =			includes/parsing.h \
+						includes/world.h
 
 # Sources root path
 SOURCES_PATH =			./sources
 
 # Sources files list from root source path
 SOURCE_FILE_PATHS =	main.c \
-						parsing/display_parsing.c \
-						parsing/parsing.c
+					parsing/display_parsing.c \
+					parsing/elements/parse_ambient.c \
+					parsing/parsing.c
 
 # Local libraries root paths that need to be compiled (e.g. ./lib/mylib)
 LOCAL_LIBRARY_PATHS =	libraries/minilibx-linux \

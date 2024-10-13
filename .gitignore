@@ -1,5 +1,6 @@
-obj/
 miniRT
-*.o
+a.out
 libraries/libft/libft.a
 libraries/libgnl/libgnl.a
+obj/
+*.o
