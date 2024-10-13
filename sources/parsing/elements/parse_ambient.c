@@ -1,6 +1,7 @@
 #include <stddef.h>
 #include <stdio.h>
 
+#include "libft.h"
 #include "world.h"
 
 char	**goto_next_value(char **line_split)
@@ -18,8 +19,35 @@ char	**goto_next_value(char **line_split)
 
 bool	is_float(const char *s)
 {
-	(void)s;
-	return (true);
+	int	i;
+
+	i = 0;
+	if (s[i] == '-')
+		i++;
+	if (1 != ft_isdigit(s[i]))
+		return (false);
+	while (1 == ft_isdigit(s[i]))
+		i++;
+	if (s[i] == '\0')
+		return (true);
+	if (s[i] != '.')
+        return (false);
+    i++;
+	if (1 != ft_isdigit(s[i]))
+		return (false);
+	while (1 == ft_isdigit(s[i]))
+		i++;
+    return (s[i] == '\0');
+}
+
+bool	is_int(const char *s)
+{
+	int	i;
+
+	i = 0;
+	while (ft_isdigit(s[i]))
+		i++;
+	return (s[i] == '\0');
 }
 
 bool	is_float_in_range(float n, float lower, float upper)
@@ -81,7 +109,7 @@ int	parse_ambient(char **line_split, t_world *world)
 	line_split = goto_next_value(line_split);
 	if (line_split == NULL)
 		return (printf("Error\nNot enough information for Ambient\n"), -1);
-	if (false == is_float(*line_split))
+	if (false == is_float(*line_split, ft_strlen(*line_split)))
 		return (printf("Error\nAmbient Power is not a float\n"), -2);
 	world->ambient_power = atof(*line_split);
 	if (false == is_float_in_range(world->ambient_power, 0.0f, 1.0f))
