@@ -23,8 +23,8 @@ int	parse_line(const char *line, t_world *world)
 		return (0);
 	if (0 == ft_strncmp(line_split[i], "A", 2))
 		return (parse_ambient(line_split + i + 1, world));
-	// if (0 == ft_strncmp(line_split[i], "C", 2))
-	// 	return (parse_camera(line_split + i + 1, world));
+	if (0 == ft_strncmp(line_split[i], "C", 2))
+		return (parse_camera(line_split + i + 1, world));
 	// if (0 == ft_strncmp(line_split[i], "L", 2))
 	// 	return (parse_light(line_split + i + 1, world));
 	// if (0 == ft_strncmp(line_split[i], "sp", 3))
@@ -62,6 +62,8 @@ int	parse_rt(const char *pathname, t_world *world)
 		line = get_next_line(fd);
 		if (line == NULL)
 			break ;
+		if (line[ft_strlen(line) - 1] == '\n')
+			line[ft_strlen(line) - 1] = '\0';
 		if (0 != parse_line(line, world))
 			return (free(world->objects), free(line), -3);
 		free(line);
