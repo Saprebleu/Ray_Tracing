@@ -2,6 +2,8 @@
 #include <stddef.h>
 #include <stdio.h>
 
+#include "libft.h"
+
 #include "parsing/utils.h"
 #include "world.h"
 

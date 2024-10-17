@@ -25,8 +25,8 @@ int	parse_line(const char *line, t_world *world)
 		return (parse_ambient(line_split + i + 1, world));
 	if (0 == ft_strncmp(line_split[i], "C", 2))
 		return (parse_camera(line_split + i + 1, world));
-	// if (0 == ft_strncmp(line_split[i], "L", 2))
-	// 	return (parse_light(line_split + i + 1, world));
+	if (0 == ft_strncmp(line_split[i], "L", 2))
+		return (parse_light(line_split + i + 1, world));
 	// if (0 == ft_strncmp(line_split[i], "sp", 3))
 	// 	return (parse_sphere(line_split + i + 1, world));
 	// if (0 == ft_strncmp(line_split[i], "pl", 3))

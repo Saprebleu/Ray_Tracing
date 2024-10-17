@@ -28,10 +28,10 @@ void print_parsing(t_world world)
 	printf("\n");
 	printf("Camera Position  = %f / %f / %f\n", world.camera_position.x, world.camera_position.y, world.camera_position.z);
 	printf("Camera Direction = %f / %f / %f\n", world.camera_direction.x, world.camera_direction.y, world.camera_direction.z);
-	printf("Camera FOV       = %f\n", world.ambient_power);
+	printf("Camera FOV       = %d\n", world.camera_fov);
 	printf("\n");
 	printf("Light Position   = %f / %f / %f\n", world.light_position.x, world.light_position.y, world.light_position.z);
-	printf("Ambient Color    = %d / %d / %d\n", world.light_color.r, world.light_color.g, world.light_color.b);
+	printf("Light Color      = %d / %d / %d\n", world.light_color.r, world.light_color.g, world.light_color.b);
 	printf("Light Power      = %f\n", world.light_power);
 	if (world.nb_objects > 0)
 	{

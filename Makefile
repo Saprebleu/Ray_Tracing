@@ -28,6 +28,7 @@ SOURCE_FILE_PATHS =	main.c \
 					parsing/display_parsing.c \
 					parsing/elements/parse_ambient.c \
 					parsing/elements/parse_camera.c \
+					parsing/elements/parse_light.c \
 					parsing/parsing.c
 
 # Local libraries root paths that need to be compiled (e.g. ./lib/mylib)
