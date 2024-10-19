@@ -37,7 +37,6 @@ void print_parsing(t_world world)
 	{
 		printf("\n");
 		printf("OBJECTS:\n");
-		printf("\n");
 		for (int i = 0; i < world.nb_objects; i++)
 		{
 			printf("[%d] Object Type = %s\n", i, get_object_type_string(world.objects[i].type));
@@ -46,14 +45,14 @@ void print_parsing(t_world world)
 				case SPHERE:
 					printf("\tPosition  = %f / %f / %f\n", world.objects[i].position.x, world.objects[i].position.y, world.objects[i].position.z);
 					printf("\tColor     = %d / %d / %d\n", world.objects[i].color.r, world.objects[i].color.g, world.objects[i].color.b);
-					printf("\tRadius    = %f\n", world.objects[i].radius);
+					printf("\tDiameter  = %f\n", world.objects[i].diameter);
 					break ;
 
 				case CYLINDER:
 					printf("\tPosition  = %f / %f / %f\n", world.objects[i].position.x, world.objects[i].position.y, world.objects[i].position.z);
 					printf("\tDirection = %f / %f / %f\n", world.objects[i].direction.x, world.objects[i].direction.y, world.objects[i].direction.z);
 					printf("\tColor     = %d / %d / %d\n", world.objects[i].color.r, world.objects[i].color.g, world.objects[i].color.b);
-					printf("\tRadius    = %f\n", world.objects[i].radius);
+					printf("\tDiameter  = %f\n", world.objects[i].diameter);
 					printf("\tHeight    = %f\n", world.objects[i].height);
 					break ;
 

@@ -28,8 +28,16 @@ SOURCE_FILE_PATHS =	main.c \
 					parsing/display_parsing.c \
 					parsing/elements/parse_ambient.c \
 					parsing/elements/parse_camera.c \
+					parsing/elements/parse_cylinder.c \
 					parsing/elements/parse_light.c \
-					parsing/parsing.c
+					parsing/elements/parse_plane.c \
+					parsing/elements/parse_sphere.c \
+					parsing/parsing.c \
+					parsing/utils/color.c \
+					parsing/utils/float.c \
+					parsing/utils/int.c \
+					parsing/utils/utils.c \
+					parsing/utils/vector.c
 
 # Local libraries root paths that need to be compiled (e.g. ./lib/mylib)
 LOCAL_LIBRARY_PATHS =	libraries/minilibx-linux \
