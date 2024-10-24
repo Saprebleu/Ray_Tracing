@@ -6,7 +6,7 @@
 /*   By: tjarross <tjarross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:48:55 by tjarross          #+#    #+#             */
-/*   Updated: 2024/10/24 19:18:12 by tjarross         ###   ########.fr       */
+/*   Updated: 2024/10/24 20:04:09 by tjarross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,13 @@ typedef struct s_object
 	float			diameter;
 	float			height;
 	t_color			color;
+	float			a;
+	float			b;
+	float			c;
+	float			delta;
+	float			t1;
+	float			t2;
+	float			t_min;
 }	t_object;
 
 typedef struct s_world
