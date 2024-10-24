@@ -6,22 +6,35 @@
 /*   By: tjarross <tjarross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:29:08 by tjarross          #+#    #+#             */
-/*   Updated: 2024/10/19 14:50:29 by tjarross         ###   ########.fr       */
+/*   Updated: 2024/10/24 19:18:44 by tjarross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "mlx.h"
+
 #include "world.h"
 #include "parsing.h"
 
 void	print_parsing(t_world world);
 
+void set_pixel_color(t_display *display, int x, int y, int color)
+{
+	display->image_buffer[y * display->size_line +
+		x * display->bits_per_pixel / 8 + 0] = GET_BLUE(color);
+	display->image_buffer[y * display->size_line +
+		x * display->bits_per_pixel / 8 + 1] = GET_GREEN(color);
+	display->image_buffer[y * display->size_line +
+		x * display->bits_per_pixel / 8 + 2] = GET_RED(color);
+}
+
 int	main(int argc, char **argv)
 {
-	t_world	world;
-	int		parsing_ret;
+	t_display	display;
+	t_world		world;
+	int			parsing_ret;
 
 	if (argc != 2)
 		return (printf("Error\nProgram take only one argument\n"),
@@ -30,5 +43,25 @@ int	main(int argc, char **argv)
 	if (parsing_ret != 0)
 		return (EXIT_FAILURE);
 	print_parsing(world);
+	display.mlx_ptr = mlx_init();
+	if (display.mlx_ptr == NULL)
+		return (printf("Error\nCannot create mlx context\n"), EXIT_FAILURE);
+	display.mlx_window = mlx_new_window(display.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE);
+	if (display.mlx_window == NULL)
+		return (printf("Error\nCannot create mlx window\n"), EXIT_FAILURE);
+	display.mlx_image = mlx_new_image(display.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
+	if (display.mlx_image == NULL)
+		return (printf("Error\nCannot create mlx image\n"), EXIT_FAILURE);
+	display.image_buffer = mlx_get_data_addr(display.mlx_image,
+		&display.bits_per_pixel, &display.size_line, &display.endian);
+	if (display.image_buffer == NULL)
+		return (printf("Error\nCannot get mlx image buffer\n"), EXIT_FAILURE);
+
+	for (int y = 0; y < WINDOW_HEIGHT; y++)
+		for (int x = 0; x < WINDOW_WIDTH; x++)
+			set_pixel_color(&display, x, y, GET_RGB(255, 255, 255));
+
+	mlx_put_image_to_window(display.mlx_ptr, display.mlx_window, display.mlx_image, 0, 0);
+	mlx_loop(display.mlx_ptr);
 	return (EXIT_SUCCESS);
 }

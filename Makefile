@@ -50,7 +50,7 @@ LIBRARY_BIN_PATHS =		-L libraries/minilibx-linux \
 						-L libraries/libgnl
 
 # Flags used at linking time (e.g. -lm -lssl -lssh)
-LINKER_FLAGS =			-lm -lmlx -lft -lgnl
+LINKER_FLAGS =			-lm -lft -lgnl -lmlx -lX11 -lXext
 
 
 ################################################################################
