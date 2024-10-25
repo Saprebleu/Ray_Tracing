@@ -6,7 +6,7 @@
 /*   By: tjarross <tjarross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:48:55 by tjarross          #+#    #+#             */
-/*   Updated: 2024/10/24 20:04:09 by tjarross         ###   ########.fr       */
+/*   Updated: 2024/10/25 20:18:56 by tjarross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,6 @@
 # define WINDOW_TITLE	"miniRT"
 # define WINDOW_WIDTH	1024
 # define WINDOW_HEIGHT	768
-
-# define GET_RED(color) ((color & 0xFF0000) >> 16)
-# define GET_GREEN(color) ((color & 0x00FF00) >> 8)
-# define GET_BLUE(color) ((color & 0x0000FF))
-# define GET_RGB(r, g, b) (((r & 0xFF) << 16) | ((g & 0xFF) << 8) | ((b) & 0xFF))
 
 typedef enum e_object_type
 {
@@ -57,9 +52,6 @@ typedef struct s_object
 	float			a;
 	float			b;
 	float			c;
-	float			delta;
-	float			t1;
-	float			t2;
 	float			t_min;
 }	t_object;
 
