@@ -6,7 +6,7 @@
 /*   By: tjarross <tjarross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:29:01 by tjarross          #+#    #+#             */
-/*   Updated: 2024/10/19 14:43:04 by tjarross         ###   ########.fr       */
+/*   Updated: 2024/10/26 18:23:07 by tjarross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	parse_sphere(char **line_split, t_world *world)
 	if (line_split == NULL)
 		return (printf("Error\nNot enough information for Sphere\n"), -2);
 	if (false == is_vector(*line_split))
-		return (printf("Error\nPlane Position is not a vector\n"), -3);
+		return (printf("Error\nSphere Position is not a vector\n"), -3);
 	world->objects[world->nb_objects].position = get_vector(*line_split);
 	line_split = goto_next_value(line_split + 1);
 	if (line_split == NULL)
