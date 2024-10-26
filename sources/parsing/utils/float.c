@@ -6,7 +6,7 @@
 /*   By: tjarross <tjarross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:31:17 by tjarross          #+#    #+#             */
-/*   Updated: 2024/10/26 17:33:47 by tjarross         ###   ########.fr       */
+/*   Updated: 2024/10/26 19:38:09 by tjarross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,6 @@ float	get_float(const char *s)
 	if (decimal_str == NULL)
 		return (n);
 	decimals = ft_atoi(decimal_str + 1);
-	return (n + (sign *
-		(decimals / (float)powf(10, ft_strlen(decimal_str + 1)))));
+	return (n + (sign
+			* (decimals / (float)powf(10, ft_strlen(decimal_str + 1)))));
 }
