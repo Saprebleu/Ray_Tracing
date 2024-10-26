@@ -6,7 +6,7 @@
 /*   By: tjarross <tjarross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:29:08 by tjarross          #+#    #+#             */
-/*   Updated: 2024/10/25 20:28:15 by tjarross         ###   ########.fr       */
+/*   Updated: 2024/10/26 09:24:06 by tjarross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,11 +75,11 @@ bool	intersect_sphere(t_vector *camera_position,
 
 	distance = create_vector(camera_position, &sphere->position);
 	a = dot_product(ray, ray);
-	b = 2 * dot_product(ray, &distance);
+	b = 2.0f * dot_product(ray, &distance);
 	c = dot_product(camera_position, camera_position)
 		+ dot_product(&sphere->position, &sphere->position)
-		- 2 * (distance.x + distance.y + distance.z)
-		- (sphere->diameter / 2.0f) * (sphere->diameter / 2.0f);
+		- 2.0f * (distance.x + distance.y + distance.z)
+		- powf(sphere->diameter / 2.0f, 2.0f);
 	sphere->t_min = solve_polynom(a, b, c);
 	return (sphere->t_min != -1.0f);
 }
