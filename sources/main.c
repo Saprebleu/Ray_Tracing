@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tjarross <tjarross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:29:08 by tjarross          #+#    #+#             */
-/*   Updated: 2024/11/03 19:38:18 by jayzatov         ###   ########.fr       */
+/*   Updated: 2024/11/03 23:19:55 by tjarross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,6 @@
 
 #include "world.h"
 #include "parsing.h"
-
-float gx;
-float gy;
 
 void	print_parsing(t_world world);
 
@@ -72,16 +69,21 @@ float	solve_polynom(float a, float b, float c)
 	{
 		t1 = (-b - sqrtf(b * b - 4.0f * a * c)) / (2.0f * a);
 		t2 = (-b + sqrtf(b * b - 4.0f * a * c)) / (2.0f * a);
-		if (gx == 512 && gy == 384)
-			printf("t1 = %f, t2 = %f\n", t1, t2);
-		return (fminf(fabsf(t1), fabsf(t2)));
+		if (t1 < 0.0f && t2 < 0.0f)
+			return (MAXFLOAT);
+		if (t1 < 0.0f)
+			return (t2);
+		else if (t2 < 0.0f)
+			return (t1);
+		else
+			return (fminf(t1, t2));
 	}
 	return (MAXFLOAT);
 }
 
 // "distance" distance between camera point and the center of a sphere
 
-bool	intersect_sphere(const t_vector *eye,
+bool	intersect_sphere(const t_vector *pixel,
 	const t_vector *ray, t_object *sphere)
 {
 	t_vector	distance;
@@ -89,7 +91,7 @@ bool	intersect_sphere(const t_vector *eye,
 	float		b;
 	float		c;
 
-	distance = create_vector(eye, &sphere->position);
+	distance = create_vector(&sphere->position, pixel);
 	a = dot_product(ray, ray);
 	b = 2.0f * dot_product(ray, &distance);
 	c = dot_product(&distance, &distance)
@@ -110,7 +112,7 @@ void normalize_vector(t_vector *v)
 	v->z /= length;
 }
 
-bool	intesect_cylinder(const t_vector *eye, const t_vector *ray, t_object *cylinder,
+bool	intesect_cylinder(const t_vector *pixel, const t_vector *ray, t_object *cylinder,
 		int x, int y)
 {
 	// float x = cylinder->position.x;
@@ -121,17 +123,15 @@ bool	intesect_cylinder(const t_vector *eye, const t_vector *ray, t_object *cylin
 	// a = (pixel.x * pixel.x + pixel.y * pixel.y);
 	// b = (2.0f*(0.0f)*pixel.x + 2.0f*(0.0f)*pixel.y);
 	
-	t_vector distance = create_vector(eye, &cylinder->position);
+	t_vector distance = create_vector(&cylinder->position, pixel);
 
 	// ray au carré
-	a = (ray->x*ray->x + ray->z*ray->z);
+	a = (ray->x * ray->x + ray->z * ray->z);
 	// 2 fois chaque coordonnée de ray * chaque coordonnée de distance
-	b = 2.0f*(ray->x * distance.x) + 2.0f*(ray->z * distance.z);
-	c = (distance.x*distance.x + distance.z*distance.z)
+	b = 2.0f * (ray->x * distance.x) + 2.0f * (ray->z * distance.z);
+	c = (distance.x * distance.x + distance.z * distance.z)
 		- ((cylinder->diameter / 2.0f) * (cylinder->diameter / 2.0f));
 	
-	gx = x;
-	gy = y;
 	cylinder->t_min = solve_polynom(a, b, c);
 	
 	if (cylinder->t_min != MAXFLOAT)
@@ -147,15 +147,15 @@ bool	intesect_cylinder(const t_vector *eye, const t_vector *ray, t_object *cylin
 		// -> il n'y a que le z qui change par rapport aux coordonnees de la camera
 		// Il faut normaliser ray
 		
-		figure_point.x = eye->x + (cylinder->t_min * ray->x);
-		figure_point.y = eye->y + (cylinder->t_min * ray->y);
-		figure_point.z = eye->z + (cylinder->t_min * ray->z);
+		figure_point.x = pixel->x + (cylinder->t_min * ray->x);
+		figure_point.y = pixel->y + (cylinder->t_min * ray->y);
+		figure_point.z = pixel->z + (cylinder->t_min * ray->z);
 		if (x == 1024/2 && y == 768/2)
 		{
 			printf("\nray_norm x: %f, y: %f, z: %f\n", ray->x, ray->y, ray->z);
 			printf("cylinder->t_min %f\n", cylinder->t_min);
 			printf("POINT (%f, %f, %f)\n", figure_point.x, figure_point.y, figure_point.z);
-			printf("EYE x: %f, y: %f, z: %f\n", eye->x, eye->y, eye->z);
+			printf("EYE x: %f, y: %f, z: %f\n", pixel->x, pixel->y, pixel->z);
 		}
 		
 		float	point_center_dist = (square((figure_point.x - cylinder->position.x)) +
@@ -265,7 +265,6 @@ void	generate_image(t_display *display, t_world *world)
 	eye.x = world->camera_position.x;
 	eye.y = world->camera_position.y;
 	eye.z = world->camera_position.z - camera_distance;
-	(void)ray;
 	y = -1;
 	while (++y < WINDOW_HEIGHT)
 	{
@@ -297,7 +296,7 @@ void	generate_image(t_display *display, t_world *world)
 			// if (index_obj != -1)
 			// 	set_pixel_color(display, x, y, &world->objects[index_obj].color);
 
-			if (intesect_cylinder(&eye, &ray, &world->objects[0], x, y))
+			if (intesect_cylinder(&pixel, &ray, &world->objects[0], x, y))
 				set_pixel_color(display, x, y, &world->objects[0].color);
 		}
 	}
