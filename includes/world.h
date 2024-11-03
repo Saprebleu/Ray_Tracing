@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   world.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjarross <tjarross@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:48:55 by tjarross          #+#    #+#             */
-/*   Updated: 2024/10/25 20:18:56 by tjarross         ###   ########.fr       */
+/*   Updated: 2024/10/28 13:54:22 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,6 @@ typedef struct s_object
 	float			diameter;
 	float			height;
 	t_color			color;
-	float			a;
-	float			b;
-	float			c;
 	float			t_min;
 }	t_object;
 
