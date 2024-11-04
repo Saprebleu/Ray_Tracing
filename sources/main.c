@@ -6,7 +6,11 @@
 /*   By: tjarross <tjarross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:29:08 by tjarross          #+#    #+#             */
+<<<<<<< Updated upstream
 /*   Updated: 2024/11/03 23:19:55 by tjarross         ###   ########.fr       */
+=======
+/*   Updated: 2024/11/03 19:50:37 by jayzatov         ###   ########.fr       */
+>>>>>>> Stashed changes
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,17 +162,17 @@ bool	intesect_cylinder(const t_vector *pixel, const t_vector *ray, t_object *cyl
 			printf("EYE x: %f, y: %f, z: %f\n", pixel->x, pixel->y, pixel->z);
 		}
 		
-		float	point_center_dist = (square((figure_point.x - cylinder->position.x)) +
+		float	point_center_length = (square((figure_point.x - cylinder->position.x)) +
 									 square((figure_point.y - cylinder->position.y))+
 									 square((figure_point.z - cylinder->position.z)));
 											
 		if (x == 1024/2 && y == 768/2)
-			printf("\npoint_center_dist %f, sqrt %f\n", point_center_dist, sqrtf(point_center_dist));
-		// point_center_dist = sqrtf(point_center_dist);
+			printf("\npoint_center_length %f, sqrt %f\n", point_center_length, sqrtf(point_center_length));
+		// point_center_length = sqrtf(point_center_length);
 
 
 		float		pythagore_solution;
-		pythagore_solution = point_center_dist - square((cylinder->diameter / 2.0f));
+		pythagore_solution = point_center_length - square((cylinder->diameter / 2.0f));
 		
 		if (x == 1024/2 && y == 768/2)
 		{
@@ -181,11 +185,11 @@ bool	intesect_cylinder(const t_vector *pixel, const t_vector *ray, t_object *cyl
 
 		if (x == 1024/2 && y == 768/2)
 		{
-			printf("\n\n(A-C)^2 : %f\n", point_center_dist);
+			printf("\n\n(A-C)^2 : %f\n", point_center_length);
 			printf("ray^2 : %f\n", square(cylinder->diameter / 2.0f));
 			// printf("DIAMETER : %f\n\n", (cylinder->diameter / 2.0f));
-			printf("(A-C)^2 - ray^2 : RESULT^2 = %f\n", point_center_dist - square(cylinder->diameter / 2.0f));
-			printf("RESULT : %f\n", sqrtf(point_center_dist - square(cylinder->diameter / 2.0f)));
+			printf("(A-C)^2 - ray^2 : RESULT^2 = %f\n", point_center_length - square(cylinder->diameter / 2.0f));
+			printf("RESULT : %f\n", sqrtf(point_center_length - square(cylinder->diameter / 2.0f)));
 			printf("H/2 : %f\n\n", (cylinder->height / 2.0f));
 
 			
