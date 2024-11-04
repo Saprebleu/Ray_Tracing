@@ -6,10 +6,11 @@
 /*   By: tjarross <tjarross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:29:03 by tjarross          #+#    #+#             */
-/*   Updated: 2024/10/19 14:43:17 by tjarross         ###   ########.fr       */
+/*   Updated: 2024/11/04 20:10:50 by tjarross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <math.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -24,8 +25,23 @@
 static int	parse_cylinder3(char **line_split, t_world *world)
 {
 	line_split = goto_next_value(line_split + 1);
+	if (line_split == NULL)
+		return (printf("Error\nNot enough information for Cylinder\n"), -10);
+	if (false == is_float(*line_split))
+		return (printf("Error\nCylinder Height is not a float\n"), -11);
+	world->objects[world->nb_objects].height = get_float(*line_split);
+	line_split = goto_next_value(line_split + 1);
+	if (line_split == NULL)
+		return (printf("Error\nNot enough information for Cylinder\n"), -12);
+	if (false == is_color(*line_split))
+		return (printf("Error\nCylinder Color is not a color\n"), -13);
+	world->objects[world->nb_objects].color = get_color(*line_split);
+	if (false == is_color_in_range(world->objects[world->nb_objects].color,
+			0, 255))
+		return (printf("Error\nCylinder Color not in range [0, 255]\n"), -14);
+	line_split = goto_next_value(line_split + 1);
 	if (line_split != NULL)
-		return (printf("Error\nInvalid value: '%s'\n", *line_split), -10);
+		return (printf("Error\nInvalid value: '%s'\n", *line_split), -15);
 	world->objects[world->nb_objects].type = CYLINDER;
 	world->nb_objects++;
 	return (0);
@@ -36,24 +52,23 @@ static int	parse_cylinder2(char **line_split, t_world *world)
 	line_split = goto_next_value(line_split + 1);
 	if (line_split == NULL)
 		return (printf("Error\nNot enough information for Cylinder\n"), -4);
+	if (false == is_vector(*line_split))
+		return (printf("Error\nCylinder Direction is not a vector\n"), -5);
+	world->objects[world->nb_objects].direction = get_vector(*line_split);
+	if (false == is_vector_in_range(world->objects[world->nb_objects].direction,
+			-1.0f, 1.0f))
+		return (printf("Error\nCylinder Direction not in range [-1, 1]\n"), -6);
+	if (fabsf(powf(world->objects[world->nb_objects].direction.x, 2)
+			+ powf(world->objects[world->nb_objects].direction.y, 2)
+			+ powf(world->objects[world->nb_objects].direction.z, 2) - 1.0f)
+		> 0.01f)
+		return (printf("Error\nCylinder Direction not normalized\n"), -7);
+	line_split = goto_next_value(line_split + 1);
+	if (line_split == NULL)
+		return (printf("Error\nNot enough information for Cylinder\n"), -8);
 	if (false == is_float(*line_split))
-		return (printf("Error\nCylinder Diameter is not a float\n"), -5);
+		return (printf("Error\nCylinder Diameter is not a float\n"), -9);
 	world->objects[world->nb_objects].diameter = get_float(*line_split);
-	line_split = goto_next_value(line_split + 1);
-	if (line_split == NULL)
-		return (printf("Error\nNot enough information for Cylinder\n"), -4);
-	if (false == is_float(*line_split))
-		return (printf("Error\nCylinder Height is not a float\n"), -5);
-	world->objects[world->nb_objects].height = get_float(*line_split);
-	line_split = goto_next_value(line_split + 1);
-	if (line_split == NULL)
-		return (printf("Error\nNot enough information for Cylinder\n"), -7);
-	if (false == is_color(*line_split))
-		return (printf("Error\nCylinder Color is not a color\n"), -8);
-	world->objects[world->nb_objects].color = get_color(*line_split);
-	if (false == is_color_in_range(world->objects[world->nb_objects].color,
-			0, 255))
-		return (printf("Error\nCylinder Color not in range [0, 255]\n"), -9);
 	return (parse_cylinder3(line_split, world));
 }
 
@@ -70,14 +85,5 @@ int	parse_cylinder(char **line_split, t_world *world)
 	if (false == is_vector(*line_split))
 		return (printf("Error\nCylinder Position is not a vector\n"), -3);
 	world->objects[world->nb_objects].position = get_vector(*line_split);
-	line_split = goto_next_value(line_split + 1);
-	if (line_split == NULL)
-		return (printf("Error\nNot enough information for Cylinder\n"), -4);
-	if (false == is_vector(*line_split))
-		return (printf("Error\nCylinder Direction is not a vector\n"), -5);
-	world->objects[world->nb_objects].direction = get_vector(*line_split);
-	if (false == is_vector_in_range(world->objects[world->nb_objects].direction,
-			-1.0f, 1.0f))
-		return (printf("Error\nCylinder Direction not in range [-1, 1]\n"), -6);
 	return (parse_cylinder2(line_split, world));
 }
