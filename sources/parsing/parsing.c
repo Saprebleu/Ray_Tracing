@@ -6,7 +6,7 @@
 /*   By: tjarross <tjarross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:28:00 by tjarross          #+#    #+#             */
-/*   Updated: 2024/10/19 14:28:03 by tjarross         ###   ########.fr       */
+/*   Updated: 2024/11/04 22:01:53 by tjarross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,40 @@
 #include "world.h"
 #include "parsing.h"
 
+void	free_split(char **split)
+{
+	int	i;
+
+	i = 0;
+	while (split[i] != NULL)
+		free(split[i++]);
+	free(split);
+}
+
+int	parse_elements(char **line_split, int i, t_world *world)
+{
+	int	ret;
+
+	if (0 == ft_strncmp(line_split[i], "A", 2))
+		ret = parse_ambient(line_split + i + 1, world);
+	else if (0 == ft_strncmp(line_split[i], "C", 2))
+		ret = parse_camera(line_split + i + 1, world);
+	else if (0 == ft_strncmp(line_split[i], "L", 2))
+		ret = parse_light(line_split + i + 1, world);
+	else if (0 == ft_strncmp(line_split[i], "sp", 3))
+		ret = parse_sphere(line_split + i + 1, world);
+	else if (0 == ft_strncmp(line_split[i], "pl", 3))
+		ret = parse_plane(line_split + i + 1, world);
+	else if (0 == ft_strncmp(line_split[i], "cy", 3))
+		ret = parse_cylinder(line_split + i + 1, world);
+	else
+	{
+		printf("Error\nInvalid element type '%s'\n", line_split[i]);
+		ret = -100;
+	}
+	return (free_split(line_split), ret);
+}
+
 int	parse_line(const char *line, t_world *world)
 {
 	char	**line_split;
@@ -32,20 +66,8 @@ int	parse_line(const char *line, t_world *world)
 	while (line_split[i] && line_split[i][0] == '\0')
 		i++;
 	if (line_split[i] == NULL)
-		return (0);
-	if (0 == ft_strncmp(line_split[i], "A", 2))
-		return (parse_ambient(line_split + i + 1, world));
-	if (0 == ft_strncmp(line_split[i], "C", 2))
-		return (parse_camera(line_split + i + 1, world));
-	if (0 == ft_strncmp(line_split[i], "L", 2))
-		return (parse_light(line_split + i + 1, world));
-	if (0 == ft_strncmp(line_split[i], "sp", 3))
-		return (parse_sphere(line_split + i + 1, world));
-	if (0 == ft_strncmp(line_split[i], "pl", 3))
-		return (parse_plane(line_split + i + 1, world));
-	if (0 == ft_strncmp(line_split[i], "cy", 3))
-		return (parse_cylinder(line_split + i + 1, world));
-	return (printf("Error\nInvalid element type '%s'\n", line_split[i]), -2);
+		return (free_split(line_split), 0);
+	return (parse_elements(line_split, i, world));
 }
 
 bool	file_has_extension(const char *pathname, const char *extension)
