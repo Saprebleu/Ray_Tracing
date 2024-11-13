@@ -25,6 +25,11 @@ SOURCES_PATH =			./sources
 
 # Sources files list from root source path
 SOURCE_FILE_PATHS =	main.c \
+					angles.c \
+					cylinder.c \
+					rotation.c \
+					sphere.c \
+					vector_maths.c \
 					parsing/display_parsing.c \
 					parsing/elements/parse_ambient.c \
 					parsing/elements/parse_camera.c \

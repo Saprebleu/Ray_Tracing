@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjarross <tjarross@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:29:08 by tjarross          #+#    #+#             */
-<<<<<<< Updated upstream
-/*   Updated: 2024/11/03 23:19:55 by tjarross         ###   ########.fr       */
-=======
-/*   Updated: 2024/11/03 19:50:37 by jayzatov         ###   ########.fr       */
->>>>>>> Stashed changes
+/*   Updated: 2024/11/13 17:31:46 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +22,6 @@
 #include "world.h"
 #include "parsing.h"
 
-void	print_parsing(t_world world);
 
 void	set_pixel_color(t_display *display, int x, int y, const t_color *color)
 {
@@ -36,215 +31,6 @@ void	set_pixel_color(t_display *display, int x, int y, const t_color *color)
 		+ x * display->bits_per_pixel / 8 + 1] = color->g;
 	display->image_buffer[y * display->size_line
 		+ x * display->bits_per_pixel / 8 + 2] = color->r;
-}
-
-// Gives a number resulting of the multiplication of 2 vectors.
-// The dot product can be useful to :
-// 		- calcualte the distance.
-//		- determine angles.
-//		- determine whether an object is aiming towards another
-//		  or the contrary.
-
-float	dot_product(const t_vector *v1, const t_vector *v2)
-{
-	return (v1->x * v2->x + v1->y * v2->y + v1->z * v2->z);
-}
-
-t_vector	create_vector(const t_vector *start, const t_vector *end)
-{
-	t_vector	v;
-
-	v.x = end->x - start->x;
-	v.y = end->y - start->y;
-	v.z = end->z - start->z;
-	return (v);
-}
-
-float	solve_polynom(float a, float b, float c)
-{
-	float	delta;
-	float	t1;
-	float	t2;
-
-	delta = b * b - 4 * a * c;
-	if (delta == 0.0f)
-		return (-b / (2.0f * a));
-	else if (delta > 0.0f)
-	{
-		t1 = (-b - sqrtf(b * b - 4.0f * a * c)) / (2.0f * a);
-		t2 = (-b + sqrtf(b * b - 4.0f * a * c)) / (2.0f * a);
-		if (t1 < 0.0f && t2 < 0.0f)
-			return (MAXFLOAT);
-		if (t1 < 0.0f)
-			return (t2);
-		else if (t2 < 0.0f)
-			return (t1);
-		else
-			return (fminf(t1, t2));
-	}
-	return (MAXFLOAT);
-}
-
-// "distance" distance between camera point and the center of a sphere
-
-bool	intersect_sphere(const t_vector *pixel,
-	const t_vector *ray, t_object *sphere)
-{
-	t_vector	distance;
-	float		a;
-	float		b;
-	float		c;
-
-	distance = create_vector(&sphere->position, pixel);
-	a = dot_product(ray, ray);
-	b = 2.0f * dot_product(ray, &distance);
-	c = dot_product(&distance, &distance)
-		- ((sphere->diameter / 2.0f) * (sphere->diameter / 2.0f));
-	sphere->t_min = solve_polynom(a, b, c);
-	return (sphere->t_min != MAXFLOAT);
-}
-
-float square(float x) {
-    return x * x;
-}
-void normalize_vector(t_vector *v)
-{
-	float	length = sqrtf(powf(v->x, 2) + powf(v->y, 2) + powf(v->z, 2));
-
-	v->x /= length;
-	v->y /= length;
-	v->z /= length;
-}
-
-bool	intesect_cylinder(const t_vector *pixel, const t_vector *ray, t_object *cylinder,
-		int x, int y)
-{
-	// float x = cylinder->position.x;
-	// float y = cylinder->position.y;
-	float		a;
-	float		b;
-	float		c;
-	// a = (pixel.x * pixel.x + pixel.y * pixel.y);
-	// b = (2.0f*(0.0f)*pixel.x + 2.0f*(0.0f)*pixel.y);
-	
-	t_vector distance = create_vector(&cylinder->position, pixel);
-
-	// ray au carré
-	a = (ray->x * ray->x + ray->z * ray->z);
-	// 2 fois chaque coordonnée de ray * chaque coordonnée de distance
-	b = 2.0f * (ray->x * distance.x) + 2.0f * (ray->z * distance.z);
-	c = (distance.x * distance.x + distance.z * distance.z)
-		- ((cylinder->diameter / 2.0f) * (cylinder->diameter / 2.0f));
-	
-	cylinder->t_min = solve_polynom(a, b, c);
-	
-	if (cylinder->t_min != MAXFLOAT)
-	{	
-		// float	normalized_ray = sqrtf(powf(ray->x, 2) + powf(ray->y, 2) + powf(ray->z, 2));
-		// t_vector	ray_norm;
-		// ray_norm.x = ray->x/normalized_ray;
-		// ray_norm.y = ray->y/normalized_ray;
-		// ray_norm.z = ray->z/normalized_ray;
-		
-		t_vector	figure_point;
-		// X camera position MAIS la position de l'oeil
-		// -> il n'y a que le z qui change par rapport aux coordonnees de la camera
-		// Il faut normaliser ray
-		
-		figure_point.x = pixel->x + (cylinder->t_min * ray->x);
-		figure_point.y = pixel->y + (cylinder->t_min * ray->y);
-		figure_point.z = pixel->z + (cylinder->t_min * ray->z);
-		if (x == 1024/2 && y == 768/2)
-		{
-			printf("\nray_norm x: %f, y: %f, z: %f\n", ray->x, ray->y, ray->z);
-			printf("cylinder->t_min %f\n", cylinder->t_min);
-			printf("POINT (%f, %f, %f)\n", figure_point.x, figure_point.y, figure_point.z);
-			printf("EYE x: %f, y: %f, z: %f\n", pixel->x, pixel->y, pixel->z);
-		}
-		
-		float	point_center_length = (square((figure_point.x - cylinder->position.x)) +
-									 square((figure_point.y - cylinder->position.y))+
-									 square((figure_point.z - cylinder->position.z)));
-											
-		if (x == 1024/2 && y == 768/2)
-			printf("\npoint_center_length %f, sqrt %f\n", point_center_length, sqrtf(point_center_length));
-		// point_center_length = sqrtf(point_center_length);
-
-
-		float		pythagore_solution;
-		pythagore_solution = point_center_length - square((cylinder->diameter / 2.0f));
-		
-		if (x == 1024/2 && y == 768/2)
-		{
-			printf("cylinder->rayon %f, squre %f\n", (cylinder->diameter / 2.0f), square((cylinder->diameter / 2.0f)));
-			printf("pythagore_solution %f\n", sqrtf(pythagore_solution));
-		}
-		
-
-		pythagore_solution = sqrtf(pythagore_solution);	
-
-		if (x == 1024/2 && y == 768/2)
-		{
-			printf("\n\n(A-C)^2 : %f\n", point_center_length);
-			printf("ray^2 : %f\n", square(cylinder->diameter / 2.0f));
-			// printf("DIAMETER : %f\n\n", (cylinder->diameter / 2.0f));
-			printf("(A-C)^2 - ray^2 : RESULT^2 = %f\n", point_center_length - square(cylinder->diameter / 2.0f));
-			printf("RESULT : %f\n", sqrtf(point_center_length - square(cylinder->diameter / 2.0f)));
-			printf("H/2 : %f\n\n", (cylinder->height / 2.0f));
-
-			
-			// pythagore_solution = sqrtf(fabsf(pythagore_solution));
-			printf("SOLUTION : %f\n", fabsf(pythagore_solution));
-			printf("cylinder->height %f\n", cylinder->height);
-		}
-		
-
-
-		// if (fabsf(pythagore_solution) > (cylinder->height / 2.0f))
-		// if (fabsf(pythagore_solution) > cylinder->height)
-		// if (fabsf(pythagore_solution) > (cylinder->height / 2.0f))
-		if (fabsf(pythagore_solution) > (cylinder->height / 2.0f))
-		{
-			// printf("pythagore_solution2 %f\n", pythagore_solution);
-			cylinder->color.r = 255; 
-			cylinder->color.g = 255; 
-			cylinder->color.b = 0;
-			//JAUNE
-			if (x == 1024/2 && y == 768/2)
-				printf("JAUNE\n");
-
-			// return (0);	
-		}
-		else if (fabsf(pythagore_solution) == (cylinder->height / 2.0f))
-		{
-			cylinder->color.r = 0; 
-			cylinder->color.g = 255; 
-			cylinder->color.b = 0;
-			//ROUGE
-			if (x == 1024/2 && y == 768/2)
-				printf("ROUGE\n");
-		}
-		else if (fabsf(pythagore_solution) < (cylinder->height / 2.0f))
-		{
-			cylinder->color.r = 0; 
-			cylinder->color.g = 0; 
-			cylinder->color.b = 255;
-			if (x == 1024/2 && y == 768/2)
-				printf("BLEU\n");
-
-			//BLEU 
-		}
-		else if (x == 1024/2 && y == 768/2)
-		{
-			printf("OK -- %f, %f\n", fabsf(pythagore_solution), pythagore_solution);
-			
-		}	
-			
-		return (cylinder->t_min != MAXFLOAT);
-
-	}
-	
-	return (false);
 }
 
 // "Camera distance" is calculated thanks to the TOA formula of a right triangle,
@@ -280,7 +66,6 @@ void	generate_image(t_display *display, t_world *world)
 			ray = create_vector(&eye, &pixel);
 			normalize_vector(&ray);
 
-			
 			// intersect_sphere(&world->eye, &ray, &world->objects[0]);
 			// intersect_sphere(&world->eye, &ray, &world->objects[1]);
 				
@@ -300,7 +85,7 @@ void	generate_image(t_display *display, t_world *world)
 			// if (index_obj != -1)
 			// 	set_pixel_color(display, x, y, &world->objects[index_obj].color);
 
-			if (intesect_cylinder(&pixel, &ray, &world->objects[0], x, y))
+			if (intesect_cylinder(eye, pixel, &world->objects[0]))
 				set_pixel_color(display, x, y, &world->objects[0].color);
 		}
 	}

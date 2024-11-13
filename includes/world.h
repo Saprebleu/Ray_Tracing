@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:48:55 by tjarross          #+#    #+#             */
-/*   Updated: 2024/10/28 13:54:22 by jayzatov         ###   ########.fr       */
+/*   Updated: 2024/11/13 17:25:59 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,5 +79,34 @@ typedef struct s_display
 	int		size_line;
 	int		endian;
 }	t_display;
+
+typedef struct s_angles
+{
+	float alpha;
+	float beta;
+	float gamma;
+}	t_angles;
+
+typedef struct s_distances
+{
+	float	t1;
+	float	t2;
+}	t_distances;
+
+t_vector	create_vector(const t_vector *start, const t_vector *end);
+bool		cylinder_height(t_object cylinder, float t, t_vector ray, t_vector rot_pixel);
+float		dot_product(const t_vector *v1, const t_vector *v2);
+void		find_angles(t_angles *angles, t_vector cylinder_direction);
+t_distances	find_distances(t_vector ray, t_vector rot_pixel, t_object cylinder);
+bool		intesect_cylinder(t_vector	eye, t_vector pixel, t_object *cylinder);
+bool		intersect_sphere(const t_vector *pixel, const t_vector *ray, t_object *sphere);
+float		magnitude(t_vector vec);
+void		normalize_vector(t_vector *v);
+void		print_parsing(t_world world);
+void		rotation_process(t_vector vec, t_vector cylinder_center,
+			t_vector *rot_vec, t_angles angles);
+float		square(float nbr);
+void		translation(t_vector *vec, t_vector new_origin);
+void		xyz_rotation_matrix(t_vector original, t_vector *rotated, t_angles angles);
 
 #endif
