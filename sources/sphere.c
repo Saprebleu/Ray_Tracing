@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 17:24:28 by jayzatov          #+#    #+#             */
-/*   Updated: 2024/11/13 17:26:12 by jayzatov         ###   ########.fr       */
+/*   Updated: 2024/11/15 11:40:27 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ float	solve_polynom(float a, float b, float c)
 	return (MAXFLOAT);
 }
 
-// "distance" : distance between the pixel and the center of a sphere
+// "distance" : distance between the center of the sphere and the pixel 
 
-bool	intersect_sphere(const t_vector *pixel,
+void	intersect_sphere(const t_vector *pixel,
 	const t_vector *ray, t_object *sphere)
 {
 	t_vector	distance;
@@ -63,5 +63,5 @@ bool	intersect_sphere(const t_vector *pixel,
 	c = dot_product(&distance, &distance)
 		- ((sphere->diameter / 2.0f) * (sphere->diameter / 2.0f));
 	sphere->t_min = solve_polynom(a, b, c);
-	return (sphere->t_min != MAXFLOAT);
+	return;
 }

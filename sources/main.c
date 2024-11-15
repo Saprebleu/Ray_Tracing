@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:29:08 by tjarross          #+#    #+#             */
-/*   Updated: 2024/11/13 17:31:46 by jayzatov         ###   ########.fr       */
+/*   Updated: 2024/11/15 11:29:07 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ void	set_pixel_color(t_display *display, int x, int y, const t_color *color)
 // 	knowing fov degrees (converted to radians for tanf()) and screen width.
 //  It is the eye-camera distance;
 
-// The "ray" starts at the camera point, goes through each pixel of the screen and
-// might encounter a figure.
+// The "ray" starts at the eye, goes through a pixel of the screen
+// and might encounter a figure.
 
 void	generate_image(t_display *display, t_world *world)
 {
@@ -66,27 +66,33 @@ void	generate_image(t_display *display, t_world *world)
 			ray = create_vector(&eye, &pixel);
 			normalize_vector(&ray);
 
-			// intersect_sphere(&world->eye, &ray, &world->objects[0]);
-			// intersect_sphere(&world->eye, &ray, &world->objects[1]);
-				
+			int j = -1;
+			while (++j < world->nb_objects)
+			{
+				world->objects[j].t_min = MAXFLOAT;
+				if (world->objects[j].type == SPHERE)
+					intersect_sphere(&pixel, &ray, &world->objects[j]);
+				else if (world->objects[j].type == CYLINDER)
+					intesect_cylinder(eye, pixel, &world->objects[j]);
+				else if (world->objects[j].type == PLANE)
+					intersect_plane(pixel, &ray, &world->objects[j]);
+			}
 			
-			// int i = 0;
-			// int index_obj = -1;
-			// float smallest_tmin = MAXFLOAT;
-			// while(i < world->nb_objects)
-			// {
-			// 	if (world->objects[i].t_min < smallest_tmin)
-			// 	{
-			// 		index_obj = i;
-			// 		smallest_tmin = world->objects[i].t_min;
-			// 	}
-			// 	i++;
-			// }
-			// if (index_obj != -1)
-			// 	set_pixel_color(display, x, y, &world->objects[index_obj].color);
+			int i = 0;
+			int index_obj = -1;
+			float smallest_tmin = MAXFLOAT;
+			while(i < world->nb_objects)
+			{
+				if (world->objects[i].t_min < smallest_tmin)
+				{
+					index_obj = i;
+					smallest_tmin = world->objects[i].t_min;
+				}
+				i++;
+			}
+			if (index_obj != -1)
+				set_pixel_color(display, x, y, &world->objects[index_obj].color);
 
-			if (intesect_cylinder(eye, pixel, &world->objects[0]))
-				set_pixel_color(display, x, y, &world->objects[0].color);
 		}
 	}
 }

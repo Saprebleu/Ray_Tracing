@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 15:53:00 by jayzatov          #+#    #+#             */
-/*   Updated: 2024/11/13 17:02:07 by jayzatov         ###   ########.fr       */
+/*   Updated: 2024/11/14 16:48:09 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ float	dot_product(const t_vector *v1, const t_vector *v2)
 	return (v1->x * v2->x + v1->y * v2->y + v1->z * v2->z);
 }
 
-// Written ||V||
+// Written |V|
 
 float	magnitude(t_vector vec)
 {
