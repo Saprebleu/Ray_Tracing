@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:48:55 by tjarross          #+#    #+#             */
-/*   Updated: 2024/11/13 17:25:59 by jayzatov         ###   ########.fr       */
+/*   Updated: 2024/11/15 11:29:56 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,11 +94,12 @@ typedef struct s_distances
 }	t_distances;
 
 t_vector	create_vector(const t_vector *start, const t_vector *end);
-bool		cylinder_height(t_object cylinder, float t, t_vector ray, t_vector rot_pixel);
+bool		cylinder_height(t_object *cylinder, float t, t_vector ray, t_vector rot_pixel);
 float		dot_product(const t_vector *v1, const t_vector *v2);
 void		find_angles(t_angles *angles, t_vector cylinder_direction);
 t_distances	find_distances(t_vector ray, t_vector rot_pixel, t_object cylinder);
-bool		intesect_cylinder(t_vector	eye, t_vector pixel, t_object *cylinder);
+void		intesect_cylinder(t_vector	eye, t_vector pixel, t_object *cylinder);
+void		intersect_plane(t_vector pixel, const t_vector *ray, t_object *plane);
 bool		intersect_sphere(const t_vector *pixel, const t_vector *ray, t_object *sphere);
 float		magnitude(t_vector vec);
 void		normalize_vector(t_vector *v);

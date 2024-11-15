@@ -8,7 +8,7 @@ BUILD_PATH =			./obj
 COMPILER =				gcc
 
 # Compiler's flags
-COMPILE_FLAGS =			-O0 -g3 -std=c99 -Wall -Werror -Wextra
+COMPILE_FLAGS =			-Wall -Werror -Wextra
 
 # Compiler's includes flags (e.g. -I includes -I my_lib/includes)
 INCLUDE_FLAGS =			-I includes \
@@ -28,6 +28,7 @@ SOURCE_FILE_PATHS =	main.c \
 					angles.c \
 					cylinder.c \
 					rotation.c \
+					plane.c \
 					sphere.c \
 					vector_maths.c \
 					parsing/display_parsing.c \
