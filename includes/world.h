@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:48:55 by tjarross          #+#    #+#             */
-/*   Updated: 2024/11/15 11:29:56 by jayzatov         ###   ########.fr       */
+/*   Updated: 2024/11/15 12:01:33 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void		find_angles(t_angles *angles, t_vector cylinder_direction);
 t_distances	find_distances(t_vector ray, t_vector rot_pixel, t_object cylinder);
 void		intesect_cylinder(t_vector	eye, t_vector pixel, t_object *cylinder);
 void		intersect_plane(t_vector pixel, const t_vector *ray, t_object *plane);
-bool		intersect_sphere(const t_vector *pixel, const t_vector *ray, t_object *sphere);
+void		intersect_sphere(const t_vector *pixel, const t_vector *ray, t_object *sphere);
 float		magnitude(t_vector vec);
 void		normalize_vector(t_vector *v);
 void		print_parsing(t_world world);
