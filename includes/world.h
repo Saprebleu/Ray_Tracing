@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:48:55 by tjarross          #+#    #+#             */
-/*   Updated: 2024/11/15 12:01:33 by jayzatov         ###   ########.fr       */
+/*   Updated: 2024/11/17 19:09:58 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,15 +96,19 @@ typedef struct s_distances
 t_vector	create_vector(const t_vector *start, const t_vector *end);
 bool		cylinder_height(t_object *cylinder, float t, t_vector ray, t_vector rot_pixel);
 float		dot_product(const t_vector *v1, const t_vector *v2);
-void		find_angles(t_angles *angles, t_vector cylinder_direction);
+void		find_angles(t_angles *angles, t_vector rotation, int direction);
 t_distances	find_distances(t_vector ray, t_vector rot_pixel, t_object cylinder);
+void		generate_image(t_display *display, t_world *world);
+void		initialize_eye(t_vector *eye, t_world world);
+void		initialize_pixel(t_vector *pixel, t_world world, int x, int y);
 void		intesect_cylinder(t_vector	eye, t_vector pixel, t_object *cylinder);
 void		intersect_plane(t_vector pixel, const t_vector *ray, t_object *plane);
 void		intersect_sphere(const t_vector *pixel, const t_vector *ray, t_object *sphere);
 float		magnitude(t_vector vec);
 void		normalize_vector(t_vector *v);
 void		print_parsing(t_world world);
-void		rotation_process(t_vector vec, t_vector cylinder_center,
+t_vector	rotated_cam_ray(t_vector *pixel, t_vector *eye, t_world world);
+void		rotation_process(t_vector vec, t_vector center,
 			t_vector *rot_vec, t_angles angles);
 float		square(float nbr);
 void		translation(t_vector *vec, t_vector new_origin);

@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:38:41 by jayzatov          #+#    #+#             */
-/*   Updated: 2024/11/14 19:54:38 by jayzatov         ###   ########.fr       */
+/*   Updated: 2024/11/17 18:18:19 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,13 @@ bool	cylinder_height(t_object *cylinder, float t,
 								square((figure_point.y - cylinder->position.y))+
 								square((figure_point.z - cylinder->position.z)));
 	pythagore_solution = point_center_length - square((cylinder->diameter / 2.0f));
-	pythagore_solution = sqrtf(pythagore_solution);
+	
+	
+	// printf("pythagore_solution %f\n", pythagore_solution);
+	// printf("(cylinder->height / 2.0f) %f\n", (cylinder->height / 2.0f));
+		
 	if (fabsf(pythagore_solution) <= (cylinder->height / 2.0f))
-		return (cylinder->t_min != MAXFLOAT);
+		return (true);
 	return (false);
 }
 
@@ -100,7 +104,11 @@ void	intesect_cylinder(t_vector	eye, t_vector pixel, t_object *cylinder)
 	t_vector	ray;
 	t_distances	dist;
 
-	find_angles(&angles, cylinder->direction);
+	find_angles(&angles, cylinder->direction, -1);
+	// printf("alpha %f\n", angles.alpha/M_PI * 180);
+	// printf("beta %f\n", angles.beta/M_PI * 180);
+	// printf("gamma %f\n", angles.gamma/M_PI * 180); 
+	
 	rotation_process(eye, cylinder->position, &rot_eye, angles);
 	rotation_process(pixel, cylinder->position, &rot_pixel, angles);
 	ray = create_vector(&rot_eye, &rot_pixel);

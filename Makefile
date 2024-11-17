@@ -26,7 +26,9 @@ SOURCES_PATH =			./sources
 # Sources files list from root source path
 SOURCE_FILE_PATHS =	main.c \
 					angles.c \
+					camera_rot.c \
 					cylinder.c \
+					img_generation.c \
 					rotation.c \
 					plane.c \
 					sphere.c \

@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:29:08 by tjarross          #+#    #+#             */
-/*   Updated: 2024/11/15 11:29:07 by jayzatov         ###   ########.fr       */
+/*   Updated: 2024/11/17 19:10:05 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,80 +22,6 @@
 #include "world.h"
 #include "parsing.h"
 
-
-void	set_pixel_color(t_display *display, int x, int y, const t_color *color)
-{
-	display->image_buffer[y * display->size_line
-		+ x * display->bits_per_pixel / 8 + 0] = color->b;
-	display->image_buffer[y * display->size_line
-		+ x * display->bits_per_pixel / 8 + 1] = color->g;
-	display->image_buffer[y * display->size_line
-		+ x * display->bits_per_pixel / 8 + 2] = color->r;
-}
-
-// "Camera distance" is calculated thanks to the TOA formula of a right triangle,
-// 	knowing fov degrees (converted to radians for tanf()) and screen width.
-//  It is the eye-camera distance;
-
-// The "ray" starts at the eye, goes through a pixel of the screen
-// and might encounter a figure.
-
-void	generate_image(t_display *display, t_world *world)
-{
-	t_vector	ray;
-	t_vector	pixel;
-	t_vector	eye;
-	int			x;
-	int			y;
-	float		camera_distance;
-
-	camera_distance = ((WINDOW_WIDTH / 2.0f)
-						/ tanf((world->camera_fov / 2.0f) * M_PI / 180.0f));
-	pixel.z = world->camera_position.z;
-	eye.x = world->camera_position.x;
-	eye.y = world->camera_position.y;
-	eye.z = world->camera_position.z - camera_distance;
-	y = -1;
-	while (++y < WINDOW_HEIGHT)
-	{
-		x = -1;
-		while (++x < WINDOW_WIDTH)
-		{
-			pixel.x = world->camera_position.x + (WINDOW_WIDTH / 2.0f) - x;
-			pixel.y = world->camera_position.y - (WINDOW_HEIGHT / 2.0f) + y;
-			ray = create_vector(&eye, &pixel);
-			normalize_vector(&ray);
-
-			int j = -1;
-			while (++j < world->nb_objects)
-			{
-				world->objects[j].t_min = MAXFLOAT;
-				if (world->objects[j].type == SPHERE)
-					intersect_sphere(&pixel, &ray, &world->objects[j]);
-				else if (world->objects[j].type == CYLINDER)
-					intesect_cylinder(eye, pixel, &world->objects[j]);
-				else if (world->objects[j].type == PLANE)
-					intersect_plane(pixel, &ray, &world->objects[j]);
-			}
-			
-			int i = 0;
-			int index_obj = -1;
-			float smallest_tmin = MAXFLOAT;
-			while(i < world->nb_objects)
-			{
-				if (world->objects[i].t_min < smallest_tmin)
-				{
-					index_obj = i;
-					smallest_tmin = world->objects[i].t_min;
-				}
-				i++;
-			}
-			if (index_obj != -1)
-				set_pixel_color(display, x, y, &world->objects[index_obj].color);
-
-		}
-	}
-}
 
 bool	initialize_mlx_context(t_display *display, int window_width,
 	int window_height, char *window_title)

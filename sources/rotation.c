@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 15:37:17 by jayzatov          #+#    #+#             */
-/*   Updated: 2024/11/13 17:01:23 by jayzatov         ###   ########.fr       */
+/*   Updated: 2024/11/17 18:38:58 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@
 #include "world.h"
 #include "parsing.h"
 
-// The rotation is apllied to vectors that will create a
-// rotated ray from a specific (rotated)pixel to the figure.
+// The rotation is aplied to vectors that will create a
+// rotated ray from a specific point to the figure.
 
 void	translation(t_vector *vec, t_vector new_origin)
 {
@@ -59,9 +59,9 @@ void	xyz_rotation_matrix(t_vector original, t_vector *rotated, t_angles angles)
 				+ ((cos(alpha) * cos(beta)) * original.z);
 }
 
-void	rotation_process(t_vector vec, t_vector figure_center, t_vector *rot_vec, t_angles angles)
+void	rotation_process(t_vector vec, t_vector center, t_vector *rot_vec, t_angles angles)
 {
-	translation(&vec, figure_center);
+	translation(&vec, center);
 	xyz_rotation_matrix(vec, rot_vec, angles);
-	detranslation(rot_vec, figure_center);
+	detranslation(rot_vec, center);
 }
