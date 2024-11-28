@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:38:41 by jayzatov          #+#    #+#             */
-/*   Updated: 2024/11/17 18:18:19 by jayzatov         ###   ########.fr       */
+/*   Updated: 2024/11/28 13:56:04 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,13 @@ t_distances	two_ts(float a, float b, float c)
 	{
 		dist.t1 = (-b - sqrtf(b * b - 4.0f * a * c)) / (2.0f * a);
 		dist.t2 = (-b + sqrtf(b * b - 4.0f * a * c)) / (2.0f * a);
+		if (dist.t1 < 0)
+			dist.t1 = MAXFLOAT;
+		if (dist.t2 < 0)
+			dist.t2 = MAXFLOAT;
+		
 	}
-	return (dist);	
+	return (dist);
 }
 
 // Those are two (or only one) distances(t) between
@@ -77,16 +82,28 @@ bool	cylinder_height(t_object *cylinder, float t,
 	figure_point.x = rot_pixel.x + (cylinder->t_min * ray.x);
 	figure_point.y = rot_pixel.y + (cylinder->t_min * ray.y);
 	figure_point.z = rot_pixel.z + (cylinder->t_min * ray.z);
-	point_center_length = (square((figure_point.x - cylinder->position.x)) +
-								square((figure_point.y - cylinder->position.y))+
-								square((figure_point.z - cylinder->position.z)));
-	pythagore_solution = point_center_length - square((cylinder->diameter / 2.0f));
+	// a^2 + b^2 = c^2
+ 	point_center_length = sqrtf(square((figure_point.x - cylinder->position.x)) +
+						  square((figure_point.y - cylinder->position.y)) +
+						  square((figure_point.z - cylinder->position.z)));
+	
+	// b^2 = c^2 - a^2
+	pythagore_solution = square(point_center_length) - square((cylinder->diameter / 2.0f));
+	pythagore_solution = sqrtf(pythagore_solution);
 	
 	
 	// printf("pythagore_solution %f\n", pythagore_solution);
 	// printf("(cylinder->height / 2.0f) %f\n", (cylinder->height / 2.0f));
-		
-	if (fabsf(pythagore_solution) <= (cylinder->height / 2.0f))
+	if (point_center_length <= cylinder->diameter / 2.0f)
+		return (true);
+
+	float mid_height = cylinder->height / 2.0f;
+
+	// printf("mid_height %f\n", mid_height);
+
+	// if (pythagore_solution < mid_height/2 && point_center_length > 0)
+	// 	return (true);
+	if (pythagore_solution <= mid_height)
 		return (true);
 	return (false);
 }
@@ -96,7 +113,7 @@ bool	cylinder_height(t_object *cylinder, float t,
 // each axe (x, y, z).
 // So we don't need to normalize "cylinder->direction" here.
 
-void	intesect_cylinder(t_vector	eye, t_vector pixel, t_object *cylinder)
+void	intesect_cylinder(t_vector	eye, t_vector pixel, t_object *cylinder, t_world world)
 {
 	t_angles	angles;
 	t_vector	rot_eye;
@@ -114,10 +131,24 @@ void	intesect_cylinder(t_vector	eye, t_vector pixel, t_object *cylinder)
 	ray = create_vector(&rot_eye, &rot_pixel);
 	normalize_vector(&ray);
 	dist = find_distances(ray, rot_pixel, *cylinder);
+	
 	if (dist.t1 != MAXFLOAT && cylinder_height(cylinder, dist.t1, ray, rot_pixel))
+	{
+		cylinder->pt_color = light_on_figure(rot_pixel, ray, dist.t1, *cylinder, world, 1);
+		cylinder->t_min = dist.t1;
 		return;
+	}
 	if (dist.t2 != MAXFLOAT && cylinder_height(cylinder, dist.t2, ray, rot_pixel))
+	{
+		cylinder->pt_color = light_on_figure(rot_pixel, ray, dist.t2, *cylinder, world, -1);
+		cylinder->t_min = dist.t2;
+		// cylinder->t_min = MAXFLOAT;
+
 		return;
+	}
+	cylinder->pt_color = cylinder->color;
 	cylinder->t_min = MAXFLOAT;
+	
+	
 	return;
 }

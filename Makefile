@@ -29,8 +29,10 @@ SOURCE_FILE_PATHS =	main.c \
 					camera_rot.c \
 					cylinder.c \
 					img_generation.c \
-					rotation.c \
+					light.c \
 					plane.c \
+					rotation.c \
+					shadow.c \
 					sphere.c \
 					vector_maths.c \
 					parsing/display_parsing.c \

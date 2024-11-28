@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cylinder.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjarross <tjarross@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:29:03 by tjarross          #+#    #+#             */
-/*   Updated: 2024/11/04 20:10:50 by tjarross         ###   ########.fr       */
+/*   Updated: 2024/11/15 20:48:46 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,11 @@ static int	parse_cylinder2(char **line_split, t_world *world)
 	if (false == is_vector_in_range(world->objects[world->nb_objects].direction,
 			-1.0f, 1.0f))
 		return (printf("Error\nCylinder Direction not in range [-1, 1]\n"), -6);
-	if (fabsf(powf(world->objects[world->nb_objects].direction.x, 2)
-			+ powf(world->objects[world->nb_objects].direction.y, 2)
-			+ powf(world->objects[world->nb_objects].direction.z, 2) - 1.0f)
-		> 0.01f)
-		return (printf("Error\nCylinder Direction not normalized\n"), -7);
+	// if (fabsf(powf(world->objects[world->nb_objects].direction.x, 2)
+	// 		+ powf(world->objects[world->nb_objects].direction.y, 2)
+	// 		+ powf(world->objects[world->nb_objects].direction.z, 2) - 1.0f)
+	// 	> 0.01f)
+	// 	return (printf("Error\nCylinder Direction not normalized\n"), -7);
 	line_split = goto_next_value(line_split + 1);
 	if (line_split == NULL)
 		return (printf("Error\nNot enough information for Cylinder\n"), -8);

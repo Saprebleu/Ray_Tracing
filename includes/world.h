@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:48:55 by tjarross          #+#    #+#             */
-/*   Updated: 2024/11/17 19:09:58 by jayzatov         ###   ########.fr       */
+/*   Updated: 2024/11/27 23:44:46 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,13 @@ typedef struct s_object
 	t_object_type	type;
 	t_vector		position;
 	t_vector		direction;
+	t_vector		normal;
 	float			diameter;
 	float			height;
 	t_color			color;
+	t_color			pt_color;
 	float			t_min;
+	int				index;
 }	t_object;
 
 typedef struct s_world
@@ -101,9 +104,15 @@ t_distances	find_distances(t_vector ray, t_vector rot_pixel, t_object cylinder);
 void		generate_image(t_display *display, t_world *world);
 void		initialize_eye(t_vector *eye, t_world world);
 void		initialize_pixel(t_vector *pixel, t_world world, int x, int y);
-void		intesect_cylinder(t_vector	eye, t_vector pixel, t_object *cylinder);
+void		intesect_cylinder(t_vector	eye, t_vector pixel, t_object *cylinder, t_world world);
 void		intersect_plane(t_vector pixel, const t_vector *ray, t_object *plane);
-void		intersect_sphere(const t_vector *pixel, const t_vector *ray, t_object *sphere);
+void		intersect_sphere(const t_vector *pixel, const t_vector *ray, t_object *sphere, t_world world);
+t_color    	light_on_figure(t_vector pixel, t_vector ray, float t_dist, t_object sphere, t_world world,
+			int in_or_out);
+
+t_color    shadow_on_figure(float t_dist, t_object figure, t_world world,
+            int in_or_out, t_vector pixel, t_vector ray);
+
 float		magnitude(t_vector vec);
 void		normalize_vector(t_vector *v);
 void		print_parsing(t_world world);

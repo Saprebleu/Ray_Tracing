@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 19:00:36 by jayzatov          #+#    #+#             */
-/*   Updated: 2024/11/17 19:08:00 by jayzatov         ###   ########.fr       */
+/*   Updated: 2024/11/26 12:23:59 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ t_vector	rotated_cam_ray(t_vector *pixel, t_vector *eye, t_world world)
 	t_angles	angles;
 	t_vector	ray;
 
-	find_angles(&angles, world.camera_direction, 1);
+	find_angles(&angles, world.camera_direction, -1);
 	rotation_process(*pixel, world.camera_position, pixel, angles);
 	rotation_process(*eye, world.camera_position, eye, angles);
 	ray = create_vector(eye, pixel);
