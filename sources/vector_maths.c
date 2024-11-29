@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 15:53:00 by jayzatov          #+#    #+#             */
-/*   Updated: 2024/11/26 14:31:17 by jayzatov         ###   ########.fr       */
+/*   Updated: 2024/11/28 17:10:33 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ t_vector	create_vector(const t_vector *start, const t_vector *end)
 //		- determine whether an object is aiming towards another
 //		  or the contrary...
 //		- determine angles :
-// by calculating the cosinus between
+// by calculating the cosinus (dot product) between
 // two normalized vectors : which gives smth in the
-// range [-1 ; 1].
+// range [-1 ; 1] in radians.
 // If the cos < 0, the vectors don't have the same
 // direction. At cos == 1 they're orthogonal.
 
