@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 19:00:36 by jayzatov          #+#    #+#             */
-/*   Updated: 2024/11/26 12:23:59 by jayzatov         ###   ########.fr       */
+/*   Updated: 2024/12/02 16:16:21 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ void	initialize_eye(t_vector *eye, t_world world)
 
 void	initialize_pixel(t_vector *pixel, t_world world, int x, int y)
 {
-	pixel->x = world.camera_position.x + (WINDOW_WIDTH / 2.0f) - x;
-	pixel->y = world.camera_position.y - (WINDOW_HEIGHT / 2.0f) + y;
+	pixel->x = world.camera_position.x - (WINDOW_WIDTH / 2.0f) + x;
+	pixel->y = world.camera_position.y + (WINDOW_HEIGHT / 2.0f) - y;
 	pixel->z = world.camera_position.z;
 }
 
