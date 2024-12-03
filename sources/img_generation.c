@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 19:09:08 by jayzatov          #+#    #+#             */
-/*   Updated: 2024/11/27 11:38:07 by jayzatov         ###   ########.fr       */
+/*   Updated: 2024/12/03 10:29:31 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	intersect_figures(t_vector eye, t_vector pixel, t_vector ray, t_world *worl
 		else if (world->objects[j].type == CYLINDER)
 			intesect_cylinder(eye, pixel, &world->objects[j], *world);
 		else if (world->objects[j].type == PLANE)
-			intersect_plane(pixel, &ray, &world->objects[j]);
+			intersect_plane(pixel, &ray, &world->objects[j], *world);
 	}
 }
 
@@ -90,10 +90,11 @@ void	closest_figure(t_display *display, t_world *world, int x, int y)
 	if (index_obj != -1)
 	{
 		if (world->objects[index_obj].type == SPHERE
-			|| world->objects[index_obj].type == CYLINDER)
+			|| world->objects[index_obj].type == CYLINDER
+			|| world->objects[index_obj].type == PLANE)
 		{
 			set_pixel_color(display, x, y, &world->objects[index_obj].pt_color);	
-			printf("closest pixel\n");
+			// printf("closest pixel\n");
 		}
 		else
 			set_pixel_color(display, x, y, &world->objects[index_obj].color);	
@@ -119,8 +120,11 @@ void	generate_image(t_display *display, t_world *world)
 		while (++x < WINDOW_WIDTH)
 		{
 			initialize_pixel(&pixel, *world, x, y);
-			ray = rotated_cam_ray(&pixel, &eye, *world);
-			// put_shadows(display, world, x, y, pixel, ray);
+			// ray = rotated_cam_ray(&pixel, &eye, *world);
+
+			// TEST, ray non roté pour le plan
+			ray = create_vector(&eye, &pixel);
+			normalize_vector(&ray);
 			
 			intersect_figures(eye, pixel, ray, world);
 			

@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:48:55 by tjarross          #+#    #+#             */
-/*   Updated: 2024/11/27 23:44:46 by jayzatov         ###   ########.fr       */
+/*   Updated: 2024/11/29 19:37:32 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void		generate_image(t_display *display, t_world *world);
 void		initialize_eye(t_vector *eye, t_world world);
 void		initialize_pixel(t_vector *pixel, t_world world, int x, int y);
 void		intesect_cylinder(t_vector	eye, t_vector pixel, t_object *cylinder, t_world world);
-void		intersect_plane(t_vector pixel, const t_vector *ray, t_object *plane);
+void		intersect_plane(t_vector pixel, const t_vector *ray, t_object *plane, t_world world);
 void		intersect_sphere(const t_vector *pixel, const t_vector *ray, t_object *sphere, t_world world);
 t_color    	light_on_figure(t_vector pixel, t_vector ray, float t_dist, t_object sphere, t_world world,
 			int in_or_out);
