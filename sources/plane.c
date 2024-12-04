@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 11:29:18 by jayzatov          #+#    #+#             */
-/*   Updated: 2024/12/03 11:12:56 by jayzatov         ###   ########.fr       */
+/*   Updated: 2024/12/04 13:20:30 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,22 @@ void	intersect_plane(t_vector pixel, const t_vector *ray, t_object *plane, t_wor
 	int norm_product = 1;
 	// t_vector plane_pt_pixel_prod = create_vector(&pixel, &plane->position);
 	t_vector on_plane = plane->position;
-	t_vector eye_plane =  create_vector(&on_plane, &pixel);
-	// normalize_vector(&eye_plane);
+	t_vector pixel_plane =  create_vector(&on_plane, &pixel);
+	// normalize_vector(&pixel_plane);
 	
 	if (dot_product(&plane->direction, ray) != 0)
-		t = -(dot_product(&plane->direction, &eye_plane)
+		t = -(dot_product(&plane->direction, &pixel_plane)
 			/ dot_product(&plane->direction, ray));
 
-	if (dot_product(&plane->direction, &eye_plane) < 0)
+	normalize_vector(&pixel_plane);
+	//utile pour ne pas eclairer la, où les ray de la camera
+	// et de la lumiere ne se croisent pas
+	
+	if (dot_product(&plane->direction, &pixel_plane) < 0)
+	{
+		// printf("-1\n");
 		norm_product *= -1;
+	}
 		
 	if (t >= 0 && t != MAXFLOAT)
 	{

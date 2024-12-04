@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 19:09:08 by jayzatov          #+#    #+#             */
-/*   Updated: 2024/12/03 10:29:31 by jayzatov         ###   ########.fr       */
+/*   Updated: 2024/12/04 14:08:10 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	put_shadows(t_display *display, t_world *world, int x, int y, t_vector pixe
 	{
 		if (world->objects[i].t_min < MAXFLOAT)
 		{
-			world->objects[i].pt_color = shadow_on_figure(world->objects[i].t_min, world->objects[i], *world, -1, pixel, ray);
+			// world->objects[i].pt_color = shadow_on_figure(world->objects[i].t_min, world->objects[i], *world, -1, pixel, ray);
 			set_pixel_color(display, x, y, &world->objects[i].pt_color);
 		}
 		i++;
@@ -120,11 +120,11 @@ void	generate_image(t_display *display, t_world *world)
 		while (++x < WINDOW_WIDTH)
 		{
 			initialize_pixel(&pixel, *world, x, y);
-			// ray = rotated_cam_ray(&pixel, &eye, *world);
+			ray = rotated_cam_ray(&pixel, &eye, *world);
 
 			// TEST, ray non roté pour le plan
-			ray = create_vector(&eye, &pixel);
-			normalize_vector(&ray);
+			// ray = create_vector(&eye, &pixel);
+			// normalize_vector(&ray);
 			
 			intersect_figures(eye, pixel, ray, world);
 			
