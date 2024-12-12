@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:38:41 by jayzatov          #+#    #+#             */
-/*   Updated: 2024/11/28 13:56:04 by jayzatov         ###   ########.fr       */
+/*   Updated: 2024/12/11 13:41:57 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,22 @@ bool	cylinder_height(t_object *cylinder, float t,
 // each axe (x, y, z).
 // So we don't need to normalize "cylinder->direction" here.
 
+static t_vector    find_hit_pt(t_vector origin, t_vector ray, float t_dist)
+{
+    t_vector ray_norm;
+    t_vector pt_on_sphere;
+
+    ray_norm = ray;
+    normalize_vector(&ray_norm);
+    pt_on_sphere.x = origin.x + (t_dist * ray_norm.x);
+    pt_on_sphere.y = origin.y + (t_dist * ray_norm.y);
+    pt_on_sphere.z = origin.z + (t_dist * ray_norm.z);
+
+    return (pt_on_sphere);
+}
+
+extern int x;
+extern int y;
 void	intesect_cylinder(t_vector	eye, t_vector pixel, t_object *cylinder, t_world world)
 {
 	t_angles	angles;
@@ -121,29 +137,70 @@ void	intesect_cylinder(t_vector	eye, t_vector pixel, t_object *cylinder, t_world
 	t_vector	ray;
 	t_distances	dist;
 
-	find_angles(&angles, cylinder->direction, -1);
+
+	// t_vector or_pixel = pixel;
+	t_vector origin_pt;
+	origin_pt.x = MAXFLOAT;
+	origin_pt.y = MAXFLOAT;
+	origin_pt.z = MAXFLOAT;
+	// if (pixel.x == 0 && pixel.y == 0 && pixel.z == -400)
+	// {
+		// ray = create_vector(&eye, &pixel);
+		// normalize_vector(&ray);
+		// dist = find_distances(ray, pixel, *cylinder);
+		// if (dist.t1 != MAXFLOAT && cylinder_height(cylinder, dist.t1, ray, pixel))
+		// {
+		// 	origin_pt = find_hit_pt(pixel, ray, dist.t1);
+		// 		// printf("Origin_pt : %f, %f, %f\n", origin_pt.x, origin_pt.y, origin_pt.z);
+		// }
+		// else if (dist.t2 != MAXFLOAT && cylinder_height(cylinder, dist.t2, ray, pixel))
+		// {
+		// 	origin_pt = find_hit_pt(pixel, ray, dist.t2);
+		// 		// printf("Origin_pt : %f, %f, %f\n", origin_pt.x, origin_pt.y, origin_pt.z);
+		// }
+	// }
+	
 	// printf("alpha %f\n", angles.alpha/M_PI * 180);
 	// printf("beta %f\n", angles.beta/M_PI * 180);
 	// printf("gamma %f\n", angles.gamma/M_PI * 180); 
+	find_angles(&angles, cylinder->direction, -1);
 	
+	
+
 	rotation_process(eye, cylinder->position, &rot_eye, angles);
 	rotation_process(pixel, cylinder->position, &rot_pixel, angles);
-	ray = create_vector(&rot_eye, &rot_pixel);
-	normalize_vector(&ray);
-	dist = find_distances(ray, rot_pixel, *cylinder);
+
+
+	t_vector rot_ray = create_vector(&rot_eye, &rot_pixel);
+	ray = create_vector(&eye, &pixel);
+	normalize_vector(&rot_ray);
+	dist = find_distances(rot_ray, rot_pixel, *cylinder);
+
+	// float min = fminf(dist.t1, dist.t2);
+	// float max = fmaxf(dist.t1, dist.t2);
+	// dist.t1 = min;
+	// dist.t2 = max;
 	
-	if (dist.t1 != MAXFLOAT && cylinder_height(cylinder, dist.t1, ray, rot_pixel))
+	if (dist.t1 != MAXFLOAT && cylinder_height(cylinder, dist.t1, rot_ray, rot_pixel))
 	{
-		cylinder->pt_color = light_on_figure(rot_pixel, ray, dist.t1, *cylinder, world, 1);
+		origin_pt = find_hit_pt(pixel, ray, dist.t1);
+		//  if (x == 1024 / 2 && y == 768 / 2)
+		// {
+		// 	printf("ORIGIN PT %f, %f, %f\n", origin_pt.x, origin_pt.y, origin_pt.z);
+		// }
+		cylinder->pt_color = light_on_figure(origin_pt, pixel, rot_eye, rot_pixel, rot_ray, dist.t1, *cylinder, world, 1);
 		cylinder->t_min = dist.t1;
 		return;
 	}
-	if (dist.t2 != MAXFLOAT && cylinder_height(cylinder, dist.t2, ray, rot_pixel))
+	if (dist.t2 != MAXFLOAT && cylinder_height(cylinder, dist.t2, rot_ray, rot_pixel))
 	{
-		cylinder->pt_color = light_on_figure(rot_pixel, ray, dist.t2, *cylinder, world, -1);
+			//  if (x == 1024 / 2 && y == 768 / 2)
+			// {
+			// 	printf("ORIGIN PT %f, %f, %f\n", origin_pt.x, origin_pt.y, origin_pt.z);
+			// }
+		origin_pt = find_hit_pt(pixel, ray, dist.t2);
+		cylinder->pt_color = light_on_figure(origin_pt, pixel, rot_eye, rot_pixel, rot_ray, dist.t2, *cylinder, world, -1);
 		cylinder->t_min = dist.t2;
-		// cylinder->t_min = MAXFLOAT;
-
 		return;
 	}
 	cylinder->pt_color = cylinder->color;

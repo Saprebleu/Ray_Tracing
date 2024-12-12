@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 17:40:18 by jayzatov          #+#    #+#             */
-/*   Updated: 2024/12/04 14:06:18 by jayzatov         ###   ########.fr       */
+/*   Updated: 2024/12/12 13:22:49 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,39 +78,111 @@ t_vector		scal_x_vec(float n, t_vector p)
 	return (v);
 }
 
+void zyx_rotation_matrix(t_vector original, t_vector *rotated, t_angles angles)
+{
+    float	alpha;
+	float	beta;
+	float	gamma;
+
+	alpha = angles.alpha;
+	beta = angles.beta;
+	gamma = angles.gamma;
+    // rotated->x = ((cosf(beta) * cosf(gamma)) * original.x)
+				// + ((sin(alpha) * sin(beta) * cos(gamma) - cos(alpha) * sin(gamma)) * original.y)
+				// + ((cos(alpha) * sin(beta) * cos(gamma) + sin(alpha) * sin(gamma)) * original.z);
+	rotated->x = ((cosf(alpha) * cosf(beta)) * original.x)
+				+ ((cosf(alpha) * sinf(beta) * sinf(gamma) - sinf(alpha) * cosf(gamma)) * original.y)
+				+ ((cosf(alpha) * sinf(beta) * cosf(gamma) + sinf(alpha) * sinf(gamma)) * original.z);
+	
+    rotated->y = ((sinf(alpha) * cosf(beta)) * original.x)
+				+ ((sinf(alpha) * sinf(beta) * sinf(gamma) + cosf(alpha) * cosf(gamma)) * original.y)
+				+ ((sinf(alpha) * sinf(beta) * cosf(gamma) - cosf(alpha) * sinf(gamma)) * original.z);
+	
+    rotated->z = ((-sinf(beta)) * original.x)
+				+ ((cosf(beta) * sinf(gamma)) * original.y)
+				+ ((cosf(beta) * cosf(gamma)) * original.z);
+}
+
+void xyz_rotation_matrix_inverse(t_vector rotated, t_vector *original, t_angles angles)
+{
+    float alpha;
+    float beta;
+    float gamma;
+
+    alpha = angles.alpha;
+    beta = angles.beta;
+    gamma = angles.gamma;
+
+    // Matrice transposée (inverse d'une rotation 3D)
+    original->x = ((cosf(beta) * cosf(gamma)) * rotated.x)
+                + ((cosf(beta) * sinf(gamma)) * rotated.y)
+                + ((-sinf(beta)) * rotated.z);
+
+    original->y = ((sinf(alpha) * sinf(beta) * cosf(gamma) - cosf(alpha) * sinf(gamma)) * rotated.x)
+                + ((sinf(alpha) * sinf(beta) * sinf(gamma) + cosf(alpha) * cosf(gamma)) * rotated.y)
+                + ((sinf(alpha) * cosf(beta)) * rotated.z);
+
+    original->z = ((cosf(alpha) * sinf(beta) * cosf(gamma) + sinf(alpha) * sinf(gamma)) * rotated.x)
+                + ((cosf(alpha) * sinf(beta) * sinf(gamma) - sinf(alpha) * cosf(gamma)) * rotated.y)
+                + ((cosf(alpha) * cosf(beta)) * rotated.z);
+}
+
+
+extern int x;
+extern int y;
 static t_vector cylinder_norm(t_vector pt_on_cyl, t_object cylinder)
 {
-    // t_vector V = create_vector(&cylinder.position, &pt_on_cyl);
-    // normalize_vector(&V);
-
-    // t_vector proj = cylinder_proj(V, cylinder);
-    // normalize_vector(&proj);
-
+    t_vector axis;
+    axis.x = 0;
+    axis.y = 1;
+    axis.z = 0;
     
-    // t_vector Vperp;
-    // Vperp.x = V.x - proj.x;
-    // Vperp.y = V.y - proj.y;
-    // Vperp.z = V.z - proj.z;
+    t_angles angles;
+    // cylinder.direction.y = 0.3;
 
-    // t_vector N = Vperp;
-    /////////////////////////////////////////////////////
-    // normalize_vector(&N);
+    find_angles(&angles, cylinder.direction, -1);
+
+    // if (x == 1024 / 2 && y == 768 / 2)
+        // printf("axis %f, %f, %f\n", axis.x, axis.y, axis.z);
+   
+    // printf("prev d %f, %f, %f >> alpha %f, %f, %f\n", cylinder.direction.x, cylinder.direction.y, cylinder.direction.z,
+        // angles.alpha, angles.beta, angles.gamma);
+    // printf("prev %f, %f, %f\n", axis.x, axis.y, axis.z);
+
+
+	// xyz_rotation_matrix(axis, &axis, angles);
     
-    // normalize_vector(&light);
-    // float cos = dot_product(&N, &light);
-    // if (cos > 0.0f)
+    // if (x == 1024 / 2 && y == 768 / 2)
     // {
-    //     N = scal_x_vec(-1.0f, N);
-        // (void)figure;
-        // (void)light;
-    //     figure->color.r = 255;
-    //     figure->color.g = 255;
-    //     figure->color.b = 255;
+    //     printf("axis XYZ %f, %f, %f\n", axis.x, axis.y, axis.z);
+        
     // }
+    // find_angles(&angles, cylinder.direction, -1);
+	xyz_rotation_matrix_inverse(axis, &axis, angles);
+    
+    // if (x == 1024 / 2 && y == 768 / 2)
+        // printf("axis ZYX %f, %f, %f\n\n", axis.x, axis.y, axis.z);
+    
+    // printf("axis %f, %f, %f\n", axis.x, axis.y, axis.z);
+    // rotation_process(axis, cylinder.position, &axis, angles);
 
-    cylinder.position.y = pt_on_cyl.y;
-    t_vector N = create_vector(&cylinder.position, &pt_on_cyl);
+    t_vector B = axis;
+    t_vector A = create_vector(&cylinder.position, &pt_on_cyl);
+    t_vector Anorm = A;
+    normalize_vector(&Anorm);
+    // normalize_vector(&B);
+    // 
+    float t = magnitude(A) * dot_product(&Anorm, &B);
+    t_vector I;
+    I.x = cylinder.position.x + (t*B.x);   
+    I.y = cylinder.position.y + (t*B.y);   
+    I.z = cylinder.position.z + (t*B.z);
+
+    t_vector N = create_vector(&I, &pt_on_cyl);
     normalize_vector(&N);
+    // if (x == 1024 / 2 && y == 768 / 2)
+    //     printf("N %f, %f, %f\n\n", N.x, N.y, N.z);
+    
     
     return (N);
 }
@@ -124,123 +196,186 @@ void color_limit(int *color)
     return ;
 }
 
-static void shadows(t_object *figure, t_world world, float L_mag, t_angles angles, t_vector rot_light,
+static void shadows(t_vector rot_pt, t_object *figure, t_world world, float L_mag, t_angles angles, t_vector rot_light,
     t_vector pt_on_figure, int in_or_out, t_vector N, t_vector L, t_lights *diffuse_l, t_lights *specular_l,
-    t_lights *ambient_l, float cos)
+    t_lights *ambient_l, float cos, float t_dist, t_vector pixel, t_vector eye)
 {
-    
     int j = -1;
     t_distances dist;
     t_vector pt_origin = pt_on_figure;
-    
+    t_vector light_ori = rot_light;
+    t_vector initial_pos = figure->position;
+    (void)pt_origin;
+    (void)light_ori;
+    (void)rot_pt;
+    (void)initial_pos;
 	while (++j < world.nb_objects)
 	{
-        pt_on_figure = pt_origin;
-		/*if (world.objects[j].type == SPHERE)
-		else */if (world.objects[j].type == CYLINDER)
-        {
-            // pt_on_figure = 
+        
+ 
             t_object neighbour;
             neighbour = world.objects[j];
-            
-            // find_angles(&angles, figure->direction, 1);
-            // n'a pas l'air de changer le cylindre lui-même?
-            // find_angles(&angles, figure->direction, -1);
-            // rotation_process(world.objects[j].position, figure->position, &neighbour.position, angles);
-            
-            // C'est ce qui marche pour l'ombre sur le bleu
-            // MARCHE SLMNT POUR LES CYLINDRE PAS ROTES
-            //////////////////////////////////////////////
+
             float Ln_mag = L_mag;
             (void)Ln_mag;
-            t_vector L_n = L;
+            (void)t_dist;
+            (void)pixel;
             
-            // Faire la rotation de lumiere dans tous les cas
-            // lorsque la figure est un plan :
-            
-            // if (in_or_out == 1 /*&& neighbour.type == CYLINDER*/)
-            // {
+            if ((figure->type == CYLINDER && in_or_out == 1 && figure->index != neighbour.index))
+            {
+                //ROTATION de la figure voisine
                 
-                //trouve les angles de rotation inversée 
-                find_angles(&angles, neighbour.direction, -1);
-                // applique cette rotation a la lumière
+                pt_on_figure = pt_origin;
                 rot_light = world.light_position; //POUR QUE CA MARCHE SUR figure ROTE
-                rotation_process(rot_light, neighbour.position, &rot_light, angles);
                 
-                //applique cette rotation au point frappé
+                find_angles(&angles, neighbour.direction, -1);
+                rotation_process(rot_light, neighbour.position, &rot_light, angles);
                 rotation_process(pt_on_figure, neighbour.position, &pt_on_figure, angles);
                 //crée un vecteur roté avec les 2 points rotés
-                L_n = create_vector(&pt_on_figure, &rot_light);
+                t_vector L_n = create_vector(&pt_on_figure, &rot_light);
                 Ln_mag = magnitude(L_n);
                 normalize_vector(&L_n);
                 // cos = dot_product(&N, &L_n);
+                
                 (void)N;
                 // !!!! Marche en remplaçant L par L_n plus loin:
                 // L = create_vector(&pt_on_figure, &rot_light);
                 // normalize_vector(&L);
                 L = L_n;
-            // }
+                dist.t1 = MAXFLOAT;
+                dist.t2 = MAXFLOAT;
+                dist = find_distances(L, pt_on_figure, neighbour);
+                // if (dist.t1 == 0)
+                //     dist = find_distances(L, pt_on_figure, world.objects[j]);
+                float min = fminf(dist.t1, dist.t2);
+                float max = fmaxf(dist.t1, dist.t2);
+                dist.t1 = min;
+                dist.t2 = max;
             
-
-            dist.t1 = MAXFLOAT;
-            dist.t2 = MAXFLOAT;
+            }
+            else if((figure->type == CYLINDER && in_or_out == -1 && figure->index != neighbour.index))
+            {
+                //PROJECTION D'UN AUTRE OBJET DANS LE CYLINDRE
+                pt_on_figure = pt_origin;
+                rot_light = world.light_position; //POUR QUE CA MARCHE SUR figure ROTE
+                
+                find_angles(&angles, neighbour.direction, -1);
+                rotation_process(rot_light, neighbour.position, &rot_light, angles);
+                rotation_process(pt_on_figure, neighbour.position, &pt_on_figure, angles);
+                //crée un vecteur roté avec les 2 points rotés
+                t_vector L_n = create_vector(&pt_on_figure, &rot_light);
+                Ln_mag = magnitude(L_n);
+                normalize_vector(&L_n);
+                // cos = dot_product(&N, &L_n);
+                
+                (void)N;
+                // !!!! Marche en remplaçant L par L_n plus loin:
+                // L = create_vector(&pt_on_figure, &rot_light);
+                // normalize_vector(&L);
+                L = L_n;
+                dist.t1 = MAXFLOAT;
+                dist.t2 = MAXFLOAT;
+                dist = find_distances(L, pt_on_figure, neighbour);
+                // if (dist.t1 == 0)
+                //     dist = find_distances(L, pt_on_figure, world.objects[j]);
+                float min = fminf(dist.t1, dist.t2);
+                float max = fmaxf(dist.t1, dist.t2);
+                dist.t1 = min;
+                dist.t2 = max;
+            }
+            else if (figure->type == CYLINDER && in_or_out == -1 && figure->index == neighbour.index)
+            {
+                    pt_on_figure = pt_origin;
+                    // pt_on_figure = rot_pt;
+                    rot_light = world.light_position; //POUR QUE CA MARCHE SUR figure ROTE
+                    
+                    find_angles(&angles, figure->direction, -1);
+                    rotation_process(rot_light, figure->position, &rot_light, angles);
+                    rotation_process(pt_on_figure, figure->position, &pt_on_figure, angles);
+                    //crée un vecteur roté avec les 2 points rotés
+                    t_vector L_n = create_vector(&pt_on_figure, &rot_light);
+                    Ln_mag = magnitude(L_n);
+                    normalize_vector(&L_n);
+                    cos = dot_product(&N, &L_n);
+                    
+                    // (void)N;
+                    // !!!! Marche en remplaçant L par L_n plus loin:
+                    // L = create_vector(&pt_on_figure, &rot_light);
+                    // normalize_vector(&L);
+                    L = L_n;
+                    dist.t1 = MAXFLOAT;
+                    dist.t2 = MAXFLOAT;
+                    // if (cos > 0)
+                    // {
+                        dist = find_distances(L, pt_on_figure, *figure);
+                        float min = fminf(dist.t1, dist.t2);
+                        float max = fmaxf(dist.t1, dist.t2);
+                        dist.t1 = min;
+                        dist.t2 = max;
+                    // }
+                    
+            }
+            if (figure->index != neighbour.index && figure->type == PLANE)
+            {             
+                // applique cette rotation a la lumière
+                pt_on_figure = rot_pt;
+                rot_light = world.light_position; //POUR QUE CA MARCHE SUR figure ROTE
+                
+                find_angles(&angles, neighbour.direction, -1);
+                rotation_process(rot_light, neighbour.position, &rot_light, angles);
+                rotation_process(pt_on_figure, neighbour.position, &pt_on_figure, angles);
+                //crée un vecteur roté avec les 2 points rotés
+                t_vector L_n = create_vector(&pt_on_figure, &rot_light);
+                Ln_mag = magnitude(L_n);
+                normalize_vector(&L_n);
+                // cos = dot_product(&N, &L_n);
+                
+                (void)N;
+                // !!!! Marche en remplaçant L par L_n plus loin:
+                // L = create_vector(&pt_on_figure, &rot_light);
+                // normalize_vector(&L);
+                L = L_n;
+                dist.t1 = MAXFLOAT;
+                dist.t2 = MAXFLOAT;
+                dist = find_distances(L, pt_on_figure, neighbour);
+                // if (dist.t1 == 0)
+                //     dist = find_distances(L, pt_on_figure, world.objects[j]);
+                float min = fminf(dist.t1, dist.t2);
+                float max = fmaxf(dist.t1, dist.t2);
+                dist.t1 = min;
+                dist.t2 = max;           
+            }
             
-            // neighbour.direction.x *= in_or_out;
-            // neighbour.direction.y *= in_or_out;
-            // neighbour.direction.z *= in_or_out;
-            
-            dist = find_distances(L, pt_on_figure, neighbour);
-            // if (dist.t1 == 0)
-            //     dist = find_distances(L, pt_on_figure, world.objects[j]);
-            float min = fminf(dist.t1, dist.t2);
-		    float max = fmaxf(dist.t1, dist.t2);
-		    dist.t1 = min;
-		    dist.t2 = max;
             (void)cos;
             (void)in_or_out;
             (void)figure;
             (void)rot_light;
+            (void)eye;
+       
+            
             if (
-                (in_or_out == -1 && dist.t1 != MAXFLOAT && dist.t1 >= 0.001 && dist.t1 <= L_mag && cylinder_height(&neighbour, dist.t1, L,  pt_on_figure) )
-                || (in_or_out == -1 && dist.t2 != MAXFLOAT && dist.t2 >= 0.001 && dist.t2 <= L_mag && cylinder_height(&neighbour, dist.t2, L,  pt_on_figure) )
-                
-                || ((cos > 0 && in_or_out == 1 && dist.t1 != MAXFLOAT && dist.t1 >= 0.001 && dist.t1 <= Ln_mag && cylinder_height(&neighbour, dist.t1, L,  pt_on_figure))
-                || (cos > 0 && in_or_out == 1 && dist.t2 != MAXFLOAT && dist.t2 >= 0.001 && dist.t2 <= Ln_mag && cylinder_height(&neighbour, dist.t2, L,  pt_on_figure)))
+                (/*cos > 0 && */in_or_out == -1 && dist.t1 != MAXFLOAT && dist.t1 >= 0.1 && dist.t1 <= L_mag && cylinder_height(&neighbour, dist.t1, L,  pt_on_figure))
+                || (/*cos > 0 &&*/ in_or_out == -1 && dist.t2 != MAXFLOAT && dist.t2 >= 0.00001 && dist.t2 <= L_mag && cylinder_height(&neighbour, dist.t2, L, pt_on_figure))
+                // || (figure->index != neighbour.index && /*cos > 0 &&*/ in_or_out == -1 && dist.t1 != MAXFLOAT && dist.t1 >= 0.1 && dist.t1 <= L_mag && cylinder_height(&neighbour, dist.t1, L,  pt_on_figure))
+                // || (figure->index != neighbour.index && /*cos > 0 &&*/ in_or_out == -1 && dist.t2 != MAXFLOAT && dist.t2 >= 0.00001 && dist.t2 <= L_mag && cylinder_height(&neighbour, dist.t2, L, pt_on_figure))
+                // || ((figure->index != neighbour.index && /*cos > 0 &&*/ in_or_out == 1 && dist.t1 != MAXFLOAT && dist.t1 >= 0.001 && dist.t1 <= Ln_mag && cylinder_height(&neighbour, dist.t1, L,  pt_on_figure))
+                // || (figure->index != neighbour.index && /*cos > 0 &&*/ in_or_out == 1 && dist.t2 != MAXFLOAT && dist.t2 >= 0.001 && dist.t2 <= Ln_mag && cylinder_height(&neighbour, dist.t2, L,  pt_on_figure)))
             )
             {
-                // if (((neighbour.color.b == 255 && figure->color.b == 255)
-                //     || (neighbour.color.r == 255 && figure->color.r == 255))
-                //         && (in_or_out == 1))
-                //     break;
+                // return;
+                // printf("INT SHADOW\n");
+                if (dist.t1 == MAXFLOAT)
+                    printf("dist.t1 == MAXFLOAT\n");
+                else if (dist.t2 == MAXFLOAT)
+                    printf("dist.t2 == MAXFLOAT\n");
+
+                //ne pas appliquer une ombre extérieure
+                //projetée par lui-meme sur un cylindre
+                // if (figure->type == CYLINDER && in_or_out == 1
+                //     && figure->index == neighbour.index
+                //     /*&& dot_product(&L, &N) > 0*/)
+                //     continue ;
         
-                // if (neighbour.color.r == 255 && figure->color.b == 255
-                //         && in_or_out == 1)
-                // {
-                //     printf("j : %d\n", j);
-                //     t_vector blue_pt = find_hit_pt(pt_on_figure, L, dist.t1);
-                //     printf("Intersection trouvée pr le bleu à %f, %f, %f\n", blue_pt.x, blue_pt.y, blue_pt.z);
-                //     printf("Origine : %f, %f, %f\n", pt_on_figure.x, pt_on_figure.y, pt_on_figure.z);
-                //     printf("A la distance %f\n", dist.t1);
-                //     printf("Lnorm : %f, %f, %f\nLmag : %f\n", L.x, L.y, L.z, L_mag);
-                //     printf("Light : %f, %f, %f\n", rot_light.x, rot_light.y, rot_light.z);
-                // }
-                // else if (neighbour.color.r == 255 && figure->color.r == 255
-                //         && in_or_out == 1)
-                // {
-                //     printf("j : %d\n", j);
-                //     t_vector red_pt = find_hit_pt(pt_on_figure, L, dist.t1);
-                //     printf("Intersection trouvée pr le rouge à %f, %f, %f\n", red_pt.x, red_pt.y, red_pt.z);
-                //     printf("Origine : %f, %f, %f\n", pt_on_figure.x, pt_on_figure.y, pt_on_figure.z);
-                //     printf("A la distance %f\n", dist.t1);
-                //     printf("Lnorm : %f, %f, %f\nLmag : %f\n", L.x, L.y, L.z, L_mag);
-                //     printf("Light : %f, %f, %f\n", rot_light.x, rot_light.y, rot_light.z);
-                // }
-                // else if (in_or_out == 1)
-                // {
-                //     printf("figure.color.b : %d\n", figure.color.b);
-                //     printf("Pas d'intersection j = %d\n", j);
-                //     break;
-                // }
              
                 // printf("SHADOW\n");
                 diffuse_l->r = 0;
@@ -250,49 +385,84 @@ static void shadows(t_object *figure, t_world world, float L_mag, t_angles angle
                 specular_l->g = 0;
                 specular_l->b = 0;
                 (void)ambient_l;
-                // if (in_or_out == 1)
-                // {
-                    // ambient_l->r = 0;
-                    // ambient_l->g = 0;
-                    // ambient_l->b = 0;
-                // }
+                if (figure->type == CYLINDER && in_or_out == -1
+                    && figure->index != neighbour.index)
+                {
+                    ambient_l->r = 0;
+                    ambient_l->g = 0;
+                    ambient_l->b = 0;
+                    // if (figure->color.r == 140)
+                    // {
+                    //    ambient_l->r = 80;
+                    //     ambient_l->g = 80;
+                    //     // ambient_l->b = 80; 
+                    // }
+                }
                     
                 // break ;
             }
-        }
-		// else if (world.objects[j].type == PLANE)
-			// intersect_plane(pixel, &ray, &world.objects[j]);
+            // else 
+            // {
+            //     //  if (figure->color.b == 255)
+            //     // {
+            //     if ((figure->type == CYLINDER && in_or_out == 1))
+            //     {
+                    
+            //         ambient_l->r = 100;
+            //         ambient_l->g = 255;
+            //         ambient_l->b = 100; 
+            //     }
+            // }
+            
+            // if (figure->index != neighbour.index)
+            // {
+                pt_on_figure = pt_origin;
+                // pt_on_figure = rot_pt;
+                rot_light = world.light_position; 
+            // }
 	}
 }
 
 
-t_color    light_on_figure(t_vector pixel, t_vector ray, float t_dist, t_object figure, t_world world,
+t_color    light_on_figure(t_vector origin_pt, t_vector pixel, t_vector rot_eye, t_vector rot_pixel, t_vector ray, float t_dist, t_object figure, t_world world,
             int in_or_out)
 {
-
+    (void)rot_eye;
     t_color color;
+    // return (figure.color);
 
-    t_vector pt_on_figure = find_hit_pt(pixel, ray, t_dist);
-    // printf("Beginning with %f, %f, %f\n", pt_on_figure.x, pt_on_figure.y, pt_on_figure.z);
+    t_vector rot_pt = find_hit_pt(rot_pixel, ray, t_dist);
+    // printf("Beginning with %f, %f, %f\n", rot_pt.x, rot_pt.y, rot_pt.z);
 
 
     t_vector N;
     t_vector    rot_light = world.light_position;
     t_angles	angles;
 
+    // if (x == 1024 / 2 && y == 768 / 2)
+		// printf("1- ORIGIN PT %f, %f, %f\n", origin_pt.x, origin_pt.y, origin_pt.z);
+    
+
     // NORMALES
     if (figure.type == SPHERE)
-        N = sphere_norm(pt_on_figure, figure);
+    {
+        N = sphere_norm(rot_pt, figure);
+        
+    }
     else if (figure.type == CYLINDER)
     {
-        N = cylinder_norm(pt_on_figure, figure);
-        
-        find_angles(&angles, figure.direction, -1);
-	    rotation_process(world.light_position, figure.position, &rot_light, angles);
+        N = cylinder_norm(origin_pt, figure);
+        // N = cylinder_norm(origin_pt, figure);
+        //rotate light      
+        // find_angles(&angles, figure.direction, 1);
+	    // rotation_process(world.light_position, origin_pt, &rot_light, angles);
+        // origin_pt = rot_pt;
+
     }
     else if (figure.type == PLANE)
     {
         N = figure.direction;
+        origin_pt = rot_pt;
         // normalize_vector(&N);
         // printf("plane N %f, %f, %f\n", N.x, N.y, N.z);
         // printf("light %f, %f, %f\n", world.light_position.x, world.light_position.y, world.light_position.z);
@@ -300,36 +470,37 @@ t_color    light_on_figure(t_vector pixel, t_vector ray, float t_dist, t_object 
     //////
 
     
-    // t_vector L_no_rot = create_vector(&pt_on_figure, &world.light_position);
-    // normalize_vector(&L_no_rot);
-    t_vector L = create_vector(&pt_on_figure, &rot_light); // du point vers la lumiere
-    t_vector V = create_vector(&pt_on_figure, &pixel); // du point vers la camera == pixel ?
+    //  if (x == 1024 / 2 && y == 768 / 2)
+		// printf("2- ORIGIN PT %f, %f, %f\n", origin_pt.x, origin_pt.y, origin_pt.z);
     
+
+    t_vector L = create_vector(&origin_pt, &world.light_position); // du point vers la lumiere
+    t_vector V = create_vector(&origin_pt, &pixel); // du point vers la camera == rot_pixel ?
     // printf("L %f, %f, %f\n", L.x, L.y, L.z);
     
-    float L_mag = magnitude(L);// ça, ou world.light_position
+
+    //  if (x == 1024 / 2 && y == 768 / 2)
+		// printf("3- ORIGIN PT %f, %f, %f\n", origin_pt.x, origin_pt.y, origin_pt.z);
+    
+
+    float L_mag = magnitude(L);
     normalize_vector(&L);
     normalize_vector(&V);
 
-
-    t_vector N_cpy = N;
-    // permet d'avoir la lumiere dans les t2 (interieur du cylindre)
-    // en multipliant par -1;
-    // if (cos < 0 && in_or_out == -1)
+    // if (in_or_out == -1 && dot_product(&L, &N) > 0)
     // {
-    // // // if (in_or_out == MAXFLOAT)
-    // // // {
         N.x *= in_or_out;
         N.y *= in_or_out;
         N.z *= in_or_out;
     // }
+    
+    
     (void)in_or_out;
-    float cos = dot_product(&N, &L);
-    // printf("dot LN %f\n", cos);
 
 
 
     float dot_LN = dot_product(&L, &N); // = cos de l'angle L et N
+    float cos = dot_LN;
     t_vector R; // rayon réfléchi
     R.x = 2 * dot_LN * N.x - L.x;
     R.y = 2 * dot_LN * N.y - L.y;
@@ -341,8 +512,7 @@ t_color    light_on_figure(t_vector pixel, t_vector ray, float t_dist, t_object 
     ambient_l.r = world.ambient_power * world.ambient_color.r;
     ambient_l.g = world.ambient_power * world.ambient_color.g;
     ambient_l.b = world.ambient_power * world.ambient_color.b;
-    
-    int shininess = 50;
+    int shininess = 130;
     if (dot_product(&R, &V) > 0 && dot_LN > 0)
     {
         specular_l.r = powf(dot_product(&R, &V), shininess) * world.light_power * world.light_color.r;
@@ -361,43 +531,16 @@ t_color    light_on_figure(t_vector pixel, t_vector ray, float t_dist, t_object 
     diffuse_l.g = dot_LN * (world.light_power * world.light_color.g);
     diffuse_l.b = dot_LN * (world.light_power * world.light_color.b);
     
-    if (figure.type == PLANE)
-        shadows(&figure, world, L_mag, angles, rot_light, pt_on_figure, in_or_out, N, L, &diffuse_l,
-                &specular_l, &ambient_l, cos);
+
+    //  if (x == 1024 / 2 && y == 768 / 2)
+		// printf("4- ORIGIN PT %f, %f, %f\n", origin_pt.x, origin_pt.y, origin_pt.z);
     
-    // if (figure.type == PLANE)
-    // {
-    //     printf("diffuse : %d, %d, %d\n", diffuse_l.r, diffuse_l.g, diffuse_l.b);
-    //     if (diffuse_l.r != 0)
-    //         printf("On point %f, %f, %f\n", pt_on_figure.x, pt_on_figure.y, pt_on_figure.z);
-    //     printf("specular : %d, %d, %d\n", specular_l.r, specular_l.g, specular_l.b);
-    //     printf("ambient : %d, %d, %d\n\n", ambient_l.r, ambient_l.g, ambient_l.b);
-    // }
 
-//     // TEST
-//     // float cos = dot_product(&N, &L);
-//     // // float cos_cpy = dot_product(&N_cpy, &L);
-//     // if ((cos < 0 && in_or_out == -1)
-//     //     /*|| (cos_cpy < 0 && in_or_out == -1)*/)
-//     // {
-//     //      diffuse_l.r = 0;
-//     //     diffuse_l.g = 0;
-//     //     diffuse_l.b = 0;
-//     //     specular_l.r = 0;
-//     //     specular_l.g = 0;
-//     //     specular_l.b = 0;
-//     //     ambient_l.r = 0;
-//     //     ambient_l.g = 0;
-//     //     ambient_l.b = 0;
-//     // }
-    (void)N_cpy;
-    // if (figure.type == PLANE && dot_LN >= 0)
-    //     printf("dot L-N %f\n", cos);
+    shadows(rot_pt, &figure, world, L_mag, angles, rot_light, origin_pt, in_or_out, N, L, &diffuse_l,
+            &specular_l, &ambient_l, cos, t_dist, rot_pixel, rot_eye);
+    
+   
 
-    if (figure.type == CYLINDER && (diffuse_l.r != 0 || diffuse_l.g != 0 || diffuse_l.b != 0))
-    {
-        printf("CYLINDER %f, %f, %f\n             diffuse_l.r %d, diffuse_l.g %d, diffuse_l.b %d\n\n", pt_on_figure.x, pt_on_figure.y, pt_on_figure.z, diffuse_l.r, diffuse_l.g, diffuse_l.b);
-    }
     
     color.r = figure.color.r * ((ambient_l.r + diffuse_l.r + specular_l.r) / 255.f);
     color_limit(&color.r);
@@ -407,109 +550,6 @@ t_color    light_on_figure(t_vector pixel, t_vector ray, float t_dist, t_object 
     color_limit(&color.b);
 
  
-//     printf("color.r = %d\n", color.b);
 
     return (color);
 }
-
-/////////////////////////////////////////////////
-
-    // float dot = dot_product(&light, &sphere_norm);
-    // dot = dot < 0 ? 0 : dot;
-    // color.r =  dot * (sphere.color.r + world.light_power * (float)world.light_color.r);
-    // color.g =  dot * (sphere.color.g + world.light_power * (float)world.light_color.g);
-    // color.b =  dot * (sphere.color.b + world.light_power * (float)world.light_color.b);
-    // color.r += world.ambient_color.r * world.ambient_power;
-    // color.g += world.ambient_color.g * world.ambient_power;
-    // color.b += world.ambient_color.b * world.ambient_power;
-    // color.r = color.r > 255 ? 255 : color.r;
-    // color.g = color.g > 255 ? 255 : color.g;
-    // color.b = color.b > 255 ? 255 : color.b;
-
-    
-    // if (t_dist == 0)
-    // {
-    //     // printf("ray.z %f\n", ray.z);
-    //     printf("r %d\n", color.r);
-    //     printf("g %d\n", color.g);
-    //     printf("b %d\n", color.b);
-    // }
-
-
-    // // cos of N and L
-    // t_vector light_cpy = light;
-    // normalize_vector(&light_cpy); 
-    // t_vector norm_cpy = sphere_norm;
-    // normalize_vector(&norm_cpy); 
-    
-    // // teta = cos de l'angle entre L et N
-    // float teta = dot_product(&light_cpy, &norm_cpy);
-    
-    // if (teta < 0)
-    //     teta = 0;
-
-    // printf("teta %f\n", teta);
-    
-    // // change t_dist to the distance between light and the point
-
-    // // La lumière diminue en intensité proportionnellement
-    // // au carré de la distance entre le point et la source. La formule classique est :
-    // float attenuation;
-    // t_vector pt_light_dist = create_vector(&light, &pt_on_sphere);
-    // float d = magnitude(pt_light_dist);
-    // if (d == 0) 
-    //     attenuation = 1;
-    // else
-    // {
-    //     // intensité de lumiere de base indépendante de la distance
-    //     float a;
-    //     // attenuation de lumiere modérée
-    //     float b;
-    //     // la plus faible intensité lumineuse
-    //     float c;
-    //     // abc exemples : (scène large) 1.0, 0, 0.01, (scène petite et luimineuse) 1.0,0.1,0.0.
-    //     // précision physique stricte : abc = 1, 0.1, 0.01.
-    //     // forte décroissance avec la distance: abc = 1,0.2,0.01.
-    //     // scène très grande : abc = 1, 0.05, 0.005;
-    //     a = 1.0;
-    //     b = 0.09;
-    //     c = 0.0025;   
-    //     attenuation = 1 / (a + b * d + c * square(d));
-    //     // if ((a + b * d + c * square(d)) > 1)
-    //     //     attenuation = 1;
-    //     attenuation = 1 / (d / 2);
-    // }
-    // // attenuation = 1;
-    // float ambient_intens = /*attenuation * */world.ambient_power;
-    // if (ambient_intens > 1)
-    //     ambient_intens = 1;
-
-    
-    // sphere.color.r = sphere.color.r + (world.ambient_color.r - sphere.color.r) * world.ambient_power;
-    // sphere.color.g = sphere.color.g + (world.ambient_color.g - sphere.color.g) * world.ambient_power;
-    // sphere.color.b = sphere.color.b + (world.ambient_color.b - sphere.color.b) * world.ambient_power;
-
-    
-    // color.r = sphere.color.r * teta
-    //        * ((world.light_power * world.light_color.r) * attenuation);
-    // if (color.r > 255)
-    //    color.r = 255; 
-    // color.g = /*(ambient_intens * world.ambient_color.g) + */sphere.color.g * teta
-    //             * ((world.light_power * world.light_color.r) * attenuation);
-    // if (color.g > 255)
-    //    color.g = 255; 
-    // color.b = /*(ambient_intens * world.ambient_color.b) + */sphere.color.b * teta
-    //             * ((world.light_power * world.light_color.r) * attenuation);
-    // if (color.b > 255)
-    //    color.b = 255; 
-    
-    
-    //  if (t_dist == 0)
-    // {
-    //     printf("AFTER :\n");
-    //     printf("r %d\n", color.r);
-    //     printf("g %d\n", color.g);
-    //     printf("b %d\n", color.b);
-    // }
-
-/////////////////////////////////////////////////
