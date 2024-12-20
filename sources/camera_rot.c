@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 19:00:36 by jayzatov          #+#    #+#             */
-/*   Updated: 2024/12/02 16:16:21 by jayzatov         ###   ########.fr       */
+/*   Updated: 2024/12/20 18:25:47 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 
 void	initialize_eye(t_vector *eye, t_world world)
 {
+	t_angles	angles;
 	float		camera_distance;
 
 	camera_distance = ((WINDOW_WIDTH / 2.0f)
@@ -36,6 +37,8 @@ void	initialize_eye(t_vector *eye, t_world world)
 	eye->x = world.camera_position.x;
 	eye->y = world.camera_position.y;
 	eye->z = world.camera_position.z - camera_distance;
+	find_angles(&angles, world.camera_direction, -1);
+	rotation_process(*eye, world.camera_position, eye, angles);
 }
 
 void	initialize_pixel(t_vector *pixel, t_world world, int x, int y)
@@ -45,15 +48,40 @@ void	initialize_pixel(t_vector *pixel, t_world world, int x, int y)
 	pixel->z = world.camera_position.z;
 }
 
-t_vector	rotated_cam_ray(t_vector *pixel, t_vector *eye, t_world world)
+// static void xyz_rotation_matrix_inverse(t_vector rotated, t_vector *original, t_angles angles)
+// {
+// 	return;
+//     float alpha;
+//     float beta;
+//     float gamma;
+
+//     alpha = angles.alpha;
+//     beta = angles.beta;
+//     gamma = angles.gamma;
+
+//     // Matrice transposée (inverse d'une rotation 3D)
+//     original->x = ((cosf(beta) * cosf(gamma)) * rotated.x)
+//                 + ((cosf(beta) * sinf(gamma)) * rotated.y)
+//                 + ((-sinf(beta)) * rotated.z);
+
+//     original->y = ((sinf(alpha) * sinf(beta) * cosf(gamma) - cosf(alpha) * sinf(gamma)) * rotated.x)
+//                 + ((sinf(alpha) * sinf(beta) * sinf(gamma) + cosf(alpha) * cosf(gamma)) * rotated.y)
+//                 + ((sinf(alpha) * cosf(beta)) * rotated.z);
+
+//     original->z = ((cosf(alpha) * sinf(beta) * cosf(gamma) + sinf(alpha) * sinf(gamma)) * rotated.x)
+//                 + ((cosf(alpha) * sinf(beta) * sinf(gamma) - sinf(alpha) * cosf(gamma)) * rotated.y)
+//                 + ((cosf(alpha) * cosf(beta)) * rotated.z);
+// }
+
+t_vector	rotated_cam_ray(t_vector *pixel, t_vector *rot_eye, t_world world)
 {
 	t_angles	angles;
 	t_vector	ray;
 
 	find_angles(&angles, world.camera_direction, -1);
 	rotation_process(*pixel, world.camera_position, pixel, angles);
-	rotation_process(*eye, world.camera_position, eye, angles);
-	ray = create_vector(eye, pixel);
+
+	ray = create_vector(rot_eye, pixel);
 	normalize_vector(&ray);
 	return (ray);
 }
