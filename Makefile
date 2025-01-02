@@ -8,7 +8,7 @@ BUILD_PATH =			./obj
 COMPILER =				gcc
 
 # Compiler's flags
-COMPILE_FLAGS =			-Wall -Werror -Wextra
+COMPILE_FLAGS =			-g -Wall -Werror -Wextra
 
 # Compiler's includes flags (e.g. -I includes -I my_lib/includes)
 INCLUDE_FLAGS =			-I includes \

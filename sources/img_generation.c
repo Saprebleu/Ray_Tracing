@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 19:09:08 by jayzatov          #+#    #+#             */
-/*   Updated: 2024/12/20 18:27:17 by jayzatov         ###   ########.fr       */
+/*   Updated: 2024/12/29 16:51:43 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,6 @@ void	generate_image(t_display *display, t_world *world)
 			initialize_pixel(&pixel, *world, x, y);
 			
 			ray = rotated_cam_ray(&pixel, &rot_eye, *world);
-			
 			
 			// TEST, ray non roté pour le plan
 			// ray = create_vector(&eye, &pixel);

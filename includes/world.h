@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:48:55 by tjarross          #+#    #+#             */
-/*   Updated: 2024/11/29 19:37:32 by jayzatov         ###   ########.fr       */
+/*   Updated: 2024/12/18 14:58:57 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,9 +105,9 @@ void		generate_image(t_display *display, t_world *world);
 void		initialize_eye(t_vector *eye, t_world world);
 void		initialize_pixel(t_vector *pixel, t_world world, int x, int y);
 void		intesect_cylinder(t_vector	eye, t_vector pixel, t_object *cylinder, t_world world);
-void		intersect_plane(t_vector pixel, const t_vector *ray, t_object *plane, t_world world);
-void		intersect_sphere(const t_vector *pixel, const t_vector *ray, t_object *sphere, t_world world);
-t_color    	light_on_figure(t_vector pixel, t_vector ray, float t_dist, t_object sphere, t_world world,
+void		intersect_plane(t_vector eye, t_vector pixel, const t_vector ray, t_object *plane, t_world world);
+void		intersect_sphere(const t_vector eye, const t_vector pixel, const t_vector ray, t_object *sphere, t_world world);
+t_color    	light_on_figure(t_vector origin_pt, t_vector pixel, t_vector rot_eye, t_vector rot_pixel, t_vector ray, float t_dist, t_object sphere, t_world world,
 			int in_or_out);
 
 t_color    shadow_on_figure(float t_dist, t_object figure, t_world world,
@@ -117,10 +117,16 @@ float		magnitude(t_vector vec);
 void		normalize_vector(t_vector *v);
 void		print_parsing(t_world world);
 t_vector	rotated_cam_ray(t_vector *pixel, t_vector *eye, t_world world);
-void		rotation_process(t_vector vec, t_vector center,
+t_vector		rotation_process(t_vector vec, t_vector center,
 			t_vector *rot_vec, t_angles angles);
+float		solve_polynom(float a, float b, float c);
+// void	solve_polynom(float a, float b, float c, t_distances *dst);
+
 float		square(float nbr);
 void		translation(t_vector *vec, t_vector new_origin);
 void		xyz_rotation_matrix(t_vector original, t_vector *rotated, t_angles angles);
+
+void	solve_poly(float a, float b, float c, t_distances *dst);
+t_distances	two_ts(float a, float b, float c);
 
 #endif

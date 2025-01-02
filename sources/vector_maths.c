@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 15:53:00 by jayzatov          #+#    #+#             */
-/*   Updated: 2024/11/28 17:10:33 by jayzatov         ###   ########.fr       */
+/*   Updated: 2024/12/04 14:26:24 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,22 +34,22 @@ t_vector	create_vector(const t_vector *start, const t_vector *end)
 
 // Gives a number resulting of the multiplication of 2 vectors.
 // The dot product can be useful to :
-// 		- calcualte the distance.
-//		- determine whether an object is aiming towards another
-//		  or the contrary...
-//		- determine angles :
-// by calculating the cosinus (dot product) between
-// two normalized vectors : which gives smth in the
-// range [-1 ; 1] in radians.
-// If the cos < 0, the vectors don't have the same
-// direction. At cos == 1 they're orthogonal.
+// - calcualte the distance.
+// - determine whether an object is aiming towards another
+//  or the contrary by determining angles :
+//  by calculating the cosinus (dot product) between
+//  two normalized vectors : which gives smth in the
+//  range [-1 ; 1] in radians.
+//  If the cos < 0, the vectors don't have the same
+//  direction. At cos == 1 they're orthogonal...
 
 float	dot_product(const t_vector *v1, const t_vector *v2)
 {
 	return (v1->x * v2->x + v1->y * v2->y + v1->z * v2->z);
 }
 
-// Written |V|
+// Written |V|, used on not normalized vectors
+// because it measures the vector's length.
 
 float	magnitude(t_vector vec)
 {
@@ -58,6 +58,9 @@ float	magnitude(t_vector vec)
 	magnitude = sqrtf(powf(vec.x, 2) + powf(vec.y, 2) + powf(vec.z, 2));
 	return (magnitude);
 }
+
+// Particularly useful to extract the
+// vector's direction, without its length.
 
 void	normalize_vector(t_vector *v)
 {

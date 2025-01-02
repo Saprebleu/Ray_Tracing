@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 17:24:28 by jayzatov          #+#    #+#             */
-/*   Updated: 2024/11/26 14:41:45 by jayzatov         ###   ########.fr       */
+/*   Updated: 2024/12/18 15:40:35 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,28 +47,119 @@ float	solve_polynom(float a, float b, float c)
 	return (MAXFLOAT);
 }
 
+void	solve_poly(float a, float b, float c, t_distances *dst)
+{
+	float	delta;
+	// float	t1;
+	// float	t2;
+	dst->t1 = MAXFLOAT;
+	dst->t2 = MAXFLOAT;
+	delta = b * b - 4 * a * c;
+	if (delta == 0.0f)
+	{
+		dst->t1 = -b / (2.0f * a);
+		// if (!dst->t1)
+			// dst->t1 = MAXFLOAT;
+		return;
+	}
+	else if (delta > 0.0f)
+	{
+		dst->t1 = (-b - sqrtf(b * b - 4.0f * a * c)) / (2.0f * a);
+		dst->t2 = (-b + sqrtf(b * b - 4.0f * a * c)) / (2.0f * a);
+		// if (dst->t1 < 0.0f && dst->t2 < 0.0f)
+		// {
+		// 	dst->t1 = MAXFLOAT;
+		// 	dst->t2 = MAXFLOAT;
+		// 	return ;
+		// 	// return (MAXFLOAT);
+		// }
+		
+		if (dst->t1 < 0.0f)
+		{
+			dst->t1 = MAXFLOAT;
+			// return ;
+			// return (dst->t2);
+		}
+		if (dst->t2 < 0.0f)
+		{
+			dst->t2 = MAXFLOAT;
+			// return ;
+			// return (dst->t1);
+		}
+		
+	}
+	
+		
+	// return (MAXFLOAT);
+	
+	return;
+}
+
+static t_vector    find_hit_pt(t_vector origin, t_vector ray, float t_dist)
+{
+    t_vector ray_norm;
+    t_vector pt_on_sphere;
+
+    ray_norm = ray;
+    normalize_vector(&ray_norm);
+    pt_on_sphere.x = origin.x + (t_dist * ray_norm.x);
+    pt_on_sphere.y = origin.y + (t_dist * ray_norm.y);
+    pt_on_sphere.z = origin.z + (t_dist * ray_norm.z);
+
+    return (pt_on_sphere);
+}
+
+
 // "distance" : distance between the center of the sphere and the pixel 
 
-void	intersect_sphere(const t_vector *pixel,
-	const t_vector *ray, t_object *sphere, t_world world)
+void	intersect_sphere(const t_vector eye, const t_vector pixel,
+	const t_vector ray, t_object *sphere, t_world world)
 {
 	t_vector	distance;
+	t_vector	pt_on_sphere;
 	float		a;
 	float		b;
 	float		c;
 
-	distance = create_vector(&sphere->position, pixel);
-	a = dot_product(ray, ray);
-	b = 2.0f * dot_product(ray, &distance);
+	// le ray va de l'oeil vers le pixel
+	// alors que distance va du centre vers le pixel
+	distance = create_vector(&sphere->position, &pixel);
+	a = dot_product(&ray, &ray);
+	b = 2.0f * dot_product(&ray, &distance);
 	c = dot_product(&distance, &distance)
 		- ((sphere->diameter / 2.0f) * (sphere->diameter / 2.0f));
-	sphere->t_min = solve_polynom(a, b, c);
+	// sphere->t_min = solve_polynom(a, b, c);
 
-	if (sphere->t_min != MAXFLOAT)
-		sphere->pt_color = light_on_figure(*pixel, *ray, sphere->t_min, *sphere, world, 1);
-	else 
-		sphere->pt_color = sphere->color;
 
+	t_distances	dist;
+	solve_poly(a, b, c, &dist);
+	// dist = two_ts(a, b, c);
+	// float min = fminf(dist.t1, dist.t2);
+	// float max = fmaxf(dist.t1, dist.t2);
+	// dist.t1 = min;
+	// dist.t2 = max;
+	
+
+	// t1 et t2, sont respectivement :
+	// intersection a la surface, intersection à l'intérieur
+	// de la figure
+	if (dist.t1 != MAXFLOAT)
+	{
+		sphere->t_min = dist.t1;
+    	pt_on_sphere = find_hit_pt(pixel, ray, sphere->t_min);
+		sphere->pt_color = light_on_figure(pt_on_sphere, ray, eye, pixel, ray, sphere->t_min, *sphere, world, 1);
+		return;
+	}
+	else if (dist.t2 != MAXFLOAT)
+	{
+		sphere->t_min = dist.t2;
+    	pt_on_sphere = find_hit_pt(pixel, ray, sphere->t_min);
+		sphere->pt_color = light_on_figure(pt_on_sphere, ray, eye, pixel, ray, sphere->t_min, *sphere, world, -1);
+		return;
+	}
+	sphere->t_min = MAXFLOAT;
+	sphere->pt_color = sphere->color;
+	return;
 	(void)world;
 	return;
 }

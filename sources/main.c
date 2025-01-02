@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:29:08 by tjarross          #+#    #+#             */
-/*   Updated: 2024/11/26 19:30:18 by jayzatov         ###   ########.fr       */
+/*   Updated: 2024/12/11 13:25:59 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,11 @@ int	main(int argc, char **argv)
 	if (parsing_ret != 0)
 		return (EXIT_FAILURE);
 	print_parsing(world);
+
 	if (false == initialize_mlx_context(&display, WINDOW_WIDTH, WINDOW_HEIGHT,
 			WINDOW_TITLE))
 		return (clean_mlx_context(&display), EXIT_FAILURE);
+	
 	generate_image(&display, &world);
 	mlx_put_image_to_window(display.mlx_ptr, display.mlx_window,
 		display.mlx_image, 0, 0);

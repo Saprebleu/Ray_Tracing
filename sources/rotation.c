@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 15:37:17 by jayzatov          #+#    #+#             */
-/*   Updated: 2024/11/25 17:55:36 by jayzatov         ###   ########.fr       */
+/*   Updated: 2024/12/06 13:40:20 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,10 @@ void	xyz_rotation_matrix(t_vector original, t_vector *rotated, t_angles angles)
 				+ ((cos(alpha) * cos(beta)) * original.z);
 }
 
-void	rotation_process(t_vector vec, t_vector center, t_vector *rot_vec, t_angles angles)
+t_vector	rotation_process(t_vector vec, t_vector center, t_vector *rot_vec, t_angles angles)
 {
 	translation(&vec, center);
 	xyz_rotation_matrix(vec, rot_vec, angles);
 	detranslation(rot_vec, center);
+	return (*rot_vec);
 }
