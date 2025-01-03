@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 17:40:18 by jayzatov          #+#    #+#             */
-/*   Updated: 2025/01/03 14:17:15 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/03 14:48:39 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -302,12 +302,14 @@ static void shadows(t_vector rot_pt, t_object *figure, t_world world, float L_ma
                 // So, in "intersect_plane()", we use the formula :
                 // t = (Norm * (A_pl_pt) - Eye) / (Norm * Ray_dir).
                 t_vector on_plane = neighbour.position;
-                t_vector pixel_plane = create_vector(&on_plane, &rot_pt);
+                t_vector pixel_plane = create_vector(&on_plane, &pt_on_figure);
 
                 // on crée d'abord un vecteur plan_pt - pixel
                 // ray = oeil - pixel
                 dist.t2 = MAXFLOAT;
-                dist.t1 = -(dot_product(&neighbour.direction, &pixel_plane) / dot_product(&neighbour.direction, &L));
+                dist.t1 = -(dot_product(&neighbour.direction, &pixel_plane)
+                        / dot_product(&neighbour.direction, &L));
+
             }
         }
         else if (/*figure->index != neighbour.index
@@ -374,19 +376,13 @@ static void shadows(t_vector rot_pt, t_object *figure, t_world world, float L_ma
                 // t = (Norm * (A_pl_pt) - Eye) / (Norm * Ray_dir).
 
                 t_vector on_plane = neighbour.position;
-                t_vector pixel_plane = create_vector(&on_plane, &rot_pt);
+                t_vector pixel_plane = create_vector(&on_plane, &pt_on_figure);
 
                 // on crée d'abord un vecteur plan_pt - pixel
                 // ray = oeil - pixel
                 dist.t2 = MAXFLOAT;
-                dist.t1 = -(dot_product(&neighbour.direction, &pixel_plane) / dot_product(&neighbour.direction, &L));
-
-                // normalize_vector(&pixel_plane);
-                // if (!dist.t1)
-                // dist.t1 = MAXFLOAT;
-                // continue;
-                // if (dot_product(&rot_pt, &neighbour.direction) < 0)
-                //     norm_product *= -1;
+                dist.t1 = -(dot_product(&neighbour.direction, &pixel_plane)
+                        / dot_product(&neighbour.direction, &L));
             }
         }
         else
