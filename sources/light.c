@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 17:40:18 by jayzatov          #+#    #+#             */
-/*   Updated: 2025/01/02 20:23:34 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/03 14:17:15 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,6 +192,7 @@ static void shadows(t_vector rot_pt, t_object *figure, t_world world, float L_ma
     t_vector pt_origin = pt_on_figure;
     t_vector light_ori = rot_light;
     t_vector initial_pos = figure->position;
+    t_vector L_cpy = L;
     (void)ray;
     (void)pt_origin;
     (void)light_ori;
@@ -204,6 +205,7 @@ static void shadows(t_vector rot_pt, t_object *figure, t_world world, float L_ma
         neighbour = world.objects[j];
 
         float Ln_mag = L_mag;
+        L = L_cpy;
         (void)Ln_mag;
         (void)t_dist;
         (void)pixel;
@@ -218,7 +220,8 @@ static void shadows(t_vector rot_pt, t_object *figure, t_world world, float L_ma
         // - on fait une ombre externe projetée par autre chose que lui-même
         // - on fait une ombre interne projetée par lui-même ou une autre figure
 
-        if ((figure->type == CYLINDER && in_or_out == 1 && figure->index != neighbour.index) || (figure->type == CYLINDER && in_or_out == -1 /*&& figure->index != neighbour.index*/)
+        if ((figure->type == CYLINDER && in_or_out == 1 && figure->index != neighbour.index)
+        || (figure->type == CYLINDER && in_or_out == -1 /*&& figure->index != neighbour.index*/)
             /*|| (figure->type == CYLINDER && in_or_out == -1 && figure->index == neighbour.index)*/)
         {
             // ROTATION de la figure voisine
@@ -292,7 +295,7 @@ static void shadows(t_vector rot_pt, t_object *figure, t_world world, float L_ma
             }
             else if (neighbour.type == PLANE)
             {
-                continue;
+                // continue;
                 // A plane's fomrula : P is on the plane if : Norm * (P - A_plane_point) = 0.
                 // It's intersection with a ray fomula : Norm * (Eye + tRay_dir - A_pl_pt)  = 0.
                 // (Because the ray formula is : Eye + tRay_dir = point).
@@ -316,7 +319,7 @@ static void shadows(t_vector rot_pt, t_object *figure, t_world world, float L_ma
             if (neighbour.type == CYLINDER)
             {
                 // continue;
-                // pt_on_figure = rot_pt;
+                pt_on_figure = rot_pt;
                 // pt_on_figure = pt_origin;
                 rot_light = world.light_position; // POUR QUE CA MARCHE SUR figure ROTE
 
@@ -404,22 +407,13 @@ static void shadows(t_vector rot_pt, t_object *figure, t_world world, float L_ma
         // }
 
         if (
-            (in_or_out == -1 && dist.t1 != MAXFLOAT && dist.t1 >= 0.001 && dist.t1 <= L_mag /*&& !cylinder_height(&neighbour, dist.t1, L,  pt_on_figure)*/)
+            (in_or_out == -1 && dist.t1 != MAXFLOAT && dist.t1 >= 0.01 && dist.t1 <= L_mag /*&& !cylinder_height(&neighbour, dist.t1, L,  pt_on_figure)*/)
             || (in_or_out == -1 && dist.t2 != MAXFLOAT && dist.t2 >= 0.00001 && dist.t2 <= L_mag /*&& cylinder_height(&neighbour, dist.t2, L, pt_on_figure)*/)
             // || (figure->index != neighbour.index && /*cos > 0 &&*/ in_or_out == -1 && dist.t1 != MAXFLOAT && dist.t1 >= 0.1 && dist.t1 <= L_mag && cylinder_height(&neighbour, dist.t1, L,  pt_on_figure))
             // || (figure->index != neighbour.index && /*cos > 0 &&*/ in_or_out == -1 && dist.t2 != MAXFLOAT && dist.t2 >= 0.00001 && dist.t2 <= L_mag && cylinder_height(&neighbour, dist.t2, L, pt_on_figure))
-            || ((figure->index != neighbour.index && /*cos > 0 &&*/ in_or_out == 1 && dist.t1 != MAXFLOAT && dist.t1 >= 0.001 && dist.t1 <= Ln_mag /*&& !cylinder_height(&neighbour, dist.t1, L,  pt_on_figure)*/)
+            || ((figure->index != neighbour.index && /*cos > 0 &&*/ in_or_out == 1 && dist.t1 != MAXFLOAT && dist.t1 >= 0.01 && dist.t1 <= Ln_mag /*&& !cylinder_height(&neighbour, dist.t1, L,  pt_on_figure)*/)
             || (figure->index != neighbour.index && /*cos > 0 &&*/ in_or_out == 1 && dist.t2 != MAXFLOAT && dist.t2 >= 0.00001 && dist.t2 <= Ln_mag /*&& !cylinder_height(&neighbour, dist.t2, L,  pt_on_figure)*/)))
         {
-
-            // if (figure->type == SPHERE && neighbour.type == CYLINDER && in_or_out == 1)
-            // {
-            //     printf("! shpere on cylinider\n");
-            //     if (dist.t1 != MAXFLOAT)
-            //         printf("dist.t1 != MAXFLOAT\n");
-            //     if (dist.t2 != MAXFLOAT)
-            //         printf("dist.t2 != MAXFLOAT\n");
-            // }
 
             if (neighbour.type == CYLINDER && dist.t1 != MAXFLOAT
                 && dist.t1 >= 0.001 && dist.t1 <= L_mag
@@ -448,17 +442,7 @@ static void shadows(t_vector rot_pt, t_object *figure, t_world world, float L_ma
                 && (!cylinder_height(&neighbour, dist.t2, L, pt_on_figure)))
                 continue;
 
-            // if (/*in_or_out == 1 &&*/ figure->type == PLANE && neighbour.type == CYLINDER)
-            // {
-            // //     printf("%d \n", in_or_out);
-            // //     break;
-            //         if (neighbour.type == CYLINDER && dist.t2 != MAXFLOAT && dist.t2 >= 0.001 && dist.t2 <= L_mag)
-            //             // printf("dist 2\n");
-            //             continue;
-            //         else if (neighbour.type == CYLINDER && dist.t1 != MAXFLOAT && dist.t1 >= 0.001 && dist.t1 <= L_mag)
-            //             printf("dist 1\n");
-            //             // continue;
-            // }
+            
 
             specular_l->r = 0;
             specular_l->g = 0;
@@ -468,31 +452,6 @@ static void shadows(t_vector rot_pt, t_object *figure, t_world world, float L_ma
             diffuse_l->b = 0;
 
             (void)ambient_l;
-            // if (figure->type == SPHERE && in_or_out == -1
-            //     && figure->index != neighbour.index)
-            // {
-            // printf("SHADOW1\n");
-            // printf("figure->index %d, neighbour.index %d\n", figure->index, neighbour.index);
-            // printf("r, g, b : %d, %d, %d\n\n", neighbour.color.r, neighbour.color.g, neighbour.color.b);
-
-            // break;
-            // }
-            // else if (figure->type == SPHERE && in_or_out == -1
-            //     && figure->index == neighbour.index)
-            // {
-            // printf("SHADOW2\n");
-
-            // diffuse_l->r = 255;
-            // diffuse_l->g = 0;
-            // diffuse_l->b = 0;
-            // specular_l->r = 255;
-            // specular_l->g = 0;
-            // specular_l->b = 0;
-            // ambient_l->r = 255;
-            // ambient_l->g = 255;
-            // ambient_l->b = 255;
-            // }
-
             break;
         }
     }
