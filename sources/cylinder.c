@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:38:41 by jayzatov          #+#    #+#             */
-/*   Updated: 2024/12/18 13:10:21 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/05 16:36:57 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,19 +113,19 @@ bool	cylinder_height(t_object *cylinder, float t,
 // each axe (x, y, z).
 // So we don't need to normalize "cylinder->direction" here.
 
-static t_vector    find_hit_pt(t_vector origin, t_vector ray, float t_dist)
-{
-    t_vector ray_norm;
-    t_vector pt_on_sphere;
+// static t_vector    find_hit_pt(t_vector origin, t_vector ray, float t_dist)
+// {
+//     t_vector ray_norm;
+//     t_vector pt_on_sphere;
 
-    ray_norm = ray;
-    normalize_vector(&ray_norm);
-    pt_on_sphere.x = origin.x + (t_dist * ray_norm.x);
-    pt_on_sphere.y = origin.y + (t_dist * ray_norm.y);
-    pt_on_sphere.z = origin.z + (t_dist * ray_norm.z);
+//     ray_norm = ray;
+//     normalize_vector(&ray_norm);
+//     pt_on_sphere.x = origin.x + (t_dist * ray_norm.x);
+//     pt_on_sphere.y = origin.y + (t_dist * ray_norm.y);
+//     pt_on_sphere.z = origin.z + (t_dist * ray_norm.z);
 
-    return (pt_on_sphere);
-}
+//     return (pt_on_sphere);
+// }
 
 extern int x;
 extern int y;

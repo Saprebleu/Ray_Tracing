@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 17:24:28 by jayzatov          #+#    #+#             */
-/*   Updated: 2024/12/18 15:40:35 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/05 16:35:20 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ float	solve_polynom(float a, float b, float c)
 	}
 	return (MAXFLOAT);
 }
+
+// If delta == 0 : intersection in one point
 
 void	solve_poly(float a, float b, float c, t_distances *dst)
 {
@@ -95,7 +97,7 @@ void	solve_poly(float a, float b, float c, t_distances *dst)
 	return;
 }
 
-static t_vector    find_hit_pt(t_vector origin, t_vector ray, float t_dist)
+t_vector    find_hit_pt(t_vector origin, t_vector ray, float t_dist)
 {
     t_vector ray_norm;
     t_vector pt_on_sphere;

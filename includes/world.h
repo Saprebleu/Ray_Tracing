@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:48:55 by tjarross          #+#    #+#             */
-/*   Updated: 2024/12/18 14:58:57 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/05 16:35:50 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,5 +128,7 @@ void		xyz_rotation_matrix(t_vector original, t_vector *rotated, t_angles angles)
 
 void	solve_poly(float a, float b, float c, t_distances *dst);
 t_distances	two_ts(float a, float b, float c);
+
+t_vector    find_hit_pt(t_vector origin, t_vector ray, float t_dist);
 
 #endif

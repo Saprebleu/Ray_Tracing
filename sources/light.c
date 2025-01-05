@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 17:40:18 by jayzatov          #+#    #+#             */
-/*   Updated: 2025/01/03 14:48:39 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/05 20:03:53 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,19 +29,19 @@ typedef struct s_lights
     int b;
 } t_lights;
 
-static t_vector find_hit_pt(t_vector origin, t_vector ray, float t_dist)
-{
-    t_vector ray_norm;
-    t_vector pt_on_sphere;
+// static t_vector find_hit_pt(t_vector origin, t_vector ray, float t_dist)
+// {
+//     t_vector ray_norm;
+//     t_vector pt_on_sphere;
 
-    ray_norm = ray;
-    normalize_vector(&ray_norm);
-    pt_on_sphere.x = origin.x + (t_dist * ray_norm.x);
-    pt_on_sphere.y = origin.y + (t_dist * ray_norm.y);
-    pt_on_sphere.z = origin.z + (t_dist * ray_norm.z);
+//     ray_norm = ray;
+//     normalize_vector(&ray_norm);
+//     pt_on_sphere.x = origin.x + (t_dist * ray_norm.x);
+//     pt_on_sphere.y = origin.y + (t_dist * ray_norm.y);
+//     pt_on_sphere.z = origin.z + (t_dist * ray_norm.z);
 
-    return (pt_on_sphere);
-}
+//     return (pt_on_sphere);
+// }
 
 static t_vector sphere_norm(t_vector pt_on_sphere, t_object sphere)
 {
@@ -181,6 +181,38 @@ void color_limit(int *color)
     return;
 }
 
+int t1_limits(float t1, float Ln_mag)
+{
+    if (t1 != MAXFLOAT && t1 >= 0.01 && t1 <= Ln_mag)
+        return (1);
+    else
+        return (0);
+}
+
+int t2_limits(float t2, float Ln_mag)
+{
+    if (t2 != MAXFLOAT && t2 >= 0.00001 && t2 <= Ln_mag)
+        return (1);
+    else
+        return (0);
+}
+
+int outside (int in_or_out, t_object *figure, t_object neighbour)
+{
+    if (in_or_out == 1 && figure->index != neighbour.index)
+        return (1);
+    else
+        return (0);
+}
+
+int inside (int in_or_out)
+{
+    if (in_or_out == -1)
+        return (1);
+    else
+        return (0);
+}
+
 static void shadows(t_vector rot_pt, t_object *figure, t_world world, float L_mag, t_angles angles, t_vector rot_light,
                     t_vector pt_on_figure, int in_or_out, t_vector N, t_vector L, t_lights *diffuse_l, t_lights *specular_l,
                     t_lights *ambient_l, float cos, float t_dist, t_vector pixel, t_vector eye, t_vector ray)
@@ -204,9 +236,9 @@ static void shadows(t_vector rot_pt, t_object *figure, t_world world, float L_ma
         t_object neighbour;
         neighbour = world.objects[j];
 
-        float Ln_mag = L_mag;
+        // float Ln_mag = L_mag;
         L = L_cpy;
-        (void)Ln_mag;
+        float Ln_mag = L_mag;
         (void)t_dist;
         (void)pixel;
 
@@ -227,17 +259,13 @@ static void shadows(t_vector rot_pt, t_object *figure, t_world world, float L_ma
             // ROTATION de la figure voisine
             if (neighbour.type == CYLINDER)
             {
-                // continue;
-
                 pt_on_figure = pt_origin;
                 rot_light = world.light_position; // POUR QUE CA MARCHE SUR figure ROTE
 
-                if (neighbour.type == CYLINDER)
-                {
-                    find_angles(&angles, neighbour.direction, -1);
-                    rotation_process(rot_light, neighbour.position, &rot_light, angles);
-                    rotation_process(pt_on_figure, neighbour.position, &pt_on_figure, angles);
-                }
+                find_angles(&angles, neighbour.direction, -1);
+                rotation_process(rot_light, neighbour.position, &rot_light, angles);
+                rotation_process(pt_on_figure, neighbour.position, &pt_on_figure, angles);
+            
                 // crée un vecteur roté avec les 2 points rotés
                 t_vector L_n = create_vector(&pt_on_figure, &rot_light);
                 Ln_mag = magnitude(L_n);
@@ -313,7 +341,7 @@ static void shadows(t_vector rot_pt, t_object *figure, t_world world, float L_ma
             }
         }
         else if (/*figure->index != neighbour.index
-            &&*/ (figure->type == PLANE || figure->type == SPHERE))
+            && */(figure->type == PLANE || figure->type == SPHERE))
         {
             // printf("figure->index %d, neighbour.index %d\n", figure->index, neighbour.index);
             // continue;
@@ -339,15 +367,15 @@ static void shadows(t_vector rot_pt, t_object *figure, t_world world, float L_ma
 
                 // (void)N;
                 // // !!!! Marche en remplaçant L par L_n plus loin:
-                L = L_n;
+                // L_n;
 
-                dist = find_distances(L, pt_on_figure, neighbour);
+                dist = find_distances(L_n, pt_on_figure, neighbour);
+
+               
+                L = L_n;
                 // if (dist.t1 == 0)
                 //     dist = find_distances(L, pt_on_figure, world.objects[j]);
-                // float min = fminf(dist.t1, dist.t2);
-                // float max = fmaxf(dist.t1, dist.t2);
-                // dist.t1 = min;
-                // dist.t2 = max;
+                
 
                 
             }
@@ -376,12 +404,12 @@ static void shadows(t_vector rot_pt, t_object *figure, t_world world, float L_ma
                 // t = (Norm * (A_pl_pt) - Eye) / (Norm * Ray_dir).
 
                 t_vector on_plane = neighbour.position;
-                t_vector pixel_plane = create_vector(&on_plane, &pt_on_figure);
+                t_vector plane_pixel = create_vector(&on_plane, &pt_on_figure);
 
                 // on crée d'abord un vecteur plan_pt - pixel
                 // ray = oeil - pixel
                 dist.t2 = MAXFLOAT;
-                dist.t1 = -(dot_product(&neighbour.direction, &pixel_plane)
+                dist.t1 = -(dot_product(&neighbour.direction, &plane_pixel)
                         / dot_product(&neighbour.direction, &L));
             }
         }
@@ -393,60 +421,93 @@ static void shadows(t_vector rot_pt, t_object *figure, t_world world, float L_ma
         (void)figure;
         (void)rot_light;
         (void)eye;
-        // if (figure->type == SPHERE && neighbour.type == CYLINDER && in_or_out == 1)
-        // {
-        //     printf("? shpere on cylinider\n");
-        //     if (dist.t1 != MAXFLOAT)
-        //         printf("dist.t1 != MAXFLOAT\n");
-        //     if (dist.t2 != MAXFLOAT)
-        //         printf("dist.t2 != MAXFLOAT\n");
-        // }
+        
+        float t = MAXFLOAT;
 
-        if (
-            (in_or_out == -1 && dist.t1 != MAXFLOAT && dist.t1 >= 0.01 && dist.t1 <= L_mag /*&& !cylinder_height(&neighbour, dist.t1, L,  pt_on_figure)*/)
-            || (in_or_out == -1 && dist.t2 != MAXFLOAT && dist.t2 >= 0.00001 && dist.t2 <= L_mag /*&& cylinder_height(&neighbour, dist.t2, L, pt_on_figure)*/)
-            // || (figure->index != neighbour.index && /*cos > 0 &&*/ in_or_out == -1 && dist.t1 != MAXFLOAT && dist.t1 >= 0.1 && dist.t1 <= L_mag && cylinder_height(&neighbour, dist.t1, L,  pt_on_figure))
-            // || (figure->index != neighbour.index && /*cos > 0 &&*/ in_or_out == -1 && dist.t2 != MAXFLOAT && dist.t2 >= 0.00001 && dist.t2 <= L_mag && cylinder_height(&neighbour, dist.t2, L, pt_on_figure))
-            || ((figure->index != neighbour.index && /*cos > 0 &&*/ in_or_out == 1 && dist.t1 != MAXFLOAT && dist.t1 >= 0.01 && dist.t1 <= Ln_mag /*&& !cylinder_height(&neighbour, dist.t1, L,  pt_on_figure)*/)
-            || (figure->index != neighbour.index && /*cos > 0 &&*/ in_or_out == 1 && dist.t2 != MAXFLOAT && dist.t2 >= 0.00001 && dist.t2 <= Ln_mag /*&& !cylinder_height(&neighbour, dist.t2, L,  pt_on_figure)*/)))
+        
+        
+        if ((inside(in_or_out) && t1_limits(dist.t1, Ln_mag))
+            || (outside(in_or_out, figure, neighbour) && t1_limits(dist.t1, Ln_mag)))
+            t = dist.t1;
+       
+        else if ((inside(in_or_out) && t2_limits(dist.t2, Ln_mag))
+            || (outside(in_or_out, figure, neighbour) && t2_limits(dist.t2, Ln_mag)))
+            t = dist.t2;
+        
+        else
+            continue;
+        
+        if (t != MAXFLOAT)
         {
+            
+     
+            // if (neighbour.type == CYLINDER && t == dist.t1)
+            // {
+            //     // if (!cylinder_height(&neighbour, dist.t1, L, pt_on_figure))
+            //         continue;
+            // }
+            // else if (neighbour.type == CYLINDER && t == dist.t2)
+            // {
+            //     // printf("t %f, dist.t2 %f\n", t, dist.t2);
 
-            if (neighbour.type == CYLINDER && dist.t1 != MAXFLOAT
-                && dist.t1 >= 0.001 && dist.t1 <= L_mag
-                && (cylinder_height(&neighbour, dist.t1, L, pt_on_figure)))
+            //     if (!cylinder_height(&neighbour, dist.t2, L, pt_on_figure))
+            //         continue;
+            // }
+            int res1, res2;
+            if (neighbour.type == CYLINDER)
             {
-                // printf("t1\n");
-                
+                res1 = cylinder_height(&neighbour, dist.t1, L, pt_on_figure);
+                res2 = cylinder_height(&neighbour, dist.t2, L, pt_on_figure);
+            }
+            
+            
+            if (neighbour.type == CYLINDER && t == dist.t1 && res1)
+            {
+
+            }
+            else if (neighbour.type == CYLINDER && t2_limits(dist.t2, Ln_mag)
+                && res2)
+            {
+                // if (neighbour.type == CYLINDER && t == dist.t1)
+                //     printf("t == dist.t1\n");
+                ambient_l->r = 0;
+                ambient_l->g = 0;
+                ambient_l->b = 0;
                 // continue;
             }
-            else if (neighbour.type == CYLINDER && dist.t2 != MAXFLOAT
-                && dist.t2 >= 0.00001 && dist.t2 <= L_mag
-                && (cylinder_height(&neighbour, dist.t2, L, pt_on_figure)))
-            {
-                // printf("t2\n");
-                // ambient_l->r = 0;
-                // ambient_l->g = 0;
-                // ambient_l->b = 0;
-                // continue;
-            }
-            else if ( neighbour.type == CYLINDER && dist.t1 != MAXFLOAT
-                && dist.t1 >= 0.001 && dist.t1 <= L_mag
+            else if (neighbour.type == CYLINDER && t == dist.t1
                 && (!cylinder_height(&neighbour, dist.t1, L, pt_on_figure)))
                 continue;
-            else if (neighbour.type == CYLINDER && dist.t2 != MAXFLOAT
-                && dist.t2 >= 0.00001 && dist.t2 <= L_mag
+            else if (neighbour.type == CYLINDER && t2_limits(dist.t2, Ln_mag)
                 && (!cylinder_height(&neighbour, dist.t2, L, pt_on_figure)))
                 continue;
 
-            
 
+            if (neighbour.type == CYLINDER)
+            {
+                // if (cylinder_height(&neighbour, dist.t1, L, pt_on_figure))
+                //     printf("HEIGHT OK, dist.t1");
+                // else if (cylinder_height(&neighbour, dist.t2, L, pt_on_figure))
+                //     printf("HEIGHT OK, dist.t2");
+                // if (dist.t1 != MAXFLOAT && dist.t1 >= 0.1 && dist.t1 <= L_mag)
+                //     printf("dist.t1 : %f, Ln_mag : %f\n", dist.t1, Ln_mag);
+                // if (dist.t2 != MAXFLOAT && dist.t2 >= 0.00001 && dist.t2 <= L_mag)
+                //     printf("dist.t2 : %f, Ln_mag : %f\n", dist.t2, Ln_mag);
+                // printf("t %f, dist.t1 %f\n", t, dist.t1);
+                // printf("t %f, dist.t2 %f\n", t, dist.t2);
+                // printf("\n--------------------------------------------\n");
+
+                // ambient_l->r = 0;
+                // ambient_l->g = 0;
+                // ambient_l->b = 0;
+            }
             specular_l->r = 0;
             specular_l->g = 0;
             specular_l->b = 0;
             diffuse_l->r = 0;
             diffuse_l->g = 0;
             diffuse_l->b = 0;
-
+           
             (void)ambient_l;
             break;
         }
