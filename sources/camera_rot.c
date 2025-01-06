@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 19:00:36 by jayzatov          #+#    #+#             */
-/*   Updated: 2025/01/06 16:46:19 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/06 17:07:29 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ void	initialize_eye(t_vector *eye, t_world world)
 	t_angles	angles;
 	double		camera_distance;
 
-	camera_distance = ((WINDOW_WIDTH / 2.0f)
-						/ tan((world.camera_fov / 2.0f) * M_PI / 180.0f));
+	camera_distance = ((WINDOW_WIDTH / 2.0)
+						/ tan((world.camera_fov / 2.0) * M_PI / 180.0));
 	eye->x = world.camera_position.x;
 	eye->y = world.camera_position.y;
 	eye->z = world.camera_position.z - camera_distance;
@@ -43,8 +43,8 @@ void	initialize_eye(t_vector *eye, t_world world)
 
 void	initialize_pixel(t_vector *pixel, t_world world, int x, int y)
 {
-	pixel->x = world.camera_position.x - (WINDOW_WIDTH / 2.0f) + x;
-	pixel->y = world.camera_position.y + (WINDOW_HEIGHT / 2.0f) - y;
+	pixel->x = world.camera_position.x - (WINDOW_WIDTH / 2.0) + x;
+	pixel->y = world.camera_position.y + (WINDOW_HEIGHT / 2.0) - y;
 	pixel->z = world.camera_position.z;
 }
 

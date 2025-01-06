@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 15:39:43 by jayzatov          #+#    #+#             */
-/*   Updated: 2025/01/06 16:42:20 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/06 17:07:04 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	find_angles(t_angles *angles, t_vector rotation, int direction)
 // 	else if (axe == 'x')
 // 		x_is_one(&normalized);
 // 	else
-// 		return (361.0f);
+// 		return (361.0);
 // 	product = dot_product(&normalized, &direction);
 // 	d_magn  = magnitude(direction);
 // 	n_magn  = magnitude(normalized);

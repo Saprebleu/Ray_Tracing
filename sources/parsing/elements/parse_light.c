@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:28:54 by tjarross          #+#    #+#             */
-/*   Updated: 2025/01/06 16:34:48 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/06 17:10:30 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	parse_light(char **line_split, t_world *world)
 	if (false == is_double(*line_split))
 		return (printf("Error\nLight Power is not a double\n"), -5);
 	world->light_power = get_double(*line_split);
-	if (false == is_double_in_range(world->light_power, 0.0f, 1.0f))
+	if (false == is_double_in_range(world->light_power, 0.0, 1.0))
 		return (printf("Error\nLight Power not in range [0, 1]\n"), -6);
 	line_split = goto_next_value(line_split + 1);
 	if (line_split == NULL)

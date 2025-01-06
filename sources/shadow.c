@@ -89,9 +89,9 @@
     
 //     // normalize_vector(&light);
 //     // double cos = dot_product(&N, &light);
-//     // if (cos > 0.0f)
+//     // if (cos > 0.0)
 //     // {
-//     //     N = scal_x_vec(-1.0f, N);
+//     //     N = scal_x_vec(-1.0, N);
 //         // (void)figure;
 //         // (void)light;
 //     //     figure->color.r = 255;
@@ -199,11 +199,11 @@
 
     
    
-//     color.r = figure.color.r * ((ambient_l.r /*+ diffuse_l.r + specular_l.r*/) / 255.f);
+//     color.r = figure.color.r * ((ambient_l.r /*+ diffuse_l.r + specular_l.r*/) / 255.0);
 //     color_limit(&color.r);
-//     color.g = figure.color.g * ((ambient_l.g /*+ diffuse_l.g + specular_l.g*/) / 255.f);
+//     color.g = figure.color.g * ((ambient_l.g /*+ diffuse_l.g + specular_l.g*/) / 255.0);
 //     color_limit(&color.g);
-//     color.b = figure.color.b * ((ambient_l.b /*+ diffuse_l.b + specular_l.b*/) / 255.f);
+//     color.b = figure.color.b * ((ambient_l.b /*+ diffuse_l.b + specular_l.b*/) / 255.0);
 //     color_limit(&color.b);
 
 //     // color.r = dot_LN * (world.light_power * world.light_color.r) * sphere.color.r;

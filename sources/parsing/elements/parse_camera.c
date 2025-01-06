@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:28:47 by tjarross          #+#    #+#             */
-/*   Updated: 2025/01/06 16:46:56 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/06 17:10:09 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ int	parse_camera(char **line_split, t_world *world)
 	world->camera_direction = get_vector(*line_split);
 	// if (fabs(pow(world->camera_direction.x, 2)
 	// 		+ pow(world->camera_direction.y, 2)
-	// 		+ pow(world->camera_direction.z, 2) - 1.0f) > 0.01f)
+	// 		+ pow(world->camera_direction.z, 2) - 1.0) > 0.01)
 	// 	return (printf("Error\nCamera Direction not normalized\n"), -6);
-	if (false == is_vector_in_range(world->camera_direction, -1.0f, 1.0f))
+	if (false == is_vector_in_range(world->camera_direction, -1.0, 1.0))
 		return (printf("Error\nCamera Direction not in range [-1, 1]\n"), -7);
 	return (parse_camera2(line_split, world));
 }

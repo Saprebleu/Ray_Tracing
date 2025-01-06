@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:38:41 by jayzatov          #+#    #+#             */
-/*   Updated: 2025/01/06 16:48:20 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/06 17:07:55 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,15 @@ t_distances	two_ts(double a, double b, double c)
 	dist.t1 = MAXFLOAT;
 	dist.t2 = MAXFLOAT;
 	delta = b * b - 4 * a * c;
-	if (delta == 0.0f)
+	if (delta == 0.0)
 	{
-		dist.t1 = -b / (2.0f * a);
+		dist.t1 = -b / (2.0 * a);
 		return (dist);
 	}
-	else if (delta > 0.0f)
+	else if (delta > 0.0)
 	{
-		dist.t1 = (-b - sqrt(b * b - 4.0f * a * c)) / (2.0f * a);
-		dist.t2 = (-b + sqrt(b * b - 4.0f * a * c)) / (2.0f * a);
+		dist.t1 = (-b - sqrt(b * b - 4.0 * a * c)) / (2.0 * a);
+		dist.t2 = (-b + sqrt(b * b - 4.0 * a * c)) / (2.0 * a);
 		if (dist.t1 < 0)
 			dist.t1 = MAXFLOAT;
 		if (dist.t2 < 0)
@@ -61,9 +61,9 @@ t_distances	find_distances(t_vector ray, t_vector rot_pixel, t_object figure)
 
 	fig_pixel_dist = create_vector(&figure.position, &rot_pixel);
 	a = (ray.x * ray.x + ray.z * ray.z);
-	b = 2.0f * (ray.x * fig_pixel_dist.x) + 2.0f * (ray.z * fig_pixel_dist.z);
+	b = 2.0 * (ray.x * fig_pixel_dist.x) + 2.0 * (ray.z * fig_pixel_dist.z);
 	c = (fig_pixel_dist.x * fig_pixel_dist.x + fig_pixel_dist.z * fig_pixel_dist.z)
-		- ((figure.diameter / 2.0f) * (figure.diameter / 2.0f));
+		- ((figure.diameter / 2.0) * (figure.diameter / 2.0));
 	return (two_ts(a, b, c));
 }
 
@@ -88,16 +88,16 @@ bool	cylinder_height(t_object *cylinder, double t,
 						  square((figure_point.z - cylinder->position.z)));
 	
 	// b^2 = c^2 - a^2
-	pythagore_solution = square(point_center_length) - square((cylinder->diameter / 2.0f));
+	pythagore_solution = square(point_center_length) - square((cylinder->diameter / 2.0));
 	pythagore_solution = sqrt(pythagore_solution);
 	
 	
 	// printf("pythagore_solution %f\n", pythagore_solution);
-	// printf("(cylinder->height / 2.0f) %f\n", (cylinder->height / 2.0f));
-	if (point_center_length <= cylinder->diameter / 2.0f)
+	// printf("(cylinder->height / 2.0) %f\n", (cylinder->height / 2.0));
+	if (point_center_length <= cylinder->diameter / 2.0)
 		return (true);
 
-	double mid_height = cylinder->height / 2.0f;
+	double mid_height = cylinder->height / 2.0;
 
 	// printf("mid_height %f\n", mid_height);
 

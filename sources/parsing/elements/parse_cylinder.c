@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:29:03 by tjarross          #+#    #+#             */
-/*   Updated: 2025/01/06 16:46:56 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/06 17:10:20 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,12 @@ static int	parse_cylinder2(char **line_split, t_world *world)
 		return (printf("Error\nCylinder Direction is not a vector\n"), -5);
 	world->objects[world->nb_objects].direction = get_vector(*line_split);
 	if (false == is_vector_in_range(world->objects[world->nb_objects].direction,
-			-1.0f, 1.0f))
+			-1.0, 1.0))
 		return (printf("Error\nCylinder Direction not in range [-1, 1]\n"), -6);
 	// if (fabs(pow(world->objects[world->nb_objects].direction.x, 2)
 	// 		+ pow(world->objects[world->nb_objects].direction.y, 2)
-	// 		+ pow(world->objects[world->nb_objects].direction.z, 2) - 1.0f)
-	// 	> 0.01f)
+	// 		+ pow(world->objects[world->nb_objects].direction.z, 2) - 1.0)
+	// 	> 0.01)
 	// 	return (printf("Error\nCylinder Direction not normalized\n"), -7);
 	line_split = goto_next_value(line_split + 1);
 	if (line_split == NULL)

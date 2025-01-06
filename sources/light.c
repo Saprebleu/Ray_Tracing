@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 17:40:18 by jayzatov          #+#    #+#             */
-/*   Updated: 2025/01/06 16:55:27 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/06 17:09:12 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -330,8 +330,8 @@ static void shadows(t_vector rot_pt, t_object *figure, t_world world, double L_m
 
                 // Ln_mag = magnitude(L);
                 double a = dot_product(&L, &L);
-                double b = 2.0f * dot_product(&L, &distance);
-                double c = dot_product(&distance, &distance) - ((neighbour.diameter / 2.0f) * (neighbour.diameter / 2.0f));
+                double b = 2.0 * dot_product(&L, &distance);
+                double c = dot_product(&distance, &distance) - ((neighbour.diameter / 2.0) * (neighbour.diameter / 2.0));
                 // dist.t1 = solve_polynom(a, b, c);
                 solve_poly(a, b, c, &dist);
                 // dist = two_ts(a, b, c);
@@ -515,11 +515,11 @@ t_color light_on_figure(t_vector origin_pt, t_vector pixel, t_vector rot_eye, t_
     //     world.light_power = 1;
     // }
 
-    color.r = figure.color.r * ((ambient_l.r + diffuse_l.r + specular_l.r) / 255.f);
+    color.r = figure.color.r * ((ambient_l.r + diffuse_l.r + specular_l.r) / 255.0);
     color_limit(&color.r);
-    color.g = figure.color.g * ((ambient_l.g + diffuse_l.g + specular_l.g) / 255.f);
+    color.g = figure.color.g * ((ambient_l.g + diffuse_l.g + specular_l.g) / 255.0);
     color_limit(&color.g);
-    color.b = figure.color.b * ((ambient_l.b + diffuse_l.b + specular_l.b) / 255.f);
+    color.b = figure.color.b * ((ambient_l.b + diffuse_l.b + specular_l.b) / 255.0);
     color_limit(&color.b);
 
     // color.r = figure.color.r + ((ambient_l.r + diffuse_l.r + specular_l.r));

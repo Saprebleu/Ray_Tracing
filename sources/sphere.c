@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 17:24:28 by jayzatov          #+#    #+#             */
-/*   Updated: 2025/01/06 16:48:20 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/06 17:09:55 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,17 @@ double	solve_polynom(double a, double b, double c)
 	double	t2;
 
 	delta = b * b - 4 * a * c;
-	if (delta == 0.0f)
-		return (-b / (2.0f * a));
-	else if (delta > 0.0f)
+	if (delta == 0.0)
+		return (-b / (2.0 * a));
+	else if (delta > 0.0)
 	{
-		t1 = (-b - sqrt(b * b - 4.0f * a * c)) / (2.0f * a);
-		t2 = (-b + sqrt(b * b - 4.0f * a * c)) / (2.0f * a);
-		if (t1 < 0.0f && t2 < 0.0f)
+		t1 = (-b - sqrt(b * b - 4.0 * a * c)) / (2.0 * a);
+		t2 = (-b + sqrt(b * b - 4.0 * a * c)) / (2.0 * a);
+		if (t1 < 0.0 && t2 < 0.0)
 			return (MAXFLOAT);
-		if (t1 < 0.0f)
+		if (t1 < 0.0)
 			return (t2);
-		else if (t2 < 0.0f)
+		else if (t2 < 0.0)
 			return (t1);
 		else
 			return (fmin(t1, t2));
@@ -57,18 +57,18 @@ void	solve_poly(double a, double b, double c, t_distances *dst)
 	dst->t1 = MAXFLOAT;
 	dst->t2 = MAXFLOAT;
 	delta = b * b - 4 * a * c;
-	if (delta == 0.0f)
+	if (delta == 0.0)
 	{
-		dst->t1 = -b / (2.0f * a);
+		dst->t1 = -b / (2.0 * a);
 		// if (!dst->t1)
 			// dst->t1 = MAXFLOAT;
 		return;
 	}
-	else if (delta > 0.0f)
+	else if (delta > 0.0)
 	{
-		dst->t1 = (-b - sqrt(b * b - 4.0f * a * c)) / (2.0f * a);
-		dst->t2 = (-b + sqrt(b * b - 4.0f * a * c)) / (2.0f * a);
-		// if (dst->t1 < 0.0f && dst->t2 < 0.0f)
+		dst->t1 = (-b - sqrt(b * b - 4.0 * a * c)) / (2.0 * a);
+		dst->t2 = (-b + sqrt(b * b - 4.0 * a * c)) / (2.0 * a);
+		// if (dst->t1 < 0.0 && dst->t2 < 0.0)
 		// {
 		// 	dst->t1 = MAXFLOAT;
 		// 	dst->t2 = MAXFLOAT;
@@ -76,13 +76,13 @@ void	solve_poly(double a, double b, double c, t_distances *dst)
 		// 	// return (MAXFLOAT);
 		// }
 		
-		if (dst->t1 < 0.0f)
+		if (dst->t1 < 0.0)
 		{
 			dst->t1 = MAXFLOAT;
 			// return ;
 			// return (dst->t2);
 		}
-		if (dst->t2 < 0.0f)
+		if (dst->t2 < 0.0)
 		{
 			dst->t2 = MAXFLOAT;
 			// return ;
@@ -127,9 +127,9 @@ void	intersect_sphere(const t_vector eye, const t_vector pixel,
 	// alors que distance va du centre vers le pixel
 	distance = create_vector(&sphere->position, &pixel);
 	a = dot_product(&ray, &ray);
-	b = 2.0f * dot_product(&ray, &distance);
+	b = 2.0 * dot_product(&ray, &distance);
 	c = dot_product(&distance, &distance)
-		- ((sphere->diameter / 2.0f) * (sphere->diameter / 2.0f));
+		- ((sphere->diameter / 2.0) * (sphere->diameter / 2.0));
 	// sphere->t_min = solve_polynom(a, b, c);
 
 
