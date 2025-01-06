@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 15:53:00 by jayzatov          #+#    #+#             */
-/*   Updated: 2024/12/04 14:26:24 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/06 16:48:20 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ t_vector	create_vector(const t_vector *start, const t_vector *end)
 //  If the cos < 0, the vectors don't have the same
 //  direction. At cos == 1 they're orthogonal...
 
-float	dot_product(const t_vector *v1, const t_vector *v2)
+double	dot_product(const t_vector *v1, const t_vector *v2)
 {
 	return (v1->x * v2->x + v1->y * v2->y + v1->z * v2->z);
 }
@@ -51,11 +51,11 @@ float	dot_product(const t_vector *v1, const t_vector *v2)
 // Written |V|, used on not normalized vectors
 // because it measures the vector's length.
 
-float	magnitude(t_vector vec)
+double	magnitude(t_vector vec)
 {
-	float	magnitude;
+	double	magnitude;
 
-	magnitude = sqrtf(powf(vec.x, 2) + powf(vec.y, 2) + powf(vec.z, 2));
+	magnitude = sqrt(pow(vec.x, 2) + pow(vec.y, 2) + pow(vec.z, 2));
 	return (magnitude);
 }
 
@@ -64,15 +64,15 @@ float	magnitude(t_vector vec)
 
 void	normalize_vector(t_vector *v)
 {
-	float	length;
+	double	length;
 
-	length = sqrtf(powf(v->x, 2) + powf(v->y, 2) + powf(v->z, 2));
+	length = sqrt(pow(v->x, 2) + pow(v->y, 2) + pow(v->z, 2));
 	v->x /= length;
 	v->y /= length;
 	v->z /= length;
 }
 
-float	square(float nbr)
+double	square(double nbr)
 {
 	return (nbr * nbr);
 }

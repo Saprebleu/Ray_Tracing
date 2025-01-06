@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_sphere.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjarross <tjarross@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:29:01 by tjarross          #+#    #+#             */
-/*   Updated: 2024/10/26 18:23:07 by tjarross         ###   ########.fr       */
+/*   Updated: 2025/01/06 16:34:48 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ int	parse_sphere(char **line_split, t_world *world)
 	line_split = goto_next_value(line_split + 1);
 	if (line_split == NULL)
 		return (printf("Error\nNot enough information for Sphere\n"), -4);
-	if (false == is_float(*line_split))
-		return (printf("Error\nSphere Diameter is not a float\n"), -5);
-	world->objects[world->nb_objects].diameter = get_float(*line_split);
+	if (false == is_double(*line_split))
+		return (printf("Error\nSphere Diameter is not a double\n"), -5);
+	world->objects[world->nb_objects].diameter = get_double(*line_split);
 	return (parse_sphere2(line_split, world));
 }

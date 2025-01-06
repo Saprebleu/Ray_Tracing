@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:38:41 by jayzatov          #+#    #+#             */
-/*   Updated: 2025/01/05 16:36:57 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/06 16:48:20 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@
 #include "world.h"
 #include "parsing.h"
 
-t_distances	two_ts(float a, float b, float c)
+t_distances	two_ts(double a, double b, double c)
 {
-	float	delta;
+	double	delta;
 	t_distances dist;
 
 	dist.t1 = MAXFLOAT;
@@ -37,8 +37,8 @@ t_distances	two_ts(float a, float b, float c)
 	}
 	else if (delta > 0.0f)
 	{
-		dist.t1 = (-b - sqrtf(b * b - 4.0f * a * c)) / (2.0f * a);
-		dist.t2 = (-b + sqrtf(b * b - 4.0f * a * c)) / (2.0f * a);
+		dist.t1 = (-b - sqrt(b * b - 4.0f * a * c)) / (2.0f * a);
+		dist.t2 = (-b + sqrt(b * b - 4.0f * a * c)) / (2.0f * a);
 		if (dist.t1 < 0)
 			dist.t1 = MAXFLOAT;
 		if (dist.t2 < 0)
@@ -54,9 +54,9 @@ t_distances	two_ts(float a, float b, float c)
 
 t_distances	find_distances(t_vector ray, t_vector rot_pixel, t_object figure)
 {
-	float		a;
-	float		b;
-	float		c;
+	double		a;
+	double		b;
+	double		c;
 	t_vector	fig_pixel_dist;
 
 	fig_pixel_dist = create_vector(&figure.position, &rot_pixel);
@@ -70,12 +70,12 @@ t_distances	find_distances(t_vector ray, t_vector rot_pixel, t_object figure)
 // "figure_point" is the point on the finite cylinder
 // that might be touched by the ray.
  
-bool	cylinder_height(t_object *cylinder, float t,
+bool	cylinder_height(t_object *cylinder, double t,
 		t_vector ray, t_vector rot_pixel)
 {
 	t_vector	figure_point;
-	float		point_center_length;
-	float		pythagore_solution;
+	double		point_center_length;
+	double		pythagore_solution;
 	
 	cylinder->t_min = t;
 	// printf("      cylinder->t_min %f\n", cylinder->t_min);
@@ -83,13 +83,13 @@ bool	cylinder_height(t_object *cylinder, float t,
 	figure_point.y = rot_pixel.y + (cylinder->t_min * ray.y);
 	figure_point.z = rot_pixel.z + (cylinder->t_min * ray.z);
 	// a^2 + b^2 = c^2
- 	point_center_length = sqrtf(square((figure_point.x - cylinder->position.x)) +
+ 	point_center_length = sqrt(square((figure_point.x - cylinder->position.x)) +
 						  square((figure_point.y - cylinder->position.y)) +
 						  square((figure_point.z - cylinder->position.z)));
 	
 	// b^2 = c^2 - a^2
 	pythagore_solution = square(point_center_length) - square((cylinder->diameter / 2.0f));
-	pythagore_solution = sqrtf(pythagore_solution);
+	pythagore_solution = sqrt(pythagore_solution);
 	
 	
 	// printf("pythagore_solution %f\n", pythagore_solution);
@@ -97,7 +97,7 @@ bool	cylinder_height(t_object *cylinder, float t,
 	if (point_center_length <= cylinder->diameter / 2.0f)
 		return (true);
 
-	float mid_height = cylinder->height / 2.0f;
+	double mid_height = cylinder->height / 2.0f;
 
 	// printf("mid_height %f\n", mid_height);
 
@@ -113,7 +113,7 @@ bool	cylinder_height(t_object *cylinder, float t,
 // each axe (x, y, z).
 // So we don't need to normalize "cylinder->direction" here.
 
-// static t_vector    find_hit_pt(t_vector origin, t_vector ray, float t_dist)
+// static t_vector    find_hit_pt(t_vector origin, t_vector ray, double t_dist)
 // {
 //     t_vector ray_norm;
 //     t_vector pt_on_sphere;

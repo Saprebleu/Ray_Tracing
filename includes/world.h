@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:48:55 by tjarross          #+#    #+#             */
-/*   Updated: 2025/01/05 16:35:50 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/06 16:38:46 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ typedef enum e_object_type
 
 typedef struct s_vector
 {
-	float	x;
-	float	y;
-	float	z;
+	double	x;
+	double	y;
+	double	z;
 }	t_vector;
 
 typedef struct s_color
@@ -47,11 +47,11 @@ typedef struct s_object
 	t_vector		position;
 	t_vector		direction;
 	t_vector		normal;
-	float			diameter;
-	float			height;
+	double			diameter;
+	double			height;
 	t_color			color;
 	t_color			pt_color;
-	float			t_min;
+	double			t_min;
 	int				index;
 }	t_object;
 
@@ -59,7 +59,7 @@ typedef struct s_world
 {
 	bool		has_ambient;
 	t_color		ambient_color;
-	float		ambient_power;
+	double		ambient_power;
 	bool		has_camera;
 	t_vector	camera_position;
 	t_vector	camera_direction;
@@ -67,7 +67,7 @@ typedef struct s_world
 	bool		has_light;
 	t_vector	light_position;
 	t_color		light_color;
-	float		light_power;
+	double		light_power;
 	int			nb_objects;
 	t_object	*objects;
 }	t_world;
@@ -85,20 +85,20 @@ typedef struct s_display
 
 typedef struct s_angles
 {
-	float alpha;
-	float beta;
-	float gamma;
+	double alpha;
+	double beta;
+	double gamma;
 }	t_angles;
 
 typedef struct s_distances
 {
-	float	t1;
-	float	t2;
+	double	t1;
+	double	t2;
 }	t_distances;
 
 t_vector	create_vector(const t_vector *start, const t_vector *end);
-bool		cylinder_height(t_object *cylinder, float t, t_vector ray, t_vector rot_pixel);
-float		dot_product(const t_vector *v1, const t_vector *v2);
+bool		cylinder_height(t_object *cylinder, double t, t_vector ray, t_vector rot_pixel);
+double		dot_product(const t_vector *v1, const t_vector *v2);
 void		find_angles(t_angles *angles, t_vector rotation, int direction);
 t_distances	find_distances(t_vector ray, t_vector rot_pixel, t_object cylinder);
 void		generate_image(t_display *display, t_world *world);
@@ -107,28 +107,28 @@ void		initialize_pixel(t_vector *pixel, t_world world, int x, int y);
 void		intesect_cylinder(t_vector	eye, t_vector pixel, t_object *cylinder, t_world world);
 void		intersect_plane(t_vector eye, t_vector pixel, const t_vector ray, t_object *plane, t_world world);
 void		intersect_sphere(const t_vector eye, const t_vector pixel, const t_vector ray, t_object *sphere, t_world world);
-t_color    	light_on_figure(t_vector origin_pt, t_vector pixel, t_vector rot_eye, t_vector rot_pixel, t_vector ray, float t_dist, t_object sphere, t_world world,
+t_color    	light_on_figure(t_vector origin_pt, t_vector pixel, t_vector rot_eye, t_vector rot_pixel, t_vector ray, double t_dist, t_object sphere, t_world world,
 			int in_or_out);
 
-t_color    shadow_on_figure(float t_dist, t_object figure, t_world world,
+t_color    shadow_on_figure(double t_dist, t_object figure, t_world world,
             int in_or_out, t_vector pixel, t_vector ray);
 
-float		magnitude(t_vector vec);
+double		magnitude(t_vector vec);
 void		normalize_vector(t_vector *v);
 void		print_parsing(t_world world);
 t_vector	rotated_cam_ray(t_vector *pixel, t_vector *eye, t_world world);
 t_vector		rotation_process(t_vector vec, t_vector center,
 			t_vector *rot_vec, t_angles angles);
-float		solve_polynom(float a, float b, float c);
-// void	solve_polynom(float a, float b, float c, t_distances *dst);
+double		solve_polynom(double a, double b, double c);
+// void	solve_polynom(double a, double b, double c, t_distances *dst);
 
-float		square(float nbr);
+double		square(double nbr);
 void		translation(t_vector *vec, t_vector new_origin);
 void		xyz_rotation_matrix(t_vector original, t_vector *rotated, t_angles angles);
 
-void	solve_poly(float a, float b, float c, t_distances *dst);
-t_distances	two_ts(float a, float b, float c);
+void	solve_poly(double a, double b, double c, t_distances *dst);
+t_distances	two_ts(double a, double b, double c);
 
-t_vector    find_hit_pt(t_vector origin, t_vector ray, float t_dist);
+t_vector    find_hit_pt(t_vector origin, t_vector ray, double t_dist);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 19:09:08 by jayzatov          #+#    #+#             */
-/*   Updated: 2025/01/05 16:19:27 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/06 16:38:00 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	closest_figure(t_display *display, t_world *world, int x, int y)
 {
 	int		i;
 	int		index_obj;
-	float	smallest_tmin;
+	double	smallest_tmin;
 	
 	i = 0;
 	index_obj = -1;

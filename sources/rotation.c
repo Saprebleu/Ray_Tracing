@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 15:37:17 by jayzatov          #+#    #+#             */
-/*   Updated: 2024/12/06 13:40:20 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/06 16:42:20 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,14 @@ void	detranslation(t_vector *vec, t_vector old_origin)
 
 void	xyz_rotation_matrix(t_vector original, t_vector *rotated, t_angles angles)
 {
-	float	alpha;
-	float	beta;
-	float	gamma;
+	double	alpha;
+	double	beta;
+	double	gamma;
 
 	alpha = angles.alpha;
 	beta = angles.beta;
 	gamma = angles.gamma;
-	rotated->x = ((cosf(beta) * cosf(gamma)) * original.x)
+	rotated->x = ((cos(beta) * cos(gamma)) * original.x)
 				+ ((sin(alpha) * sin(beta) * cos(gamma) - cos(alpha) * sin(gamma)) * original.y)
 				+ ((cos(alpha) * sin(beta) * cos(gamma) + sin(alpha) * sin(gamma)) * original.z);
 	rotated->y = ((cos(beta) * sin(gamma)) * original.x)

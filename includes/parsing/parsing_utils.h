@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjarross <tjarross@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:37:01 by tjarross          #+#    #+#             */
-/*   Updated: 2024/10/19 14:37:59 by tjarross         ###   ########.fr       */
+/*   Updated: 2025/01/06 16:40:47 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,15 @@
 void		*ft_realloc(void *ptr, size_t old_size, size_t new_size);
 char		**goto_next_value(char **line_split);
 
-bool		is_float(const char *s);
-bool		is_float_in_range(float n, float lower, float upper);
-float		get_float(const char *s);
+bool		is_double(const char *s);
+bool		is_double_in_range(double n, double lower, double upper);
+double		get_double(const char *s);
 
 bool		is_int(const char *s);
 bool		is_int_in_range(int n, int lower, int upper);
 
 bool		is_vector(const char *s);
-bool		is_vector_in_range(t_vector v, float lower, float upper);
+bool		is_vector_in_range(t_vector v, double lower, double upper);
 t_vector	get_vector(const char *s);
 
 bool		is_color(const char *s);

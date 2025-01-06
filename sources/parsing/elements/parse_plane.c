@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_plane.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjarross <tjarross@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:28:58 by tjarross          #+#    #+#             */
-/*   Updated: 2024/11/04 20:14:26 by tjarross         ###   ########.fr       */
+/*   Updated: 2025/01/06 16:46:56 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ static int	parse_plane2(char **line_split, t_world *world)
 	if (false == is_vector_in_range(world->objects[world->nb_objects].direction,
 			-1.0f, 1.0f))
 		return (printf("Error\nPlane Direction not in range [-1, 1]\n"), -6);
-	if (fabsf(powf(world->objects[world->nb_objects].direction.x, 2)
-			+ powf(world->objects[world->nb_objects].direction.y, 2)
-			+ powf(world->objects[world->nb_objects].direction.z, 2) - 1.0f)
+	if (fabs(pow(world->objects[world->nb_objects].direction.x, 2)
+			+ pow(world->objects[world->nb_objects].direction.y, 2)
+			+ pow(world->objects[world->nb_objects].direction.z, 2) - 1.0f)
 		> 0.01f)
 		return (printf("Error\nPlane Direction not normalized\n"), -7);
 	line_split = goto_next_value(line_split + 1);

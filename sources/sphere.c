@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 17:24:28 by jayzatov          #+#    #+#             */
-/*   Updated: 2025/01/05 16:35:20 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/06 16:48:20 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,19 @@
 #include "world.h"
 #include "parsing.h"
 
-float	solve_polynom(float a, float b, float c)
+double	solve_polynom(double a, double b, double c)
 {
-	float	delta;
-	float	t1;
-	float	t2;
+	double	delta;
+	double	t1;
+	double	t2;
 
 	delta = b * b - 4 * a * c;
 	if (delta == 0.0f)
 		return (-b / (2.0f * a));
 	else if (delta > 0.0f)
 	{
-		t1 = (-b - sqrtf(b * b - 4.0f * a * c)) / (2.0f * a);
-		t2 = (-b + sqrtf(b * b - 4.0f * a * c)) / (2.0f * a);
+		t1 = (-b - sqrt(b * b - 4.0f * a * c)) / (2.0f * a);
+		t2 = (-b + sqrt(b * b - 4.0f * a * c)) / (2.0f * a);
 		if (t1 < 0.0f && t2 < 0.0f)
 			return (MAXFLOAT);
 		if (t1 < 0.0f)
@@ -42,18 +42,18 @@ float	solve_polynom(float a, float b, float c)
 		else if (t2 < 0.0f)
 			return (t1);
 		else
-			return (fminf(t1, t2));
+			return (fmin(t1, t2));
 	}
 	return (MAXFLOAT);
 }
 
 // If delta == 0 : intersection in one point
 
-void	solve_poly(float a, float b, float c, t_distances *dst)
+void	solve_poly(double a, double b, double c, t_distances *dst)
 {
-	float	delta;
-	// float	t1;
-	// float	t2;
+	double	delta;
+	// double	t1;
+	// double	t2;
 	dst->t1 = MAXFLOAT;
 	dst->t2 = MAXFLOAT;
 	delta = b * b - 4 * a * c;
@@ -66,8 +66,8 @@ void	solve_poly(float a, float b, float c, t_distances *dst)
 	}
 	else if (delta > 0.0f)
 	{
-		dst->t1 = (-b - sqrtf(b * b - 4.0f * a * c)) / (2.0f * a);
-		dst->t2 = (-b + sqrtf(b * b - 4.0f * a * c)) / (2.0f * a);
+		dst->t1 = (-b - sqrt(b * b - 4.0f * a * c)) / (2.0f * a);
+		dst->t2 = (-b + sqrt(b * b - 4.0f * a * c)) / (2.0f * a);
 		// if (dst->t1 < 0.0f && dst->t2 < 0.0f)
 		// {
 		// 	dst->t1 = MAXFLOAT;
@@ -97,7 +97,7 @@ void	solve_poly(float a, float b, float c, t_distances *dst)
 	return;
 }
 
-t_vector    find_hit_pt(t_vector origin, t_vector ray, float t_dist)
+t_vector    find_hit_pt(t_vector origin, t_vector ray, double t_dist)
 {
     t_vector ray_norm;
     t_vector pt_on_sphere;
@@ -119,9 +119,9 @@ void	intersect_sphere(const t_vector eye, const t_vector pixel,
 {
 	t_vector	distance;
 	t_vector	pt_on_sphere;
-	float		a;
-	float		b;
-	float		c;
+	double		a;
+	double		b;
+	double		c;
 
 	// le ray va de l'oeil vers le pixel
 	// alors que distance va du centre vers le pixel
@@ -136,8 +136,8 @@ void	intersect_sphere(const t_vector eye, const t_vector pixel,
 	t_distances	dist;
 	solve_poly(a, b, c, &dist);
 	// dist = two_ts(a, b, c);
-	// float min = fminf(dist.t1, dist.t2);
-	// float max = fmaxf(dist.t1, dist.t2);
+	// double min = fmin(dist.t1, dist.t2);
+	// double max = fmax(dist.t1, dist.t2);
 	// dist.t1 = min;
 	// dist.t2 = max;
 	

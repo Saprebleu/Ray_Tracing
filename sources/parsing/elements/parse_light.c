@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_light.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjarross <tjarross@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:28:54 by tjarross          #+#    #+#             */
-/*   Updated: 2024/10/19 14:42:57 by tjarross         ###   ########.fr       */
+/*   Updated: 2025/01/06 16:34:48 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,10 @@ int	parse_light(char **line_split, t_world *world)
 	line_split = goto_next_value(line_split + 1);
 	if (line_split == NULL)
 		return (printf("Error\nNot enough information for Light\n"), -4);
-	if (false == is_float(*line_split))
-		return (printf("Error\nLight Power is not a float\n"), -5);
-	world->light_power = get_float(*line_split);
-	if (false == is_float_in_range(world->light_power, 0.0f, 1.0f))
+	if (false == is_double(*line_split))
+		return (printf("Error\nLight Power is not a double\n"), -5);
+	world->light_power = get_double(*line_split);
+	if (false == is_double_in_range(world->light_power, 0.0f, 1.0f))
 		return (printf("Error\nLight Power not in range [0, 1]\n"), -6);
 	line_split = goto_next_value(line_split + 1);
 	if (line_split == NULL)

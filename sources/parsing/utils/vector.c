@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjarross <tjarross@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:46:38 by tjarross          #+#    #+#             */
-/*   Updated: 2024/10/19 14:46:47 by tjarross         ###   ########.fr       */
+/*   Updated: 2025/01/06 16:34:48 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@
 #include "parsing/parsing_utils.h"
 #include "world.h"
 
-bool	is_vector_in_range(t_vector v, float lower, float upper)
+bool	is_vector_in_range(t_vector v, double lower, double upper)
 {
-	return (is_float_in_range(v.x, lower, upper)
-		&& is_float_in_range(v.y, lower, upper)
-		&& is_float_in_range(v.z, lower, upper));
+	return (is_double_in_range(v.x, lower, upper)
+		&& is_double_in_range(v.y, lower, upper)
+		&& is_double_in_range(v.z, lower, upper));
 }
 
 bool	is_vector(const char *s)
@@ -57,8 +57,8 @@ t_vector	get_vector(const char *s)
 {
 	t_vector	v;
 
-	v.x = get_float(s);
-	v.y = get_float(ft_strchr(s, ',') + 1);
-	v.z = get_float(ft_strchr(ft_strchr(s, ',') + 1, ',') + 1);
+	v.x = get_double(s);
+	v.y = get_double(ft_strchr(s, ',') + 1);
+	v.z = get_double(ft_strchr(ft_strchr(s, ',') + 1, ',') + 1);
 	return (v);
 }

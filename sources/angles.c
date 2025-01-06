@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 15:39:43 by jayzatov          #+#    #+#             */
-/*   Updated: 2024/11/17 18:19:52 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/06 16:42:20 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,12 @@ void	find_angles(t_angles *angles, t_vector rotation, int direction)
 // 	normalized->z = 0;
 // }
 
-// float	angle(t_vector direction, char axe)
+// double	angle(t_vector direction, char axe)
 // {
-// 	float		product;
-// 	float		d_magn;
-// 	float		n_magn;
-// 	float 		angle_in_rad;
+// 	double		product;
+// 	double		d_magn;
+// 	double		n_magn;
+// 	double 		angle_in_rad;
 // 	t_vector	normalized;
 
 // 	if (axe == 'z')
@@ -72,7 +72,7 @@ void	find_angles(t_angles *angles, t_vector rotation, int direction)
 // 	product = dot_product(&normalized, &direction);
 // 	d_magn  = magnitude(direction);
 // 	n_magn  = magnitude(normalized);
-// 	angle_in_rad = acosf(product /(d_magn * n_magn));
+// 	angle_in_rad = acos(product /(d_magn * n_magn));
 // 	return (angle_in_rad);
 // }
 

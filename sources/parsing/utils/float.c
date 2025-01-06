@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   float.c                                            :+:      :+:    :+:   */
+/*   double.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjarross <tjarross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -16,7 +16,7 @@
 
 #include "libft.h"
 
-bool	is_float(const char *s)
+bool	is_double(const char *s)
 {
 	int	i;
 
@@ -39,9 +39,9 @@ bool	is_float(const char *s)
 	return (s[i] == '\0');
 }
 
-bool	is_float_in_range(float n, float lower, float upper)
+bool	is_double_in_range(double n, double lower, double upper)
 {
-	return (fmaxf(n, lower) == n && fminf(n, upper) == n);
+	return (fmax(n, lower) == n && fmin(n, upper) == n);
 }
 
 int	ft_strclen(const char *s, char c)
@@ -54,11 +54,11 @@ int	ft_strclen(const char *s, char c)
 	return (tmp - s);
 }
 
-float	get_float(const char *s)
+double	get_double(const char *s)
 {
 	int		sign;
-	float	n;
-	float	decimals;
+	double	n;
+	double	decimals;
 	int		i;
 
 	sign = 1;
@@ -77,5 +77,5 @@ float	get_float(const char *s)
 		return (n);
 	decimals = ft_atoi(s + i + 1);
 	return (n + (sign
-			* (decimals / (float)powf(10, ft_strclen(s + i + 1, ',')))));
+			* (decimals / (double)pow(10, ft_strclen(s + i + 1, ',')))));
 }

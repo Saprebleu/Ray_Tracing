@@ -29,7 +29,7 @@
 //     int b;
 // }   t_lights;
 
-// static t_vector    find_hit_pt(t_vector pixel, t_vector ray, float t_dist)
+// static t_vector    find_hit_pt(t_vector pixel, t_vector ray, double t_dist)
 // {
 //     t_vector ray_norm;
 //     t_vector pt_on_sphere;
@@ -88,7 +88,7 @@
 //     // normalize_vector(&N);
     
 //     // normalize_vector(&light);
-//     // float cos = dot_product(&N, &light);
+//     // double cos = dot_product(&N, &light);
 //     // if (cos > 0.0f)
 //     // {
 //     //     N = scal_x_vec(-1.0f, N);
@@ -117,7 +117,7 @@
 
 
 
-// t_color    shadow_on_figure(float t_dist, t_object figure, t_world world,
+// t_color    shadow_on_figure(double t_dist, t_object figure, t_world world,
 //             int in_or_out, t_vector pixel, t_vector ray)
 // {
 //     printf("shadow on %u\n", figure.type);
@@ -145,7 +145,7 @@
 //     normalize_vector(&L);
 //     normalize_vector(&V);
 
-//     // float cos = dot_product(&N, &L);
+//     // double cos = dot_product(&N, &L);
 //     // if (cos > 0)
 //     // {
 //         N.x *= in_or_out;
@@ -154,7 +154,7 @@
 //     // }
 
 
-//     float dot_LN = dot_product(&L, &N); // = cos de l'angle L et N
+//     double dot_LN = dot_product(&L, &N); // = cos de l'angle L et N
     
 //     t_vector R; // rayon réfléchi
 //     R.x = 2 * dot_LN * N.x - L.x;
@@ -175,9 +175,9 @@
 
 //     if (dot_product(&R, &V) > 0 && dot_LN > 0)
 //     {
-//         specular_l.r = powf(dot_product(&R, &V), 1) * world.light_power * world.light_color.r;
-//         specular_l.g = powf(dot_product(&R, &V), 1) * world.light_power * world.light_color.g;
-//         specular_l.b = powf(dot_product(&R, &V), 1) * world.light_power * world.light_color.b;
+//         specular_l.r = pow(dot_product(&R, &V), 1) * world.light_power * world.light_color.r;
+//         specular_l.g = pow(dot_product(&R, &V), 1) * world.light_power * world.light_color.g;
+//         specular_l.b = pow(dot_product(&R, &V), 1) * world.light_power * world.light_color.b;
 //     }
 //     else
 //     {
@@ -223,11 +223,11 @@
 
 // /////////////////////////////////////////////////
 
-//     // float dot = dot_product(&light, &sphere_norm);
+//     // double dot = dot_product(&light, &sphere_norm);
 //     // dot = dot < 0 ? 0 : dot;
-//     // color.r =  dot * (sphere.color.r + world.light_power * (float)world.light_color.r);
-//     // color.g =  dot * (sphere.color.g + world.light_power * (float)world.light_color.g);
-//     // color.b =  dot * (sphere.color.b + world.light_power * (float)world.light_color.b);
+//     // color.r =  dot * (sphere.color.r + world.light_power * (double)world.light_color.r);
+//     // color.g =  dot * (sphere.color.g + world.light_power * (double)world.light_color.g);
+//     // color.b =  dot * (sphere.color.b + world.light_power * (double)world.light_color.b);
 //     // color.r += world.ambient_color.r * world.ambient_power;
 //     // color.g += world.ambient_color.g * world.ambient_power;
 //     // color.b += world.ambient_color.b * world.ambient_power;
@@ -252,7 +252,7 @@
 //     // normalize_vector(&norm_cpy); 
     
 //     // // teta = cos de l'angle entre L et N
-//     // float teta = dot_product(&light_cpy, &norm_cpy);
+//     // double teta = dot_product(&light_cpy, &norm_cpy);
     
 //     // if (teta < 0)
 //     //     teta = 0;
@@ -263,19 +263,19 @@
 
 //     // // La lumière diminue en intensité proportionnellement
 //     // // au carré de la distance entre le point et la source. La formule classique est :
-//     // float attenuation;
+//     // double attenuation;
 //     // t_vector pt_light_dist = create_vector(&light, &pt_on_sphere);
-//     // float d = magnitude(pt_light_dist);
+//     // double d = magnitude(pt_light_dist);
 //     // if (d == 0) 
 //     //     attenuation = 1;
 //     // else
 //     // {
 //     //     // intensité de lumiere de base indépendante de la distance
-//     //     float a;
+//     //     double a;
 //     //     // attenuation de lumiere modérée
-//     //     float b;
+//     //     double b;
 //     //     // la plus faible intensité lumineuse
-//     //     float c;
+//     //     double c;
 //     //     // abc exemples : (scène large) 1.0, 0, 0.01, (scène petite et luimineuse) 1.0,0.1,0.0.
 //     //     // précision physique stricte : abc = 1, 0.1, 0.01.
 //     //     // forte décroissance avec la distance: abc = 1,0.2,0.01.
@@ -289,7 +289,7 @@
 //     //     attenuation = 1 / (d / 2);
 //     // }
 //     // // attenuation = 1;
-//     // float ambient_intens = /*attenuation * */world.ambient_power;
+//     // double ambient_intens = /*attenuation * */world.ambient_power;
 //     // if (ambient_intens > 1)
 //     //     ambient_intens = 1;
 

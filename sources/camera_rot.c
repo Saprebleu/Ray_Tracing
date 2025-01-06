@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 19:00:36 by jayzatov          #+#    #+#             */
-/*   Updated: 2024/12/20 18:25:47 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/06 16:46:19 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,16 @@
 
 
 // "Camera distance" is calculated thanks to the TOA formula of a right triangle,
-// 	knowing fov degrees (converted to radians for tanf()) and screen width.
+// 	knowing fov degrees (converted to radians for tan()) and screen width.
 //  It is the eye-camera distance;
 
 void	initialize_eye(t_vector *eye, t_world world)
 {
 	t_angles	angles;
-	float		camera_distance;
+	double		camera_distance;
 
 	camera_distance = ((WINDOW_WIDTH / 2.0f)
-						/ tanf((world.camera_fov / 2.0f) * M_PI / 180.0f));
+						/ tan((world.camera_fov / 2.0f) * M_PI / 180.0f));
 	eye->x = world.camera_position.x;
 	eye->y = world.camera_position.y;
 	eye->z = world.camera_position.z - camera_distance;
@@ -51,26 +51,26 @@ void	initialize_pixel(t_vector *pixel, t_world world, int x, int y)
 // static void xyz_rotation_matrix_inverse(t_vector rotated, t_vector *original, t_angles angles)
 // {
 // 	return;
-//     float alpha;
-//     float beta;
-//     float gamma;
+//     double alpha;
+//     double beta;
+//     double gamma;
 
 //     alpha = angles.alpha;
 //     beta = angles.beta;
 //     gamma = angles.gamma;
 
 //     // Matrice transposée (inverse d'une rotation 3D)
-//     original->x = ((cosf(beta) * cosf(gamma)) * rotated.x)
-//                 + ((cosf(beta) * sinf(gamma)) * rotated.y)
-//                 + ((-sinf(beta)) * rotated.z);
+//     original->x = ((cos(beta) * cos(gamma)) * rotated.x)
+//                 + ((cos(beta) * sin(gamma)) * rotated.y)
+//                 + ((-sin(beta)) * rotated.z);
 
-//     original->y = ((sinf(alpha) * sinf(beta) * cosf(gamma) - cosf(alpha) * sinf(gamma)) * rotated.x)
-//                 + ((sinf(alpha) * sinf(beta) * sinf(gamma) + cosf(alpha) * cosf(gamma)) * rotated.y)
-//                 + ((sinf(alpha) * cosf(beta)) * rotated.z);
+//     original->y = ((sin(alpha) * sin(beta) * cos(gamma) - cos(alpha) * sin(gamma)) * rotated.x)
+//                 + ((sin(alpha) * sin(beta) * sin(gamma) + cos(alpha) * cos(gamma)) * rotated.y)
+//                 + ((sin(alpha) * cos(beta)) * rotated.z);
 
-//     original->z = ((cosf(alpha) * sinf(beta) * cosf(gamma) + sinf(alpha) * sinf(gamma)) * rotated.x)
-//                 + ((cosf(alpha) * sinf(beta) * sinf(gamma) - sinf(alpha) * cosf(gamma)) * rotated.y)
-//                 + ((cosf(alpha) * cosf(beta)) * rotated.z);
+//     original->z = ((cos(alpha) * sin(beta) * cos(gamma) + sin(alpha) * sin(gamma)) * rotated.x)
+//                 + ((cos(alpha) * sin(beta) * sin(gamma) - sin(alpha) * cos(gamma)) * rotated.y)
+//                 + ((cos(alpha) * cos(beta)) * rotated.z);
 // }
 
 t_vector	rotated_cam_ray(t_vector *pixel, t_vector *rot_eye, t_world world)
