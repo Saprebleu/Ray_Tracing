@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:38:41 by jayzatov          #+#    #+#             */
-/*   Updated: 2025/01/06 17:07:55 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/09 16:47:14 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,154 +22,118 @@
 #include "world.h"
 #include "parsing.h"
 
-t_distances	two_ts(double a, double b, double c)
-{
-	double	delta;
-	t_distances dist;
 
-	dist.t1 = MAXFLOAT;
-	dist.t2 = MAXFLOAT;
-	delta = b * b - 4 * a * c;
-	if (delta == 0.0)
-	{
-		dist.t1 = -b / (2.0 * a);
-		return (dist);
-	}
-	else if (delta > 0.0)
-	{
-		dist.t1 = (-b - sqrt(b * b - 4.0 * a * c)) / (2.0 * a);
-		dist.t2 = (-b + sqrt(b * b - 4.0 * a * c)) / (2.0 * a);
-		if (dist.t1 < 0)
-			dist.t1 = MAXFLOAT;
-		if (dist.t2 < 0)
-			dist.t2 = MAXFLOAT;
-		
-	}
-	return (dist);
+t_vector rotated(t_vector *eye, t_vector *pixel, t_object cylinder)
+{
+	t_angles	angles;
+	t_vector	rot_eye;
+	t_vector	rot_pixel;
+	t_vector	rot_ray;
+
+	find_angles(&angles, cylinder.direction, -1);
+	rotation_process(*eye, cylinder.position, &rot_eye, angles);
+	rotation_process(*pixel, cylinder.position, &rot_pixel, angles);
+	rot_ray = create_vector(&rot_eye, &rot_pixel);
+	normalize_vector(&rot_ray);
+	*pixel = rot_pixel;
+	*eye = rot_eye;
+	return (rot_ray);
 }
 
 // Those are two (or only one) distances(t) between
 // the pixel and the figure points intersected
-// by the ray from that pixel.
+// by the ray from the pixel.
+// But since cylinders can be rotated,
+// we need to reverse-rotate the ray
+// before looking for t1 and t2.
 
-t_distances	find_distances(t_vector ray, t_vector rot_pixel, t_object figure)
+void	cyl_distances(t_vector rot_pixel, t_vector rot_ray, t_object cylinder,
+	t_distances *dist)
 {
 	double		a;
 	double		b;
 	double		c;
-	t_vector	fig_pixel_dist;
+	t_vector	fig_to_pxl;
 
-	fig_pixel_dist = create_vector(&figure.position, &rot_pixel);
-	a = (ray.x * ray.x + ray.z * ray.z);
-	b = 2.0 * (ray.x * fig_pixel_dist.x) + 2.0 * (ray.z * fig_pixel_dist.z);
-	c = (fig_pixel_dist.x * fig_pixel_dist.x + fig_pixel_dist.z * fig_pixel_dist.z)
-		- ((figure.diameter / 2.0) * (figure.diameter / 2.0));
-	return (two_ts(a, b, c));
+	fig_to_pxl = create_vector(&cylinder.position, &rot_pixel);
+	a = (rot_ray.x * rot_ray.x + rot_ray.z * rot_ray.z);
+	b = 2.0 * (rot_ray.x * fig_to_pxl.x) + 2.0 * (rot_ray.z * fig_to_pxl.z);
+	c = (fig_to_pxl.x * fig_to_pxl.x + fig_to_pxl.z * fig_to_pxl.z)
+		- ((cylinder.diameter / 2.0) * (cylinder.diameter / 2.0));
+	solve_polynom(a, b, c, dist);
+}
+
+t_vector t_for_cylinder(t_vector *start, t_vector *dir, const t_object *cylinder,
+	t_distances *dist)
+{
+	t_vector	rot_ray;
+	rot_ray = rotated(start, dir, *cylinder);
+	normalize_vector(&rot_ray);
+	cyl_distances(*dir, rot_ray, *cylinder, dist);
+	return (rot_ray); 
 }
 
 // "figure_point" is the point on the finite cylinder
-// that might be touched by the ray.
- 
+// that might be touched by the ray :
+// Fig_p = origin + t * Dir.
+// For the "point_center_length", the
+// formula "a^2 + b^2 = c^2" is used.
+// For the "pythagore_solution", the
+// formula "b^2 = c^2 - a^2" is used.
+
 bool	cylinder_height(t_object *cylinder, double t,
 		t_vector ray, t_vector rot_pixel)
 {
 	t_vector	figure_point;
 	double		point_center_length;
 	double		pythagore_solution;
+	double		mid_height;
 	
 	cylinder->t_min = t;
-	// printf("      cylinder->t_min %f\n", cylinder->t_min);
 	figure_point.x = rot_pixel.x + (cylinder->t_min * ray.x);
 	figure_point.y = rot_pixel.y + (cylinder->t_min * ray.y);
 	figure_point.z = rot_pixel.z + (cylinder->t_min * ray.z);
-	// a^2 + b^2 = c^2
- 	point_center_length = sqrt(square((figure_point.x - cylinder->position.x)) +
+ 	point_center_length = sqrt(square((figure_point.x
+						- cylinder->position.x)) +
 						  square((figure_point.y - cylinder->position.y)) +
 						  square((figure_point.z - cylinder->position.z)));
-	
-	// b^2 = c^2 - a^2
-	pythagore_solution = square(point_center_length) - square((cylinder->diameter / 2.0));
-	pythagore_solution = sqrt(pythagore_solution);
-	
-	
-	// printf("pythagore_solution %f\n", pythagore_solution);
-	// printf("(cylinder->height / 2.0) %f\n", (cylinder->height / 2.0));
 	if (point_center_length <= cylinder->diameter / 2.0)
 		return (true);
-
-	double mid_height = cylinder->height / 2.0;
-
-	// printf("mid_height %f\n", mid_height);
-
-	// if (pythagore_solution < mid_height/2 && point_center_length > 0)
-	// 	return (true);
+	pythagore_solution = square(point_center_length)
+					- square((cylinder->diameter / 2.0));
+	pythagore_solution = sqrt(pythagore_solution);
+	mid_height = cylinder->height / 2.0;
 	if (pythagore_solution <= mid_height)
 		return (true);
 	return (false);
 }
 
-// In the "find_distances" function,"cylinder->direction" isn't used.
-// In the "find_angles" funciton, we create a normalized vector for
-// each axe (x, y, z).
-// So we don't need to normalize "cylinder->direction" here.
-
-// static t_vector    find_hit_pt(t_vector origin, t_vector ray, double t_dist)
-// {
-//     t_vector ray_norm;
-//     t_vector pt_on_sphere;
-
-//     ray_norm = ray;
-//     normalize_vector(&ray_norm);
-//     pt_on_sphere.x = origin.x + (t_dist * ray_norm.x);
-//     pt_on_sphere.y = origin.y + (t_dist * ray_norm.y);
-//     pt_on_sphere.z = origin.z + (t_dist * ray_norm.z);
-
-//     return (pt_on_sphere);
-// }
-
-extern int x;
-extern int y;
-void	intesect_cylinder(t_vector	eye, t_vector pixel, t_object *cylinder, t_world world)
+void	intesect_cylinder(t_vector pixel, t_vector eye, t_object *cylinder,
+		t_world world)
 {
-	t_angles	angles;
-	t_vector	rot_eye;
-	t_vector	rot_pixel;
-	t_vector	ray;
 	t_distances	dist;
-
-
-	t_vector origin_pt;
-	origin_pt.x = MAXFLOAT;
-	origin_pt.y = MAXFLOAT;
-	origin_pt.z = MAXFLOAT;
+	t_fig_info	fig_inf;
+	t_mirror	a;
 	
-	find_angles(&angles, cylinder->direction, -1);
-	
-	rotation_process(eye, cylinder->position, &rot_eye, angles);
-	rotation_process(pixel, cylinder->position, &rot_pixel, angles);
-
-	t_vector rot_ray = create_vector(&rot_eye, &rot_pixel);
-	ray = create_vector(&eye, &pixel);
-	normalize_vector(&rot_ray);
-	dist = find_distances(rot_ray, rot_pixel, *cylinder);
-
-	if (dist.t1 != MAXFLOAT && cylinder_height(cylinder, dist.t1, rot_ray, rot_pixel))
+	fig_inf.wrld = world;
+	init_mirror(&a, &eye, pixel, NULL);
+	a.ray = create_vector(&eye, &pixel);
+	normalize_vector(&a.ray);
+	a.rot_ray = t_for_cylinder(&a.rot_strt, &a.rot_dir, cylinder, &dist);
+	if (dist.t1 >= 0 && dist.t1 != MAXFLOAT
+		&& cylinder_height(cylinder, dist.t1, a.rot_ray, a.rot_dir))
 	{
-		origin_pt = find_hit_pt(pixel, ray, dist.t1);
-		cylinder->pt_color = light_on_figure(origin_pt, pixel, rot_eye, rot_pixel, rot_ray, dist.t1, *cylinder, world, 1);
-		cylinder->t_min = dist.t1;
+		fig_inf.in_or_out = 1;
+		put_light(cylinder, dist.t1, fig_inf, a);
 		return;
 	}
-	if (dist.t2 != MAXFLOAT && cylinder_height(cylinder, dist.t2, rot_ray, rot_pixel))
+	else if (dist.t2 >= 0 && dist.t2 != MAXFLOAT
+			&& cylinder_height(cylinder, dist.t2, a.rot_ray, a.rot_dir))
 	{
-		origin_pt = find_hit_pt(pixel, ray, dist.t2);
-		cylinder->pt_color = light_on_figure(origin_pt, pixel, rot_eye, rot_pixel, rot_ray, dist.t2, *cylinder, world, -1);
-		cylinder->t_min = dist.t2;
+		fig_inf.in_or_out = -1;
+		put_light(cylinder, dist.t2, fig_inf, a);
 		return;
 	}
 	cylinder->pt_color = cylinder->color;
 	cylinder->t_min = MAXFLOAT;
-	
-	
-	return;
 }

@@ -8,7 +8,7 @@ BUILD_PATH =			./obj
 COMPILER =				gcc
 
 # Compiler's flags
-COMPILE_FLAGS =			-g -Wall -Werror -Wextra
+COMPILE_FLAGS =			-fanalyzer -g -Wall -Werror -Wextra
 
 # Compiler's includes flags (e.g. -I includes -I my_lib/includes)
 INCLUDE_FLAGS =			-I includes \
@@ -18,7 +18,8 @@ INCLUDE_FLAGS =			-I includes \
 
 # Include files involved in project (needed for Makefile's recompilation check)
 INCLUDE_FILES =			includes/parsing.h \
-						includes/world.h
+						includes/world.h \
+						# include/lights.h
 
 # Sources root path
 SOURCES_PATH =			./sources
@@ -29,10 +30,14 @@ SOURCE_FILE_PATHS =	main.c \
 					camera_rot.c \
 					cylinder.c \
 					img_generation.c \
+					intersect_utils.c \
 					light.c \
+					light_utils.c \
+					normals.c \
 					plane.c \
 					rotation.c \
 					shadow.c \
+					shadow_utils.c \
 					sphere.c \
 					vector_maths.c \
 					parsing/display_parsing.c \

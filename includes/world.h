@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:48:55 by tjarross          #+#    #+#             */
-/*   Updated: 2025/01/06 16:38:46 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/10 13:56:29 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # define WINDOW_TITLE	"miniRT"
 # define WINDOW_WIDTH	1024
 # define WINDOW_HEIGHT	768
+# define SHINE			130
 
 typedef enum e_object_type
 {
@@ -96,6 +97,24 @@ typedef struct s_distances
 	double	t2;
 }	t_distances;
 
+typedef struct s_fig_info
+{
+	t_vector	pt_on_figure;
+	t_vector	normal;
+	int			in_or_out;
+	t_world		wrld;
+}	t_fig_info;
+
+typedef struct s_mirror
+{
+	t_vector	strt;
+	t_vector	rot_strt;
+	t_vector	dir;
+	t_vector	rot_dir;
+	t_vector	ray;
+	t_vector	rot_ray;
+}	t_mirror;
+
 t_vector	create_vector(const t_vector *start, const t_vector *end);
 bool		cylinder_height(t_object *cylinder, double t, t_vector ray, t_vector rot_pixel);
 double		dot_product(const t_vector *v1, const t_vector *v2);
@@ -104,14 +123,29 @@ t_distances	find_distances(t_vector ray, t_vector rot_pixel, t_object cylinder);
 void		generate_image(t_display *display, t_world *world);
 void		initialize_eye(t_vector *eye, t_world world);
 void		initialize_pixel(t_vector *pixel, t_world world, int x, int y);
-void		intesect_cylinder(t_vector	eye, t_vector pixel, t_object *cylinder, t_world world);
-void		intersect_plane(t_vector eye, t_vector pixel, const t_vector ray, t_object *plane, t_world world);
-void		intersect_sphere(const t_vector eye, const t_vector pixel, const t_vector ray, t_object *sphere, t_world world);
-t_color    	light_on_figure(t_vector origin_pt, t_vector pixel, t_vector rot_eye, t_vector rot_pixel, t_vector ray, double t_dist, t_object sphere, t_world world,
-			int in_or_out);
+void		intesect_cylinder(t_vector pixel, t_vector eye, t_object *cylinder, t_world world);
+void		intersect_plane(t_vector pixel, t_vector ray, t_object *plane, t_world world);
+void		intersect_sphere(t_vector pixel, t_vector ray, t_object *sphere, t_world world);
 
-t_color    shadow_on_figure(double t_dist, t_object figure, t_world world,
-            int in_or_out, t_vector pixel, t_vector ray);
+void	init_mirror(t_mirror *a, t_vector *eye, t_vector pixel, t_vector *ray);
+
+void	plane_norm(t_fig_info *fig_inf, t_object plane);
+void	sphere_norm(t_fig_info *fig_inf, t_object sphere);
+void	cylinder_norm(t_fig_info *fig_inf, t_vector pt_on_cyl, t_object cylinder);
+
+void	put_light(t_object *figure, float t, t_fig_info fig_inf, t_mirror a);
+t_color	light_n_shade(t_fig_info fig_inf, t_vector pixel, t_object figure, t_world world);
+
+// SHADOW
+
+t_color		shadow_on_figure(double t_dist, t_object figure, t_world world,
+			int in_or_out, t_vector pixel, t_vector ray);
+int			t1_limits(double t1, double Ln_mag);
+int			t2_limits(double t2, double Ln_mag);
+int			outside(int in_or_out, t_object *figure, t_object neighbour);
+int			inside(int in_or_out);
+int			not_cyl_height(double t, t_object neighbour, t_distances dist,
+				t_vector L, t_vector pt_on_figure, double Ln_mag);
 
 double		magnitude(t_vector vec);
 void		normalize_vector(t_vector *v);
@@ -119,7 +153,8 @@ void		print_parsing(t_world world);
 t_vector	rotated_cam_ray(t_vector *pixel, t_vector *eye, t_world world);
 t_vector		rotation_process(t_vector vec, t_vector center,
 			t_vector *rot_vec, t_angles angles);
-double		solve_polynom(double a, double b, double c);
+void	solve_polynom(double a, double b, double c, t_distances *dst);
+
 // void	solve_polynom(double a, double b, double c, t_distances *dst);
 
 double		square(double nbr);
