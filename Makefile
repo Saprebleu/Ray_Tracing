@@ -19,7 +19,7 @@ INCLUDE_FLAGS =			-I includes \
 # Include files involved in project (needed for Makefile's recompilation check)
 INCLUDE_FILES =			includes/parsing.h \
 						includes/world.h \
-						# include/lights.h
+						includes/lights.h
 
 # Sources root path
 SOURCES_PATH =			./sources

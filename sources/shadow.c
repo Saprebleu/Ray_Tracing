@@ -6,165 +6,112 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 16:58:49 by jayzatov          #+#    #+#             */
-/*   Updated: 2025/01/10 13:08:34 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/12 18:03:56 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <lights.h>
+#include "lights.h"
 
-// static void shadows(t_vector rot_pt, t_object *figure, t_world world, double L_mag, t_angles angles, t_vector rot_light,
-//                     t_vector pt_on_figure, int in_or_out, t_vector N, t_vector L, t_lights *diffuse_l, t_lights *specular_l,
-//                     t_lights *ambient_l, double cos, double t_dist, t_vector pixel, t_vector eye, t_vector ray)
-// {
-//     int j = -1;
-//     t_distances dist;
-//     t_vector pt_origin = pt_on_figure;
-//     t_vector light_ori = rot_light;
-//     t_vector initial_pos = figure->position;
-//     t_vector L_cpy = L;
-//     (void)ray;
-//     (void)pt_origin;
-//     (void)light_ori;
-//     (void)rot_pt;
-//     (void)initial_pos;
-//     while (++j < world.nb_objects)
-//     {
+// Especially when the shadow
+// is cast by a cylinder,
+// shadow_data is modified
+// (rotated).
 
-//         t_object neighbour;
-//         neighbour = world.objects[j];
+static void	init_data(t_sha_data *sd,
+			t_lights lghts, t_fig_info finfo)
+{
+	sd->l_ray = lghts.lig_ray;
+	sd->pt_origin = finfo.pt_on_figure;
+	sd->rot_light = finfo.wrld.light_position;
+	sd->l_mag = lghts.lig_mag;
+	sd->dist.t1 = MAXFLOAT;
+	sd->dist.t2 = MAXFLOAT;
+	sd->t = MAXFLOAT;
+}
 
-//         L = L_cpy;
-//         double Ln_mag = L_mag;
-//         (void)t_dist;
-//         (void)pixel;
+void	t_n_lmag(t_sha_data *shdw, t_object neighbour)
+{
+	rotated(&shdw->pt_origin, &shdw->rot_light, neighbour);
+	shdw->l_ray = create_vector(&shdw->pt_origin, &shdw->rot_light);
+	shdw->l_mag = magnitude(shdw->l_ray);
+	normalize_vector(&shdw->l_ray);
+	t_for_cylinder(shdw->pt_origin, shdw->l_ray, neighbour, &shdw->dist);
+}
 
-//         pt_on_figure = pt_origin;
-//         rot_light = world.light_position;
+static double	t1_or_t2(t_sha_data shdw, t_fig_info finfo,
+		t_object figure, t_object neighbour)
+{
+	double	t;
 
-//         dist.t1 = MAXFLOAT;
-//         dist.t2 = MAXFLOAT;
-//         if ((outside(in_or_out, figure, neighbour)
-//             || inside(in_or_out)))
-//         {
-//             if (neighbour.type == CYLINDER)
-//             {
-//                 pt_on_figure = pt_origin;
-//                 rot_light = world.light_position; // POUR QUE CA MARCHE SUR figure ROTE
+	if ((inside(finfo.in_or_out) && t1_limits(shdw.dist.t1, shdw.l_mag))
+		|| (outside(finfo.in_or_out, figure, neighbour)
+			&& t1_limits(shdw.dist.t1, shdw.l_mag)))
+		t = shdw.dist.t1;
+	else if ((inside(finfo.in_or_out) && t2_limits(shdw.dist.t2, shdw.l_mag))
+		|| (outside(finfo.in_or_out, figure, neighbour)
+			&& t2_limits(shdw.dist.t2, shdw.l_mag)))
+		t = shdw.dist.t2;
+	else
+		t = MAXFLOAT;
+	return (t);
+}
 
-//                 find_angles(&angles, neighbour.direction, -1);
-//                 rotation_process(rot_light, neighbour.position, &rot_light, angles);
-//                 rotation_process(pt_on_figure, neighbour.position, &pt_on_figure, angles);
-            
-//                 // crée un vecteur roté avec les 2 points rotés
-//                 t_vector L_n = create_vector(&pt_on_figure, &rot_light);
-//                 Ln_mag = magnitude(L_n);
-//                 L_mag = Ln_mag;
-//                 normalize_vector(&L_n);
+static int	shady(t_lights *lghts, t_sha_data shdw,
+			t_object neighbour)
+{
+	if (shdw.t != MAXFLOAT)
+	{
+		if (neighbour.type == CYLINDER
+			&& not_cyl_height(shdw, neighbour))
+			return (0);
+		lghts->specular.r = 0;
+		lghts->specular.g = 0;
+		lghts->specular.b = 0;
+		lghts->diffuse.r = 0;
+		lghts->diffuse.g = 0;
+		lghts->diffuse.b = 0;
+		return (1);
+	}
+	return (0);
+}
 
-//                 // pour le dernier if (interieur du cylindre)
-//                 cos = dot_product(&N, &L_n);
+// "nghbr"(neighbour) is another
+// figure that might be situated btw
+// the origin point and the light
+// source.
+// "lmag" is the magnitude of the
+// light ray (that might be rotated).
+// "lmag" is the limit for "t".
+// In order to figure out whether
+// another figure intercepts the
+// point-light vector (= casts a shadow)
+// we need to determine a "t" distance
+// from the origin point to the nghbr
+// figure.
 
-//                 (void)N;
-//                 // !!!! Marche en remplaçant L par L_n plus loin:
-//                 // L = create_vector(&pt_on_figure, &rot_light);
-//                 // normalize_vector(&L);
-//                 L = L_n;
+void	shadows(t_lights *lghts, t_fig_info finfo, t_object figure)
+{
+	int			j;
+	t_sha_data	shdw;
+	t_object	nghbr;
 
-//                 // if (in_or_out == -1 && figure->index == neighbour.index)
-//                 //     dist = find_distances(L, pt_on_figure, *figure);
-//                 // else
-//                 dist = find_distances(L_n, pt_on_figure, neighbour);
-
-//                 // if (dist.t1 == 0)
-//                 //     dist = find_distances(L, pt_on_figure, world.objects[j]);
-//                 // double min = fmin(dist.t1, dist.t2);
-//                 // double max = fmax(dist.t1, dist.t2);
-//                 // dist.t1 = min;
-//                 // dist.t2 = max;
-//             }
-//             else if (neighbour.type == SPHERE)
-//             {
-
-//                 // if (in_or_out == 1)
-//                 // printf("1\n");
-//                 // else
-//                 //     printf("-1\n");
-//                 pt_on_figure = pt_origin;
-//                 rot_light = world.light_position;
-//                 // le ray va de l'oeil vers le pixel
-//                 // alors que distance va du centre vers le pixel
-//                 // L va du point vers la lumiere
-//                 // distance va du centre voisin vers le point
-//                 t_vector distance = create_vector(&neighbour.position, &pt_on_figure);
-
-//                 // Ln_mag = magnitude(L);
-//                 double a = dot_product(&L, &L);
-//                 double b = 2.0 * dot_product(&L, &distance);
-//                 double c = dot_product(&distance, &distance) - ((neighbour.diameter / 2.0) * (neighbour.diameter / 2.0));
-//                 // dist.t1 = solve_polynom(a, b, c);
-//                 solve_poly(a, b, c, &dist);
-//                 // dist = two_ts(a, b, c);
-//                 // printf("!!! shpere on cylinider\n");
-//                 // if (dist.t1 != MAXFLOAT)
-//                 //     printf("dist.t1 != MAXFLOAT\n");
-//                 // if (dist.t2 != MAXFLOAT)
-//                 //     printf("dist.t2 != MAXFLOAT\n");
-//             }
-//             else if (neighbour.type == PLANE)
-//             {
-//                 // continue;
-//                 // A plane's fomrula : P is on the plane if : Norm * (P - A_plane_point) = 0.
-//                 // It's intersection with a ray fomula : Norm * (Eye + tRay_dir - A_pl_pt)  = 0.
-//                 // (Because the ray formula is : Eye + tRay_dir = point).
-//                 // So, in "intersect_plane()", we use the formula :
-//                 // t = (Norm * (A_pl_pt) - Eye) / (Norm * Ray_dir).
-//                 t_vector on_plane = neighbour.position;
-//                 t_vector pixel_plane = create_vector(&on_plane, &pt_on_figure);
-
-//                 // on crée d'abord un vecteur plan_pt - pixel
-//                 // ray = oeil - pixel
-//                 dist.t2 = MAXFLOAT;
-//                 dist.t1 = -(dot_product(&neighbour.direction, &pixel_plane)
-//                         / dot_product(&neighbour.direction, &L));
-
-//             }
-//         }
-//         else
-//             continue;
-
-//         (void)cos;
-//         (void)in_or_out;
-//         (void)figure;
-//         (void)rot_light;
-//         (void)eye;
-        
-//         double t = MAXFLOAT;
-//         if ((inside(in_or_out) && t1_limits(dist.t1, Ln_mag))
-//             || (outside(in_or_out, figure, neighbour) && t1_limits(dist.t1, Ln_mag)))
-//             t = dist.t1;
-       
-//         else if ((inside(in_or_out) && t2_limits(dist.t2, Ln_mag))
-//             || (outside(in_or_out, figure, neighbour) && t2_limits(dist.t2, Ln_mag)))
-//             t = dist.t2;
-        
-//         else
-//             continue;
-        
-//         if (t != MAXFLOAT)
-//         {
-//             if (neighbour.type == CYLINDER
-//                 && not_cyl_height(t, neighbour, dist, L, pt_on_figure, Ln_mag))
-//                 continue;
-                     
-//             specular_l->r = 0;
-//             specular_l->g = 0;
-//             specular_l->b = 0;
-//             diffuse_l->r = 0;
-//             diffuse_l->g = 0;
-//             diffuse_l->b = 0;
-           
-//             (void)ambient_l;
-//             break;
-//         }
-//     }
-// }
+	j = -1;
+	while (++j < finfo.wrld.nb_objects)
+	{
+		nghbr = finfo.wrld.objects[j];
+		init_data(&shdw, *lghts, finfo);
+		if ((outside(finfo.in_or_out, figure, nghbr)
+				|| inside(finfo.in_or_out)))
+		{
+			if (nghbr.type == CYLINDER)
+				t_n_lmag(&shdw, nghbr);
+			else if (nghbr.type == SPHERE)
+				t_for_sphere(shdw.pt_origin, shdw.l_ray, &nghbr, &shdw.dist);
+			else if (nghbr.type == PLANE)
+				t_for_plane(shdw.pt_origin, shdw.l_ray, &nghbr, &shdw.dist);
+			shdw.t = t1_or_t2(shdw, finfo, figure, nghbr);
+			if (shady(lghts, shdw, nghbr))
+				break ;
+		}
+	}
+}

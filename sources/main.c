@@ -6,14 +6,11 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:29:08 by tjarross          #+#    #+#             */
-/*   Updated: 2024/12/11 13:25:59 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/12 19:02:48 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#define _GNU_SOURCE
 #include <stdbool.h>
-#include <math.h>
-#include <stdlib.h>
 #include <stdio.h>
 
 #include "libft.h"
@@ -22,11 +19,9 @@
 #include "world.h"
 #include "parsing.h"
 
-
 bool	initialize_mlx_context(t_display *display, int window_width,
 	int window_height, char *window_title)
 {
-	
 	ft_memset(display, 0, sizeof(*display));
 	display->mlx_ptr = mlx_init();
 	if (display->mlx_ptr == NULL)
@@ -79,11 +74,9 @@ int	main(int argc, char **argv)
 	if (parsing_ret != 0)
 		return (EXIT_FAILURE);
 	print_parsing(world);
-
 	if (false == initialize_mlx_context(&display, WINDOW_WIDTH, WINDOW_HEIGHT,
 			WINDOW_TITLE))
 		return (clean_mlx_context(&display), EXIT_FAILURE);
-	
 	generate_image(&display, &world);
 	mlx_put_image_to_window(display.mlx_ptr, display.mlx_window,
 		display.mlx_image, 0, 0);

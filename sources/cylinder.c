@@ -6,24 +6,15 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:38:41 by jayzatov          #+#    #+#             */
-/*   Updated: 2025/01/09 16:47:14 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/12 19:02:18 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#define _GNU_SOURCE
 #include <stdbool.h>
-#include <math.h>
-#include <stdlib.h>
 #include <stdio.h>
-
-#include "libft.h"
-#include "mlx.h"
-
 #include "world.h"
-#include "parsing.h"
 
-
-t_vector rotated(t_vector *eye, t_vector *pixel, t_object cylinder)
+t_vector	rotated(t_vector *eye, t_vector *pixel, t_object cylinder)
 {
 	t_angles	angles;
 	t_vector	rot_eye;
@@ -47,7 +38,7 @@ t_vector rotated(t_vector *eye, t_vector *pixel, t_object cylinder)
 // we need to reverse-rotate the ray
 // before looking for t1 and t2.
 
-void	cyl_distances(t_vector rot_pixel, t_vector rot_ray, t_object cylinder,
+void	t_for_cylinder(t_vector rot_pixel, t_vector rot_ray, t_object cylinder,
 	t_distances *dist)
 {
 	double		a;
@@ -63,14 +54,15 @@ void	cyl_distances(t_vector rot_pixel, t_vector rot_ray, t_object cylinder,
 	solve_polynom(a, b, c, dist);
 }
 
-t_vector t_for_cylinder(t_vector *start, t_vector *dir, const t_object *cylinder,
-	t_distances *dist)
+t_vector	cyl_distances(t_vector *start, t_vector *dir,
+		const t_object *cylinder, t_distances *dist)
 {
 	t_vector	rot_ray;
+
 	rot_ray = rotated(start, dir, *cylinder);
 	normalize_vector(&rot_ray);
-	cyl_distances(*dir, rot_ray, *cylinder, dist);
-	return (rot_ray); 
+	t_for_cylinder(*dir, rot_ray, *cylinder, dist);
+	return (rot_ray);
 }
 
 // "figure_point" is the point on the finite cylinder
@@ -88,19 +80,19 @@ bool	cylinder_height(t_object *cylinder, double t,
 	double		point_center_length;
 	double		pythagore_solution;
 	double		mid_height;
-	
+
 	cylinder->t_min = t;
 	figure_point.x = rot_pixel.x + (cylinder->t_min * ray.x);
 	figure_point.y = rot_pixel.y + (cylinder->t_min * ray.y);
 	figure_point.z = rot_pixel.z + (cylinder->t_min * ray.z);
- 	point_center_length = sqrt(square((figure_point.x
-						- cylinder->position.x)) +
-						  square((figure_point.y - cylinder->position.y)) +
-						  square((figure_point.z - cylinder->position.z)));
+	point_center_length = sqrt(square((figure_point.x
+					- cylinder->position.x))
+			+ square((figure_point.y - cylinder->position.y))
+			+ square((figure_point.z - cylinder->position.z)));
 	if (point_center_length <= cylinder->diameter / 2.0)
 		return (true);
 	pythagore_solution = square(point_center_length)
-					- square((cylinder->diameter / 2.0));
+		- square((cylinder->diameter / 2.0));
 	pythagore_solution = sqrt(pythagore_solution);
 	mid_height = cylinder->height / 2.0;
 	if (pythagore_solution <= mid_height)
@@ -114,25 +106,25 @@ void	intesect_cylinder(t_vector pixel, t_vector eye, t_object *cylinder,
 	t_distances	dist;
 	t_fig_info	fig_inf;
 	t_mirror	a;
-	
+
 	fig_inf.wrld = world;
 	init_mirror(&a, &eye, pixel, NULL);
 	a.ray = create_vector(&eye, &pixel);
 	normalize_vector(&a.ray);
-	a.rot_ray = t_for_cylinder(&a.rot_strt, &a.rot_dir, cylinder, &dist);
+	a.rot_ray = cyl_distances(&a.rot_strt, &a.rot_dir, cylinder, &dist);
 	if (dist.t1 >= 0 && dist.t1 != MAXFLOAT
 		&& cylinder_height(cylinder, dist.t1, a.rot_ray, a.rot_dir))
 	{
 		fig_inf.in_or_out = 1;
 		put_light(cylinder, dist.t1, fig_inf, a);
-		return;
+		return ;
 	}
 	else if (dist.t2 >= 0 && dist.t2 != MAXFLOAT
-			&& cylinder_height(cylinder, dist.t2, a.rot_ray, a.rot_dir))
+		&& cylinder_height(cylinder, dist.t2, a.rot_ray, a.rot_dir))
 	{
 		fig_inf.in_or_out = -1;
 		put_light(cylinder, dist.t2, fig_inf, a);
-		return;
+		return ;
 	}
 	cylinder->pt_color = cylinder->color;
 	cylinder->t_min = MAXFLOAT;

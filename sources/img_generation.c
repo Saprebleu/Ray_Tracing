@@ -6,28 +6,24 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 19:09:08 by jayzatov          #+#    #+#             */
-/*   Updated: 2025/01/09 16:56:11 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/12 19:03:06 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#define _GNU_SOURCE
-#include <stdbool.h>
+#define _XOPEN_SOURCE 700
+// #include <stdbool.h>
 #include <math.h>
-#include <stdlib.h>
+// #include <stdlib.h>
 #include <stdio.h>
 
-#include "libft.h"
-#include "mlx.h"
+// #include "libft.h"
+// #include "mlx.h"
 
 #include "world.h"
-#include "parsing.h"
-
-int x, y;
+// #include "parsing.h"
 
 void	set_pixel_color(t_display *display, int x, int y, t_color *color)
 {
-	if (x == WINDOW_WIDTH / 2 && y == WINDOW_HEIGHT / 2)
-		*color = (t_color){0, 255, 0};
 	display->image_buffer[y * display->size_line
 		+ x * display->bits_per_pixel / 8 + 0] = color->b;
 	display->image_buffer[y * display->size_line
@@ -36,28 +32,12 @@ void	set_pixel_color(t_display *display, int x, int y, t_color *color)
 		+ x * display->bits_per_pixel / 8 + 2] = color->r;
 }
 
-// void	put_shadows(t_display *display, t_world *world, int x, int y, t_vector pixel,
-// 		t_vector ray)
-// {
-// 	(void)display;
-// 	(void)x;
-// 	(void)y;
-// 	(void)ray;
-// 	(void)pixel;
-// 	int		i;
-	
-// 	i = 0;
-// 	while(i < world->nb_objects)
-// 	{
-// 		if (world->objects[i].t_min < MAXFLOAT)
-// 			set_pixel_color(display, x, y, &world->objects[i].pt_color);
-// 		i++;
-// 	}
-// }
-
-void	intersect_figures(t_vector eye, t_vector pixel, t_vector ray, t_world *world)
+void	intersect_figures(t_vector eye, t_vector pixel,
+		t_vector ray, t_world *world)
 {
-	int j = -1;
+	int	j;
+
+	j = -1;
 	while (++j < world->nb_objects)
 	{
 		world->objects[j].t_min = MAXFLOAT;
@@ -69,7 +49,7 @@ void	intersect_figures(t_vector eye, t_vector pixel, t_vector ray, t_world *worl
 		else if (world->objects[j].type == PLANE)
 			intersect_plane(pixel, ray, &world->objects[j], *world);
 		else
-			continue;
+			continue ;
 	}
 }
 
@@ -78,11 +58,11 @@ void	closest_figure(t_display *display, t_world *world, int x, int y)
 	int		i;
 	int		index_obj;
 	double	smallest_tmin;
-	
+
 	i = 0;
 	index_obj = -1;
 	smallest_tmin = MAXFLOAT;
-	while(i < world->nb_objects)
+	while (i < world->nb_objects)
 	{
 		if (world->objects[i].t_min < smallest_tmin)
 		{
@@ -96,7 +76,7 @@ void	closest_figure(t_display *display, t_world *world, int x, int y)
 		if (world->objects[index_obj].type == SPHERE
 			|| world->objects[index_obj].type == CYLINDER
 			|| world->objects[index_obj].type == PLANE)
-			set_pixel_color(display, x, y, &world->objects[index_obj].pt_color);		
+			set_pixel_color(display, x, y, &world->objects[index_obj].pt_color);
 	}
 }
 
@@ -108,7 +88,9 @@ void	generate_image(t_display *display, t_world *world)
 	t_vector	ray;
 	t_vector	pixel;
 	t_vector	rot_eye;
-	
+	int			x;
+	int			y;
+
 	initialize_eye(&rot_eye, *world);
 	y = -1;
 	while (++y < WINDOW_HEIGHT)
@@ -122,5 +104,5 @@ void	generate_image(t_display *display, t_world *world)
 			closest_figure(display, world, x, y);
 		}
 	}
-	printf("\n   --- End of rendering ---\n");
+	printf("\n\n   --- End of rendering ---\n");
 }

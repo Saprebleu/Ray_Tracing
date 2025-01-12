@@ -6,21 +6,12 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 15:53:00 by jayzatov          #+#    #+#             */
-/*   Updated: 2025/01/06 16:48:20 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/12 19:04:12 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#define _GNU_SOURCE
-#include <stdbool.h>
-#include <math.h>
-#include <stdlib.h>
 #include <stdio.h>
-
-#include "libft.h"
-#include "mlx.h"
-
 #include "world.h"
-#include "parsing.h"
 
 t_vector	create_vector(const t_vector *start, const t_vector *end)
 {

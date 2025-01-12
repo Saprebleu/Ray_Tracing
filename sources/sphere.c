@@ -6,22 +6,14 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 17:24:28 by jayzatov          #+#    #+#             */
-/*   Updated: 2025/01/10 13:56:42 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/12 18:14:25 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#define _GNU_SOURCE
-#include <stdbool.h>
+# define _XOPEN_SOURCE 700
 #include <math.h>
-#include <stdlib.h>
 #include <stdio.h>
-
-#include "libft.h"
-#include "mlx.h"
-
 #include "world.h"
-#include "parsing.h"
-
 
 // If delta == 0 : intersection in one point
 
@@ -35,7 +27,7 @@ void	solve_polynom(double a, double b, double c, t_distances *dst)
 	if (delta == 0.0)
 	{
 		dst->t1 = -b / (2.0 * a);
-		return;
+		return ;
 	}
 	else if (delta > 0.0)
 	{
@@ -46,10 +38,10 @@ void	solve_polynom(double a, double b, double c, t_distances *dst)
 		if (dst->t2 < 0.0)
 			dst->t2 = MAXFLOAT;
 	}
-	return;
+	return ;
 }
 
-void t_for_sphere(t_vector origin, t_vector ray, const t_object *sphere,
+void	t_for_sphere(t_vector origin, t_vector ray, const t_object *sphere,
 		t_distances *dist)
 {
 	t_vector	distance;
@@ -68,12 +60,13 @@ void t_for_sphere(t_vector origin, t_vector ray, const t_object *sphere,
 // t1 is on the outside, while
 // t2 is on the inside of the figure.
 
-void	intersect_sphere(t_vector pixel, t_vector ray, t_object *sphere, t_world world)
+void	intersect_sphere(t_vector pixel, t_vector ray,
+		t_object *sphere, t_world world)
 {
 	t_distances	dist;
 	t_fig_info	fig_inf;
 	t_mirror	a;
-	
+
 	fig_inf.wrld = world;
 	init_mirror(&a, NULL, pixel, &ray);
 	t_for_sphere(pixel, ray, sphere, &dist);
@@ -81,21 +74,13 @@ void	intersect_sphere(t_vector pixel, t_vector ray, t_object *sphere, t_world wo
 	{
 		fig_inf.in_or_out = 1;
 		put_light(sphere, dist.t1, fig_inf, a);
-		// sphere->t_min = dist.t1;
-    	// fig_inf.pt_on_figure = find_hit_pt(pixel, ray, dist.t1);
-		// fig_inf.normal = sphere_norm(fig_inf, *sphere);
-		// sphere->pt_color = light_n_shade(fig_inf, pixel, *sphere, world);
-		return;
+		return ;
 	}
 	else if (dist.t2 >= 0 && dist.t2 != MAXFLOAT)
 	{
 		fig_inf.in_or_out = -1;
 		put_light(sphere, dist.t2, fig_inf, a);
-		// sphere->t_min = dist.t2;
-    	// fig_inf.pt_on_figure = find_hit_pt(pixel, ray, dist.t2);
-		// fig_inf.in_or_out = -1;
-		// sphere->pt_color = light_n_shade(fig_inf, pixel, *sphere, world);
-		return;
+		return ;
 	}
 	sphere->t_min = MAXFLOAT;
 	sphere->pt_color = sphere->color;

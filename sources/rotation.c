@@ -6,21 +6,11 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 15:37:17 by jayzatov          #+#    #+#             */
-/*   Updated: 2025/01/06 16:42:20 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/12 19:03:53 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#define _GNU_SOURCE
-#include <stdbool.h>
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h>
-
-#include "libft.h"
-#include "mlx.h"
-
 #include "world.h"
-#include "parsing.h"
 
 // The rotation is aplied to vectors that will create a
 // rotated ray from a specific point to the figure.
@@ -39,27 +29,29 @@ void	detranslation(t_vector *vec, t_vector old_origin)
 	vec->z += old_origin.z;
 }
 
-void	xyz_rotation_matrix(t_vector original, t_vector *rotated, t_angles angles)
+void	xyz_rotation_matrix(t_vector original,
+		t_vector *rotated, t_angles angles)
 {
-	double	alpha;
-	double	beta;
-	double	gamma;
+	double	alp;
+	double	bet;
+	double	gam;
 
-	alpha = angles.alpha;
-	beta = angles.beta;
-	gamma = angles.gamma;
-	rotated->x = ((cos(beta) * cos(gamma)) * original.x)
-				+ ((sin(alpha) * sin(beta) * cos(gamma) - cos(alpha) * sin(gamma)) * original.y)
-				+ ((cos(alpha) * sin(beta) * cos(gamma) + sin(alpha) * sin(gamma)) * original.z);
-	rotated->y = ((cos(beta) * sin(gamma)) * original.x)
-				+ ((sin(alpha) * sin(beta) * sin(gamma) + cos(alpha) * cos(gamma)) * original.y)
-				+ ((cos(alpha) * sin(beta) * sin(gamma) - sin(alpha) * cos(gamma)) * original.z);
-	rotated->z = ((-sin(beta)) * original.x)
-				+ ((sin(alpha) * cos(beta)) * original.y)
-				+ ((cos(alpha) * cos(beta)) * original.z);
+	alp = angles.alpha;
+	bet = angles.beta;
+	gam = angles.gamma;
+	rotated->x = ((cos(bet) * cos(gam)) * original.x)
+		+ ((sin(alp) * sin(bet) * cos(gam) - cos(alp) * sin(gam)) * original.y)
+		+ ((cos(alp) * sin(bet) * cos(gam) + sin(alp) * sin(gam)) * original.z);
+	rotated->y = ((cos(bet) * sin(gam)) * original.x)
+		+ ((sin(alp) * sin(bet) * sin(gam) + cos(alp) * cos(gam)) * original.y)
+		+ ((cos(alp) * sin(bet) * sin(gam) - sin(alp) * cos(gam)) * original.z);
+	rotated->z = ((-sin(bet)) * original.x)
+		+ ((sin(alp) * cos(bet)) * original.y)
+		+ ((cos(alp) * cos(bet)) * original.z);
 }
 
-t_vector	rotation_process(t_vector vec, t_vector center, t_vector *rot_vec, t_angles angles)
+t_vector	rotation_process(t_vector vec, t_vector center,
+			t_vector *rot_vec, t_angles angles)
 {
 	translation(&vec, center);
 	xyz_rotation_matrix(vec, rot_vec, angles);
