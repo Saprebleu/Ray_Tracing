@@ -33,6 +33,7 @@ SOURCE_FILE_PATHS =	main.c \
 					intersect_utils.c \
 					light.c \
 					light_utils.c \
+					mlx_open_close.c \
 					normals.c \
 					plane.c \
 					rotation.c \

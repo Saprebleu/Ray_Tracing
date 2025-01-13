@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:48:55 by tjarross          #+#    #+#             */
-/*   Updated: 2025/01/13 10:44:49 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/13 17:56:57 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,9 @@
 # define WINDOW_HEIGHT	768
 # define SHINE			130
 # include <stdbool.h>
+# include <X11/X.h>
+# include <X11/keysym.h>
+# define ESC		65307
 
 typedef enum e_object_type
 {
@@ -87,6 +90,8 @@ typedef struct s_display
 	int		bits_per_pixel;
 	int		size_line;
 	int		endian;
+	int		final;
+	t_world	*world;
 }	t_display;
 
 typedef struct s_angles
@@ -137,6 +142,13 @@ typedef struct s_lights
 }	t_lights;
 
 void		print_parsing(t_world world);
+
+// MLX
+
+int			render(t_display *disp);
+int			handle_keypress(int keysym, t_display *disp);
+int			close_win(t_display *disp);
+void		clean_mlx_context(t_display *display);
 
 // CAMERA-FIGURE INTERSECTIONS
 

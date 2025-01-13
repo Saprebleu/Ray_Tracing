@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:29:08 by tjarross          #+#    #+#             */
-/*   Updated: 2025/01/13 10:49:58 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/13 17:50:26 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,9 @@ int	main(int argc, char **argv)
 			WINDOW_TITLE))
 		return (clean_mlx_context(&display), EXIT_FAILURE);
 	generate_image(&display, &world);
-	mlx_put_image_to_window(display.mlx_ptr, display.mlx_window,
-		display.mlx_image, 0, 0);
+	mlx_key_hook(display.mlx_window, handle_keypress, &display);
+	mlx_hook(display.mlx_window, DestroyNotify, 0, close_win, &display);
+	mlx_loop_hook(display.mlx_ptr, render, &display);
 	mlx_loop(display.mlx_ptr);
 	clean_mlx_context(&display);
 	free(world.objects);

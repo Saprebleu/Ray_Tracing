@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 19:09:08 by jayzatov          #+#    #+#             */
-/*   Updated: 2025/01/12 19:07:24 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/13 17:53:50 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,15 @@
 
 void	set_pixel_color(t_display *display, int x, int y, t_color *color)
 {
-	display->image_buffer[y * display->size_line
-		+ x * display->bits_per_pixel / 8 + 0] = color->b;
-	display->image_buffer[y * display->size_line
-		+ x * display->bits_per_pixel / 8 + 1] = color->g;
-	display->image_buffer[y * display->size_line
-		+ x * display->bits_per_pixel / 8 + 2] = color->r;
+	if (!display->final)
+	{
+		display->image_buffer[y * display->size_line
+			+ x * display->bits_per_pixel / 8 + 0] = color->b;
+		display->image_buffer[y * display->size_line
+			+ x * display->bits_per_pixel / 8 + 1] = color->g;
+		display->image_buffer[y * display->size_line
+			+ x * display->bits_per_pixel / 8 + 2] = color->r;	
+	}
 }
 
 void	intersect_figures(t_vector eye, t_vector pixel,
@@ -62,7 +65,7 @@ void	closest_figure(t_display *display, t_world *world, int x, int y)
 	i = 0;
 	index_obj = -1;
 	smallest_tmin = MAXFLOAT;
-	while (i < world->nb_objects)
+	while (i < world->nb_objects && !display->final)
 	{
 		if (world->objects[i].t_min < smallest_tmin)
 		{
@@ -91,6 +94,7 @@ void	generate_image(t_display *display, t_world *world)
 	int			x;
 	int			y;
 
+	display->final = 0;
 	initialize_eye(&rot_eye, *world);
 	y = -1;
 	while (++y < WINDOW_HEIGHT)
@@ -101,9 +105,9 @@ void	generate_image(t_display *display, t_world *world)
 			initialize_pixel(&pixel, *world, x, y);
 			ray = rotated_cam_ray(&pixel, &rot_eye, *world);
 			intersect_figures(rot_eye, pixel, ray, world);
-			
 			closest_figure(display, world, x, y);
 		}
 	}
+	display->world = world;
 	printf("\n\n   --- End of rendering ---\n");
 }
