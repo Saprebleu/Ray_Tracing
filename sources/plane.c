@@ -6,14 +6,14 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 11:29:18 by jayzatov          #+#    #+#             */
-/*   Updated: 2025/01/12 19:03:32 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/13 10:34:22 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #define _XOPEN_SOURCE 700
 #include <math.h>
 #include <stdio.h>
-#include "world.h"
+#include "lights.h"
 
 // A plane's fomrula in 3D: 
 // P is on the plane if : Norm * (P - A_plane_point) = 0.

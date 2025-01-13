@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 19:09:08 by jayzatov          #+#    #+#             */
-/*   Updated: 2025/01/12 19:03:06 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/12 19:07:24 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ void	generate_image(t_display *display, t_world *world)
 			initialize_pixel(&pixel, *world, x, y);
 			ray = rotated_cam_ray(&pixel, &rot_eye, *world);
 			intersect_figures(rot_eye, pixel, ray, world);
+			
 			closest_figure(display, world, x, y);
 		}
 	}

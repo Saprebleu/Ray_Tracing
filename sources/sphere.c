@@ -6,14 +6,14 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 17:24:28 by jayzatov          #+#    #+#             */
-/*   Updated: 2025/01/12 18:14:25 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/13 10:34:14 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # define _XOPEN_SOURCE 700
 #include <math.h>
 #include <stdio.h>
-#include "world.h"
+#include "lights.h"
 
 // If delta == 0 : intersection in one point
 

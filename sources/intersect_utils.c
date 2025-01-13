@@ -6,12 +6,12 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:26:06 by jayzatov          #+#    #+#             */
-/*   Updated: 2025/01/12 19:02:38 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/13 10:34:05 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include "world.h"
+#include "lights.h"
 
 // For cylinder : eye and pixel.
 // For plane and sphere : pixel and ray.

@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:29:08 by tjarross          #+#    #+#             */
-/*   Updated: 2025/01/12 19:02:48 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/13 10:49:58 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,9 @@ void	clean_mlx_context(t_display *display)
 	}
 }
 
+// For debugging : put "print_parsing(world)"
+// after "parsing_ret != 0" verification.
+
 int	main(int argc, char **argv)
 {
 	t_display	display;
@@ -73,7 +76,6 @@ int	main(int argc, char **argv)
 	parsing_ret = parse_rt(argv[1], &world);
 	if (parsing_ret != 0)
 		return (EXIT_FAILURE);
-	print_parsing(world);
 	if (false == initialize_mlx_context(&display, WINDOW_WIDTH, WINDOW_HEIGHT,
 			WINDOW_TITLE))
 		return (clean_mlx_context(&display), EXIT_FAILURE);

@@ -6,13 +6,15 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:38:41 by jayzatov          #+#    #+#             */
-/*   Updated: 2025/01/12 19:02:18 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/13 10:34:27 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#define _XOPEN_SOURCE 700
 #include <stdbool.h>
+#include <math.h>
 #include <stdio.h>
-#include "world.h"
+#include "lights.h"
 
 t_vector	rotated(t_vector *eye, t_vector *pixel, t_object cylinder)
 {

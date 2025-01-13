@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:28:00 by tjarross          #+#    #+#             */
-/*   Updated: 2024/12/05 17:49:17 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/13 10:52:54 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ bool	file_has_extension(const char *pathname, const char *extension)
 
 void	put_indexes(t_world *world)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	while (++i < world->nb_objects)
