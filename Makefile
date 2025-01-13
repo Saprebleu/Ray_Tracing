@@ -84,7 +84,7 @@ $(BUILD_PATH)/%.o: $(SOURCES_PATH)/%.c $(INCLUDE_FILES)
 
 c: clean
 clean:
-	make clean -C libraries/minilibx-linux
+	make clean -iC libraries/minilibx-linux
 	make clean -C libraries/libft
 	make clean -C libraries/libgnl
 	rm -rf $(OBJECT_FILES) $(OBJECT_FILES)
