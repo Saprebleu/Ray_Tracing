@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jayzatov <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: tjarross <tjarross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 18:14:37 by jayzatov          #+#    #+#             */
-/*   Updated: 2023/11/08 18:18:20 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/13 18:30:06 by tjarross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,7 @@ char	*ft_strtrim(char const *s1, char const *set);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 int		ft_tolower(int c);
 int		ft_toupper(int c);
+
+void	ft_free_split(char **split);
 
 #endif

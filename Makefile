@@ -25,35 +25,34 @@ INCLUDE_FILES =			includes/parsing.h \
 SOURCES_PATH =			./sources
 
 # Sources files list from root source path
-SOURCE_FILE_PATHS =	main.c \
-					angles.c \
-					camera_rot.c \
-					cylinder.c \
-					img_generation.c \
-					intersect_utils.c \
-					light.c \
-					light_utils.c \
-					mlx_open_close.c \
-					normals.c \
-					plane.c \
-					rotation.c \
-					shadow.c \
-					shadow_utils.c \
-					sphere.c \
-					vector_maths.c \
-					parsing/display_parsing.c \
-					parsing/elements/parse_ambient.c \
-					parsing/elements/parse_camera.c \
-					parsing/elements/parse_cylinder.c \
-					parsing/elements/parse_light.c \
-					parsing/elements/parse_plane.c \
-					parsing/elements/parse_sphere.c \
-					parsing/parsing.c \
-					parsing/utils/color.c \
-					parsing/utils/float.c \
-					parsing/utils/int.c \
-					parsing/utils/utils.c \
-					parsing/utils/vector.c
+SOURCE_FILE_PATHS =		main.c \
+						angles.c \
+						camera_rot.c \
+						cylinder.c \
+						img_generation.c \
+						intersect_utils.c \
+						light.c \
+						light_utils.c \
+						mlx_open_close.c \
+						normals.c \
+						plane.c \
+						rotation.c \
+						shadow.c \
+						shadow_utils.c \
+						sphere.c \
+						vector_maths.c \
+						parsing/elements/parse_ambient.c \
+						parsing/elements/parse_camera.c \
+						parsing/elements/parse_cylinder.c \
+						parsing/elements/parse_light.c \
+						parsing/elements/parse_plane.c \
+						parsing/elements/parse_sphere.c \
+						parsing/parsing.c \
+						parsing/utils/color.c \
+						parsing/utils/double.c \
+						parsing/utils/int.c \
+						parsing/utils/utils.c \
+						parsing/utils/vector.c
 
 # Local libraries root paths that need to be compiled (e.g. ./lib/mylib)
 LOCAL_LIBRARY_PATHS =	libraries/minilibx-linux \
@@ -89,11 +88,12 @@ clean:
 	make clean -C libraries/libft
 	make clean -C libraries/libgnl
 	rm -rf $(OBJECT_FILES) $(OBJECT_FILES)
+	rm -rf $(BUILD_PATH)
 
 fclean: clean
 	make fclean -C libraries/libft
 	make fclean -C libraries/libgnl
-	rm -rf $(BUILD_PATH)
+	rm -rf $(NAME)
 
 re: fclean all
 

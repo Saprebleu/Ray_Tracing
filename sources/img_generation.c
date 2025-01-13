@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   img_generation.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tjarross <tjarross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 19:09:08 by jayzatov          #+#    #+#             */
-/*   Updated: 2025/01/13 17:53:50 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/13 18:28:22 by tjarross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	set_pixel_color(t_display *display, int x, int y, t_color *color)
 		display->image_buffer[y * display->size_line
 			+ x * display->bits_per_pixel / 8 + 1] = color->g;
 		display->image_buffer[y * display->size_line
-			+ x * display->bits_per_pixel / 8 + 2] = color->r;	
+			+ x * display->bits_per_pixel / 8 + 2] = color->r;
 	}
 }
 

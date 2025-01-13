@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   sphere.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tjarross <tjarross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 17:24:28 by jayzatov          #+#    #+#             */
-/*   Updated: 2025/01/13 10:34:14 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/13 18:28:35 by tjarross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# define _XOPEN_SOURCE 700
+#define _XOPEN_SOURCE 700
 #include <math.h>
 #include <stdio.h>
 #include "lights.h"

@@ -6,7 +6,7 @@
 /*   By: tjarross <tjarross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:28:00 by tjarross          #+#    #+#             */
-/*   Updated: 2025/01/13 18:09:48 by tjarross         ###   ########.fr       */
+/*   Updated: 2025/01/13 18:30:48 by tjarross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,6 @@
 #include "libft.h"
 #include "world.h"
 #include "parsing.h"
-
-void	free_split(char **split)
-{
-	int	i;
-
-	i = 0;
-	while (split[i] != NULL)
-		free(split[i++]);
-	free(split);
-}
 
 int	parse_elements(char **line_split, int i, t_world *world)
 {
@@ -51,7 +41,7 @@ int	parse_elements(char **line_split, int i, t_world *world)
 		printf("Error\nInvalid element type '%s'\n", line_split[i]);
 		ret = -100;
 	}
-	return (free_split(line_split), ret);
+	return (ft_free_split(line_split), ret);
 }
 
 int	parse_line(const char *line, t_world *world)
@@ -66,7 +56,7 @@ int	parse_line(const char *line, t_world *world)
 	while (line_split[i] && line_split[i][0] == '\0')
 		i++;
 	if (line_split[i] == NULL)
-		return (free_split(line_split), 0);
+		return (ft_free_split(line_split), 0);
 	return (parse_elements(line_split, i, world));
 }
 
