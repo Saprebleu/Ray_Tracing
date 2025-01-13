@@ -5,10 +5,10 @@ NAME =					miniRT
 BUILD_PATH =			./obj
 
 # Compiler shell command
-COMPILER =				gcc
+COMPILER =				cc
 
 # Compiler's flags
-COMPILE_FLAGS =			-fanalyzer -g -Wall -Werror -Wextra
+COMPILE_FLAGS =			-Wall -Werror -Wextra
 
 # Compiler's includes flags (e.g. -I includes -I my_lib/includes)
 INCLUDE_FLAGS =			-I includes \

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   world.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tjarross <tjarross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:48:55 by tjarross          #+#    #+#             */
-/*   Updated: 2025/01/13 17:56:57 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/13 18:01:08 by tjarross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,14 +66,14 @@ typedef struct s_object
 
 typedef struct s_world
 {
-	bool		has_ambient;
+	int			nb_ambient;
 	t_color		ambient_color;
 	double		ambient_power;
-	bool		has_camera;
+	int			nb_camera;
 	t_vector	camera_position;
 	t_vector	camera_direction;
 	int			camera_fov;
-	bool		has_light;
+	int			nb_light;
 	t_vector	light_position;
 	t_color		light_color;
 	double		light_power;

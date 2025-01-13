@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_ambient.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tjarross <tjarross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:28:51 by tjarross          #+#    #+#             */
-/*   Updated: 2025/01/06 16:41:41 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/13 18:01:52 by tjarross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,6 @@ int	parse_ambient(char **line_split, t_world *world)
 	line_split = goto_next_value(line_split + 1);
 	if (line_split != NULL)
 		return (printf("Error\nInvalid value: '%s'\n", *line_split), -7);
-	world->has_ambient = true;
+	world->nb_ambient++;
 	return (0);
 }

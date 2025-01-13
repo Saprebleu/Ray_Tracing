@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_camera.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tjarross <tjarross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:28:47 by tjarross          #+#    #+#             */
-/*   Updated: 2025/01/06 17:10:09 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/13 18:27:29 by tjarross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int	parse_camera2(char **line_split, t_world *world)
 	line_split = goto_next_value(line_split + 1);
 	if (line_split != NULL)
 		return (printf("Error\nInvalid value: '%s'\n", *line_split), -11);
-	world->has_camera = true;
+	world->nb_camera++;
 	return (0);
 }
 
@@ -51,10 +51,6 @@ int	parse_camera(char **line_split, t_world *world)
 	if (false == is_vector(*line_split))
 		return (printf("Error\nCamera Direction is not a vector\n"), -5);
 	world->camera_direction = get_vector(*line_split);
-	// if (fabs(pow(world->camera_direction.x, 2)
-	// 		+ pow(world->camera_direction.y, 2)
-	// 		+ pow(world->camera_direction.z, 2) - 1.0) > 0.01)
-	// 	return (printf("Error\nCamera Direction not normalized\n"), -6);
 	if (false == is_vector_in_range(world->camera_direction, -1.0, 1.0))
 		return (printf("Error\nCamera Direction not in range [-1, 1]\n"), -7);
 	return (parse_camera2(line_split, world));

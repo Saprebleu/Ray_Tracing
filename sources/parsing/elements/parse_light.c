@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_light.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tjarross <tjarross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:28:54 by tjarross          #+#    #+#             */
-/*   Updated: 2025/01/06 17:10:30 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/13 18:01:36 by tjarross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	parse_light2(char **line_split, t_world *world)
 	line_split = goto_next_value(line_split + 1);
 	if (line_split != NULL)
 		return (printf("Error\nInvalid value: '%s'\n", *line_split), -10);
-	world->has_light = true;
+	world->nb_light++;
 	return (0);
 }
 
