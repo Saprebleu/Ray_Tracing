@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjarross <tjarross@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:28:00 by tjarross          #+#    #+#             */
-/*   Updated: 2025/01/13 18:30:48 by tjarross         ###   ########.fr       */
+/*   Updated: 2025/01/15 15:33:31 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,11 +106,11 @@ int	parse_rt(const char *pathname, t_world *world)
 		if (line[ft_strlen(line) - 1] == '\n')
 			line[ft_strlen(line) - 1] = '\0';
 		if (0 != parse_line(line, world))
-			return (free(world->objects), free(line), -3);
+			return (free(world->objects), free(line), close(fd), -3);
 		free(line);
 	}
 	if (world->nb_camera != 1 || world->nb_ambient != 1 || world->nb_light != 1)
-		return (free(world->objects),
+		return (free(world->objects), close(fd),
 			printf("Error\nMissing or multiple objects\n"), -4);
 	return (put_indexes(world), close(fd), 0);
 }
