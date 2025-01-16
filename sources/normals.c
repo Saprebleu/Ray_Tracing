@@ -6,13 +6,13 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:54:37 by jayzatov          #+#    #+#             */
-/*   Updated: 2025/01/12 19:02:53 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/16 13:48:47 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "world.h"
 
-// Reversed 3D rotation matrix
+// Reversed 3D rotation matrix.
 
 void	xyz_rot_matrix_reverse(t_vector rotated,
 		t_vector *original, t_angles angles)
@@ -39,6 +39,9 @@ void	xyz_rot_matrix_reverse(t_vector rotated,
 		+ ((cos(alpha) * cos(beta)) * rotated.z);
 }
 
+// The default rotation of a cylinder
+// is 0,1,0 on x,y,z.
+
 static t_vector	rotated_cyl_axis(t_object cylinder)
 {
 	t_vector	axis;
@@ -51,6 +54,9 @@ static t_vector	rotated_cyl_axis(t_object cylinder)
 	xyz_rot_matrix_reverse(axis, &axis, angles);
 	return (axis);
 }
+
+// "t" is the scalar projection
+// of "a" on "b".
 
 void	cylinder_norm(t_fig_info *fig_inf,
 		t_vector pt_on_cyl, t_object cylinder)
