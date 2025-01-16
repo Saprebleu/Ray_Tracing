@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 11:29:18 by jayzatov          #+#    #+#             */
-/*   Updated: 2025/01/13 10:34:22 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/16 17:12:08 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ void	t_for_plane(t_vector origin, t_vector ray,
 	dist->t2 = MAXFLOAT;
 	plane_pt = plane->position;
 	pl_to_pxl = create_vector(&plane_pt, &origin);
-	dist->t1 = -(dot_product(&plane->direction, &pl_to_pxl)
+	if (dot_product(&plane->direction, &ray) != 0)
+		dist->t1 = -(dot_product(&plane->direction, &pl_to_pxl)
 			/ dot_product(&plane->direction, &ray));
 }
 
