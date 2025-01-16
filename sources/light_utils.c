@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 14:25:11 by jayzatov          #+#    #+#             */
-/*   Updated: 2025/01/12 18:49:30 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/01/16 17:34:01 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,11 @@ void	specular(t_fig_info f_i, t_lights *lghts,
 	cos_ref_cam = dot_product(&r.l_ref, &r.to_eye);
 	if (cos_ref_cam > 0.0 && cos_l_norm > 0.0)
 	{
-		lghts->specular.r = pow(dot_product(&r.l_ref, &r.to_eye), SHINE)
+		lghts->specular.r = pow(cos_ref_cam, SHINE)
 			* world.light_power * world.light_color.r;
-		lghts->specular.g = pow(dot_product(&r.l_ref, &r.to_eye), SHINE)
+		lghts->specular.g = pow(cos_ref_cam, SHINE)
 			* world.light_power * world.light_color.g;
-		lghts->specular.b = pow(dot_product(&r.l_ref, &r.to_eye), SHINE)
+		lghts->specular.b = pow(cos_ref_cam, SHINE)
 			* world.light_power * world.light_color.b;
 	}
 	else
