@@ -82,7 +82,6 @@ $(BUILD_PATH)/%.o: $(SOURCES_PATH)/%.c $(INCLUDE_FILES)
 	@mkdir -p $(dir $@)
 	$(COMPILER) $(COMPILE_FLAGS) -o $@ -c $< $(INCLUDE_FLAGS)
 
-c: clean
 clean:
 	make clean -iC libraries/minilibx-linux
 	make clean -C libraries/libft
