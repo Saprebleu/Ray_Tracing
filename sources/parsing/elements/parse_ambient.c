@@ -24,7 +24,7 @@ int	parse_ambient(char **line_split, t_world *world)
 		return (printf("Error\nNot enough information for Ambient\n"), -1);
 	if (false == is_double(*line_split))
 		return (printf("Error\nAmbient Power is not a double\n"), -2);
-	world->ambient_power = atof(*line_split);
+	world->ambient_power = get_double(*line_split);
 	if (false == is_double_in_range(world->ambient_power, 0.0, 1.0))
 		return (printf("Error\nAmbient Power not in range [0, 1]\n"), -3);
 	line_split = goto_next_value(line_split + 1);
