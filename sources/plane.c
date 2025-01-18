@@ -10,10 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#define _XOPEN_SOURCE 700
+#include "lights.h"
 #include <math.h>
 #include <stdio.h>
-#include "lights.h"
 
 // A plane's fomrula in 3D: 
 // P is on the plane if : Norm * (P - A_plane_point) = 0.

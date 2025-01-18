@@ -10,10 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#define _XOPEN_SOURCE 700
+#include "lights.h"
 #include <math.h>
 #include <stdio.h>
-#include "lights.h"
 
 // If delta == 0 : intersection in one point
 

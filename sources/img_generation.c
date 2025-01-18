@@ -10,17 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#define _XOPEN_SOURCE 700
-// #include <stdbool.h>
-#include <math.h>
-// #include <stdlib.h>
-#include <stdio.h>
-
-// #include "libft.h"
-// #include "mlx.h"
-
 #include "world.h"
-// #include "parsing.h"
+#include <math.h>
+#include <stdio.h>
 
 void	set_pixel_color(t_display *display, int x, int y, t_color *color)
 {

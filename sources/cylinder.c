@@ -10,11 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#define _XOPEN_SOURCE 700
+#include "lights.h"
 #include <stdbool.h>
 #include <math.h>
 #include <stdio.h>
-#include "lights.h"
 
 t_vector	rotated(t_vector *eye, t_vector *pixel, t_object cylinder)
 {
