@@ -1,5 +1,5 @@
 # Executable name
-NAME =					miniRT
+NAME =					ray_tracer
 
 # Project's build path
 BUILD_PATH =			./obj
