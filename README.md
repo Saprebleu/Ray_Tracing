@@ -1,13 +1,13 @@
 <h1>Ray Tracing</h1>
 A small ray-tracing program, that shows 3 types of geometric figures 
-in a 3D space: spheres, cylinders and planes of infinite dimensions.
+in a 3D space : spheres, cylinders and planes of infinite dimensions.
 With rotating camera to give the viewer the perspective, and different
 lights for more realism.
 
 The user can choose the rotation and position of the camera, 
-the ambient light, the direction of the light rays, as well as
+the ambient light, the position of the light, as well as
 the colors of the figures and their dimensions... In specific
-files (placed in the in "scenes" folder).
+files (placed in the "scenes" folder).
 
 Once the executable has been created ("make" command), and 
 the scene file has been given as a parameter,
@@ -29,7 +29,7 @@ using the minilibX library (42's graphics library) :
 library which allows you to do the most basic things for rendering 
 something in screens".
 <br>
-In some, the program decides where to place
+In short, the program decides where to place
 pixels of a certain colour on the screen.
 To do this, it takes into account the information given by the parameters, 
 and uses formulas for geometric figures in 3D space
@@ -44,7 +44,7 @@ Basic coloured figures, without lightning effects :
 
 <h2>Put lights and shadows</h2>
 
-Then, the lights are taken into account : tha ambient light, and the "spotlight":
+Then, the lights are taken into account : the ambient light, and the "spotlight":
 whatever is not touched by the spotlight, or whatever is hidden
 by something is darkened by a shadow (naturally).
 Here we look at the spotlight as the origin of geometric rays, and see whether
