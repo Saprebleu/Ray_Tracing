@@ -23,9 +23,11 @@ a specific 3D scene will be displayed on a window.
 
 <h2>Find figures' volumes</h2>
 From a text file (given as parameter), the program generates images,
-using the minilibX library : "MiniLibX is a tiny graphics 
+using the minilibX library (42's graphics library): 
+"MiniLibX is a tiny graphics 
 library which allows you to do the most basic things for rendering 
-something in screens" : in some, the program decides where to place
+something in screens".
+In some, the program decides where to place
 pixels of a certain colour on the screen.
 To do this, it takes into account the information given by the parameters, 
 and uses formulas for geometric figures in 3D space
