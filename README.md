@@ -12,12 +12,13 @@ Once the executable has been created ("make" command), and
 the scene file has been given as a parameter,
 a specific 3D scene will be displayed on a window.
 
-* Works only on Linux 
-* with these libraries installed: 
+* Works only on Linux, with these libraries installed: 
 * sudo apt install libx11-dev 
 * sudo apt install libxext-dev 
 
-IMAGE
+
+<img src="https://github.com/user-attachments/assets/dc4e23f9-3b6e-48d8-b0d3-c238d8a2600e" width="550" title="Basic figures">
+<br><br>
 
 From a text file (given as parameter), the program generates images,
 using the minilibX library : "MiniLibX is a tiny graphics 
@@ -30,10 +31,10 @@ and uses formulas for geometric figures in 3D space
 With these formulas, the program defines what pixels of the screen are occupied
 by which figure.
 
-Basic coloured figures, without lightning effects:
+Basic coloured figures, without lightning effects :
 
-![screenshot](README_imgs/basics.png)
-
+<img src="https://github.com/user-attachments/assets/875b2961-1035-4b4a-960a-5a7397d511ee" width="350" title="Basic figures">
+<br><br>
 
 Then, the lights are taken into account : tha ambient light, and the "spotlight":
 Whatever is not touched by the spotlight, or whatever is hidden
@@ -44,21 +45,29 @@ The intensity of the light and the "shininess" of the figure's surface are also
 taken into account, as well as the figure's color, so we know how much the light
 brightens the original colour (if the light reaches the ficgure).
 
-Phong reflection model is used:
+Phong reflection model is used :
 
-IMAGE
+<img src="https://github.com/user-attachments/assets/5df0594f-34da-4d57-9af1-80f6706135ca" width="650" title="Phong reflection model">
+<br><br>
 
-The equation converted into C code, to define how much a color is brihtened:
+The equation converted into C code, to define how much a color is brihtened :
 
-IMAGE
+<img src="https://github.com/user-attachments/assets/2ec513e3-6a57-4308-88db-6d9e07197946" width="650" title="Phong reflection model">
+<br><br><br>
+("color" is the mix of the original RVB figure's color and the brightness of the light on it)
 
+<img src="https://github.com/user-attachments/assets/e2094502-f595-4208-897b-dbc14b4badca" width="650" title="Phong reflection model">
+<br><br>
 
 It is then possible to create different images and give them a dose of realism by
-by imitating natural lightning:
-
-IMAGE
+by imitating natural lightning :
 
 
+
+
+
+
+Some useful links
 
 MinilibX :
 https://harm-smits.github.io/42docs/libs/minilibx
