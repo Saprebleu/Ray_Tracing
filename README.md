@@ -41,7 +41,7 @@ Basic coloured figures, without lightning effects :
 <h2>Put lights and shadows</h2>
 
 Then, the lights are taken into account : tha ambient light, and the "spotlight":
-Whatever is not touched by the spotlight, or whatever is hidden
+whatever is not touched by the spotlight, or whatever is hidden
 by something is darkened by a shadow (naturally).
 Here we look at the spotlight as the origin of geometric rays, and see whether
 they reach a certain point of a figure (formulas of 3D figures intersected by rays).
