@@ -1,3 +1,4 @@
+<h1>Ray Tracing</h1>
 A small ray-tracing program, that shows 3 types of geometric figures 
 in a 3D space: spheres, cylinders and planes of infinite dimensions.
 With rotating camera to give the viewer the perspective, and different
@@ -20,6 +21,7 @@ a specific 3D scene will be displayed on a window.
 <img src="https://github.com/user-attachments/assets/dc4e23f9-3b6e-48d8-b0d3-c238d8a2600e" width="550" title="Basic figures">
 <br><br>
 
+<h2>Find figures' volumes</h2>
 From a text file (given as parameter), the program generates images,
 using the minilibX library : "MiniLibX is a tiny graphics 
 library which allows you to do the most basic things for rendering 
@@ -35,6 +37,8 @@ Basic coloured figures, without lightning effects :
 
 <img src="https://github.com/user-attachments/assets/875b2961-1035-4b4a-960a-5a7397d511ee" width="350" title="Basic figures">
 <br><br>
+
+<h2>Put lights and shadows</h2>
 
 Then, the lights are taken into account : tha ambient light, and the "spotlight":
 Whatever is not touched by the spotlight, or whatever is hidden
@@ -53,21 +57,19 @@ Phong reflection model is used :
 The equation converted into C code, to define how much a color is brihtened :
 
 <img src="https://github.com/user-attachments/assets/2ec513e3-6a57-4308-88db-6d9e07197946" width="650" title="Phong reflection model">
-<br><br><br>
+<br><br>
 ("color" is the mix of the original RVB figure's color and the brightness of the light on it)
-
-<img src="https://github.com/user-attachments/assets/e2094502-f595-4208-897b-dbc14b4badca" width="650" title="Phong reflection model">
+<br><br>
+<img src="" width="650" title="Phong reflection model">
 <br><br>
 
-It is then possible to create different images and give them a dose of realism by
+It is then possible to create different images and give them a dose of realism
 by imitating natural lightning :
 
+<img src="https://github.com/user-attachments/assets/dcb8db7b-beac-4f2c-925e-9629b7ce890e" width="650" title="Phong reflection model">
+<br><br>
 
-
-
-
-
-Some useful links
+<h3>Some useful links</h3>
 
 MinilibX :
 https://harm-smits.github.io/42docs/libs/minilibx
