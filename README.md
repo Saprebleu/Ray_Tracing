@@ -14,8 +14,8 @@ the scene file has been given as a parameter,
 a specific 3D scene will be displayed on a window.
 
 * Works only on Linux, with these libraries installed: 
-* sudo apt install libx11-dev 
-* sudo apt install libxext-dev 
+* `sudo apt install libx11-dev` 
+* `sudo apt install libxext-dev`
 
 
 <img src="https://github.com/user-attachments/assets/dc4e23f9-3b6e-48d8-b0d3-c238d8a2600e" width="550" title="Basic figures">
