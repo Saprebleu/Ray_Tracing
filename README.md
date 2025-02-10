@@ -47,14 +47,14 @@ Here we look at the spotlight as the origin of geometric rays, and see whether
 they reach a certain point of a figure (formulas of 3D figures intersected by rays).
 The intensity of the light and the "shininess" of the figure's surface are also
 taken into account, as well as the figure's color, so we know how much the light
-brightens the original colour (if the light reaches the ficgure).
+brightens the original colour (if the light reaches the figure).
 
 Phong reflection model is used :
 
 <img src="https://github.com/user-attachments/assets/5df0594f-34da-4d57-9af1-80f6706135ca" width="650" title="Phong reflection model">
 <br><br>
 
-The equation converted into C code, to define how much a color is brihtened :
+The equation converted into C code, to define how much a colour is brightened :
 
 <img src="https://github.com/user-attachments/assets/2ec513e3-6a57-4308-88db-6d9e07197946" width="650" title="Phong reflection model">
 <br><br>
