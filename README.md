@@ -58,7 +58,7 @@ The equation converted into C code, to define how much a color is brihtened :
 
 <img src="https://github.com/user-attachments/assets/2ec513e3-6a57-4308-88db-6d9e07197946" width="650" title="Phong reflection model">
 <br><br>
-("color" is the mix of the original RVB figure's color and the brightness of the light on it)
+("color" is the mix of the original RGB figure's color and the brightness of the light on it)
 <br><br>
 <img src="https://github.com/user-attachments/assets/1bd2738c-88ed-4abb-a830-d79bcc233c62" width="550" title="Phong reflection model">
 <br><br>
