@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 16:58:49 by jayzatov          #+#    #+#             */
-/*   Updated: 2025/01/12 18:03:56 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:26:14 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@
 // (rotated).
 
 static void	init_data(t_sha_data *sd,
-			t_lights lghts, t_fig_info finfo)
+			t_lights lights, t_fig_info finfo)
 {
-	sd->l_ray = lghts.lig_ray;
+	sd->l_ray = lights.lig_ray;
 	sd->pt_origin = finfo.pt_on_figure;
 	sd->rot_light = finfo.wrld.light_position;
-	sd->l_mag = lghts.lig_mag;
+	sd->l_mag = lights.lig_mag;
 	sd->dist.t1 = MAXFLOAT;
 	sd->dist.t2 = MAXFLOAT;
 	sd->t = MAXFLOAT;
@@ -56,7 +56,7 @@ static double	t1_or_t2(t_sha_data shdw, t_fig_info finfo,
 	return (t);
 }
 
-static int	shady(t_lights *lghts, t_sha_data shdw,
+static int	shady(t_lights *lights, t_sha_data shdw,
 			t_object neighbour)
 {
 	if (shdw.t != MAXFLOAT)
@@ -64,12 +64,12 @@ static int	shady(t_lights *lghts, t_sha_data shdw,
 		if (neighbour.type == CYLINDER
 			&& not_cyl_height(shdw, neighbour))
 			return (0);
-		lghts->specular.r = 0;
-		lghts->specular.g = 0;
-		lghts->specular.b = 0;
-		lghts->diffuse.r = 0;
-		lghts->diffuse.g = 0;
-		lghts->diffuse.b = 0;
+		lights->specular.r = 0;
+		lights->specular.g = 0;
+		lights->specular.b = 0;
+		lights->diffuse.r = 0;
+		lights->diffuse.g = 0;
+		lights->diffuse.b = 0;
 		return (1);
 	}
 	return (0);
@@ -89,7 +89,7 @@ static int	shady(t_lights *lghts, t_sha_data shdw,
 // from the origin point to the nghbr
 // figure.
 
-void	shadows(t_lights *lghts, t_fig_info finfo, t_object figure)
+void	shadows(t_lights *lights, t_fig_info finfo, t_object figure)
 {
 	int			j;
 	t_sha_data	shdw;
@@ -99,7 +99,7 @@ void	shadows(t_lights *lghts, t_fig_info finfo, t_object figure)
 	while (++j < finfo.wrld.nb_objects)
 	{
 		nghbr = finfo.wrld.objects[j];
-		init_data(&shdw, *lghts, finfo);
+		init_data(&shdw, *lights, finfo);
 		if ((outside(finfo.in_or_out, figure, nghbr)
 				|| inside(finfo.in_or_out)))
 		{
@@ -110,7 +110,7 @@ void	shadows(t_lights *lghts, t_fig_info finfo, t_object figure)
 			else if (nghbr.type == PLANE)
 				t_for_plane(shdw.pt_origin, shdw.l_ray, &nghbr, &shdw.dist);
 			shdw.t = t1_or_t2(shdw, finfo, figure, nghbr);
-			if (shady(lghts, shdw, nghbr))
+			if (shady(lights, shdw, nghbr))
 				break ;
 		}
 	}

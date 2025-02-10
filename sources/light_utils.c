@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 14:25:11 by jayzatov          #+#    #+#             */
-/*   Updated: 2025/01/16 17:34:01 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:25:47 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,17 @@ void	light_reflection(t_vector *ref_lght, t_fig_info fig_inf,
 	normalize_vector(ref_lght);
 }
 
-void	ambient(t_fig_info f_i, t_lights *lghts)
+void	ambient(t_fig_info f_i, t_lights *lights)
 {
 	t_world	world;
 
 	world = f_i.wrld;
-	lghts->ambient.r = world.ambient_power * world.ambient_color.r;
-	lghts->ambient.g = world.ambient_power * world.ambient_color.g;
-	lghts->ambient.b = world.ambient_power * world.ambient_color.b;
+	lights->ambient.r = world.ambient_power * world.ambient_color.r;
+	lights->ambient.g = world.ambient_power * world.ambient_color.g;
+	lights->ambient.b = world.ambient_power * world.ambient_color.b;
 }
 
-void	specular(t_fig_info f_i, t_lights *lghts,
+void	specular(t_fig_info f_i, t_lights *lights,
 		t_lrays r, double cos_l_norm)
 {
 	t_world	world;
@@ -42,29 +42,29 @@ void	specular(t_fig_info f_i, t_lights *lghts,
 	cos_ref_cam = dot_product(&r.l_ref, &r.to_eye);
 	if (cos_ref_cam > 0.0 && cos_l_norm > 0.0)
 	{
-		lghts->specular.r = pow(cos_ref_cam, SHINE)
+		lights->specular.r = pow(cos_ref_cam, SHINE)
 			* world.light_power * world.light_color.r;
-		lghts->specular.g = pow(cos_ref_cam, SHINE)
+		lights->specular.g = pow(cos_ref_cam, SHINE)
 			* world.light_power * world.light_color.g;
-		lghts->specular.b = pow(cos_ref_cam, SHINE)
+		lights->specular.b = pow(cos_ref_cam, SHINE)
 			* world.light_power * world.light_color.b;
 	}
 	else
 	{
-		lghts->specular.r = 0;
-		lghts->specular.g = 0;
-		lghts->specular.b = 0;
+		lights->specular.r = 0;
+		lights->specular.g = 0;
+		lights->specular.b = 0;
 	}
 }
 
-void	diffuse(t_fig_info f_i, t_lights *lghts, double cos_l_norm)
+void	diffuse(t_fig_info f_i, t_lights *lights, double cos_l_norm)
 {
 	t_world	world;
 
 	world = f_i.wrld;
 	if (cos_l_norm < 0.0)
 		cos_l_norm = 0.0;
-	lghts->diffuse.r = cos_l_norm * (world.light_power * world.light_color.r);
-	lghts->diffuse.g = cos_l_norm * (world.light_power * world.light_color.g);
-	lghts->diffuse.b = cos_l_norm * (world.light_power * world.light_color.b);
+	lights->diffuse.r = cos_l_norm * (world.light_power * world.light_color.r);
+	lights->diffuse.g = cos_l_norm * (world.light_power * world.light_color.g);
+	lights->diffuse.b = cos_l_norm * (world.light_power * world.light_color.b);
 }

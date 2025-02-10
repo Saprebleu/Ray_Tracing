@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 14:26:39 by jayzatov          #+#    #+#             */
-/*   Updated: 2025/01/13 10:39:46 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:25:21 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,11 @@ void		plane_norm(t_fig_info *fig_inf, t_object plane);
 void		sphere_norm(t_fig_info *fig_inf, t_object sphere);
 void		cylinder_norm(t_fig_info *fig_inf, t_vector pt_on_cyl,
 				t_object cylinder);
-void		ambient(t_fig_info f_i, t_lights *lghts);
-void		specular(t_fig_info f_i, t_lights *lghts,
+void		ambient(t_fig_info f_i, t_lights *lights);
+void		specular(t_fig_info f_i, t_lights *lights,
 				t_lrays r, double cos_l_norm);
-void		diffuse(t_fig_info f_i, t_lights *lghts, double cos_l_norm);
-void		shadows(t_lights *lghts, t_fig_info finfo, t_object figure);
+void		diffuse(t_fig_info f_i, t_lights *lights, double cos_l_norm);
+void		shadows(t_lights *lights, t_fig_info finfo, t_object figure);
 int			t1_limits(double t1, double Ln_mag);
 int			t2_limits(double t2, double Ln_mag);
 int			outside(int in_or_out, t_object figure, t_object neighbour);

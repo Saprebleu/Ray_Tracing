@@ -6,7 +6,7 @@
 /*   By: jayzatov <jayzatov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 17:40:18 by jayzatov          #+#    #+#             */
-/*   Updated: 2025/01/12 18:47:38 by jayzatov         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:26:03 by jayzatov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,15 @@ void	color_limit(int *color)
 // The hit point's color would be
 // more or less bright.
 
-void	color_is_lit(t_color *color, t_lights lghts, t_object figure)
+void	color_is_lit(t_color *color, t_lights lights, t_object figure)
 {
 	t_light	amb;
 	t_light	spec;
 	t_light	diff;
 
-	amb = lghts.ambient;
-	spec = lghts.specular;
-	diff = lghts.diffuse;
+	amb = lights.ambient;
+	spec = lights.specular;
+	diff = lights.diffuse;
 	color->r = figure.color.r * ((amb.r + diff.r + spec.r) / 255.0);
 	color_limit(&color->r);
 	color->g = figure.color.g * ((amb.g + diff.g + spec.g) / 255.0);
@@ -49,23 +49,23 @@ t_color	light_n_shade(t_fig_info fig_inf, t_vector pixel,
 		t_object figure, t_world world)
 {
 	t_color		color;
-	t_lights	lghts;
+	t_lights	lights;
 	t_lrays		r;
 	double		cos_ln;
 
 	r.to_lig = create_vector(&fig_inf.pt_on_figure, &world.light_position);
-	lghts.lig_mag = magnitude(r.to_lig);
+	lights.lig_mag = magnitude(r.to_lig);
 	r.to_eye = create_vector(&fig_inf.pt_on_figure, &pixel);
 	normalize_vector(&r.to_lig);
 	normalize_vector(&r.to_eye);
 	cos_ln = dot_product(&r.to_lig, &fig_inf.normal);
 	light_reflection(&r.l_ref, fig_inf, r.to_lig, cos_ln);
-	ambient(fig_inf, &lghts);
-	specular(fig_inf, &lghts, r, cos_ln);
-	diffuse(fig_inf, &lghts, cos_ln);
-	lghts.lig_ray = r.to_lig;
+	ambient(fig_inf, &lights);
+	specular(fig_inf, &lights, r, cos_ln);
+	diffuse(fig_inf, &lights, cos_ln);
+	lights.lig_ray = r.to_lig;
 	if (cos_ln >= 0)
-		shadows(&lghts, fig_inf, figure);
-	color_is_lit(&color, lghts, figure);
+		shadows(&lights, fig_inf, figure);
+	color_is_lit(&color, lights, figure);
 	return (color);
 }
