@@ -60,7 +60,7 @@ The equation converted into C code, to define how much a color is brihtened :
 <br><br>
 ("color" is the mix of the original RVB figure's color and the brightness of the light on it)
 <br><br>
-<img src="" width="650" title="Phong reflection model">
+<img src="https://github.com/user-attachments/assets/1bd2738c-88ed-4abb-a830-d79bcc233c62" width="550" title="Phong reflection model">
 <br><br>
 
 It is then possible to create different images and give them a dose of realism
