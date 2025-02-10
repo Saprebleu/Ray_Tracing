@@ -13,7 +13,7 @@ Once the executable has been created ("make" command), and
 the scene file has been given as a parameter,
 a specific 3D scene will be displayed on a window.
 
-* Works only on Linux, with these libraries installed: 
+* Works only on Linux, with these libraries installed : 
 * `sudo apt install libx11-dev` 
 * `sudo apt install libxext-dev`
 
@@ -23,10 +23,12 @@ a specific 3D scene will be displayed on a window.
 
 <h2>Find figures' volumes</h2>
 From a text file (given as parameter), the program generates images,
-using the minilibX library (42's graphics library): 
+using the minilibX library (42's graphics library) :
+<br>
 "MiniLibX is a tiny graphics 
 library which allows you to do the most basic things for rendering 
 something in screens".
+<br>
 In some, the program decides where to place
 pixels of a certain colour on the screen.
 To do this, it takes into account the information given by the parameters, 
