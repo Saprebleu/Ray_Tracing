@@ -1,19 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jayzatov <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/08 12:08:13 by jayzatov          #+#    #+#             */
-/*   Updated: 2023/11/08 12:11:20 by jayzatov         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "libft.h"
-// #include <bsd/string.h>
-// #include <string.h>
-// #include <stdio.h>
 
 size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 {
